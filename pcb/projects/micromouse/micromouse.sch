@@ -15399,9 +15399,9 @@ datasheet section 2.2</text>
 <label x="35.56" y="35.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP19/CN28/PMBE/RC3"/>
-<wire x1="322.58" y1="139.7" x2="299.72" y2="139.7" width="0.1524" layer="91"/>
-<label x="314.96" y="139.7" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="TDI/PMA9/RA9"/>
+<wire x1="322.58" y1="137.16" x2="299.72" y2="137.16" width="0.1524" layer="91"/>
+<label x="314.96" y="137.16" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1_EA" class="0">
@@ -15411,9 +15411,9 @@ datasheet section 2.2</text>
 <label x="60.96" y="35.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="TDI/PMA9/RA9"/>
-<wire x1="322.58" y1="137.16" x2="299.72" y2="137.16" width="0.1524" layer="91"/>
-<label x="314.96" y="137.16" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="RP19/CN28/PMBE/RC3"/>
+<wire x1="322.58" y1="139.7" x2="299.72" y2="139.7" width="0.1524" layer="91"/>
+<label x="314.96" y="139.7" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1-" class="0">
@@ -15459,9 +15459,9 @@ datasheet section 2.2</text>
 <label x="119.38" y="40.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP21/CN26/PMA3/RC5"/>
-<wire x1="322.58" y1="144.78" x2="299.72" y2="144.78" width="0.1524" layer="91"/>
-<label x="314.96" y="144.78" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="RP20/CN25/PMA4/RC4"/>
+<wire x1="322.58" y1="142.24" x2="299.72" y2="142.24" width="0.1524" layer="91"/>
+<label x="314.96" y="142.24" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1_D2" class="0">
@@ -15471,9 +15471,9 @@ datasheet section 2.2</text>
 <label x="119.38" y="27.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP20/CN25/PMA4/RC4"/>
-<wire x1="322.58" y1="142.24" x2="299.72" y2="142.24" width="0.1524" layer="91"/>
-<label x="314.96" y="142.24" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="RP21/CN26/PMA3/RC5"/>
+<wire x1="322.58" y1="144.78" x2="299.72" y2="144.78" width="0.1524" layer="91"/>
+<label x="314.96" y="144.78" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1_PWM" class="0">
@@ -15483,9 +15483,9 @@ datasheet section 2.2</text>
 <label x="119.38" y="43.18" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="PWM1H1/DAC1LP/RTCC/RP14/CN12/PMWR/RB14"/>
-<wire x1="86.36" y1="127" x2="116.84" y2="127" width="0.1524" layer="91"/>
-<label x="86.36" y="127" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="PWM1H2/DAC1RP/RP12/CN14/PMD0/RB12"/>
+<wire x1="116.84" y1="137.16" x2="86.36" y2="137.16" width="0.1524" layer="91"/>
+<label x="86.36" y="137.16" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M2_EB" class="0">
@@ -15557,9 +15557,9 @@ datasheet section 2.2</text>
 <label x="198.12" y="25.4" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="PWM1H2/DAC1RP/RP12/CN14/PMD0/RB12"/>
-<wire x1="116.84" y1="137.16" x2="86.36" y2="137.16" width="0.1524" layer="91"/>
-<label x="86.36" y="137.16" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="PWM1H1/DAC1LP/RTCC/RP14/CN12/PMWR/RB14"/>
+<wire x1="86.36" y1="127" x2="116.84" y2="127" width="0.1524" layer="91"/>
+<label x="86.36" y="127" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M2_D1" class="0">
