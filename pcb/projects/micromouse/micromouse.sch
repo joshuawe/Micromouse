@@ -15392,7 +15392,7 @@ datasheet section 2.2</text>
 <wire x1="386.08" y1="160.02" x2="386.08" y2="144.78" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="M1_EA" class="0">
+<net name="M1_EB" class="0">
 <segment>
 <pinref part="M1" gate="-1" pin="S"/>
 <wire x1="45.72" y1="35.56" x2="35.56" y2="35.56" width="0.1524" layer="91"/>
@@ -15404,7 +15404,7 @@ datasheet section 2.2</text>
 <label x="91.44" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="M1_EB" class="0">
+<net name="M1_EA" class="0">
 <segment>
 <pinref part="M1" gate="-2" pin="S"/>
 <wire x1="71.12" y1="35.56" x2="60.96" y2="35.56" width="0.1524" layer="91"/>
@@ -15488,7 +15488,7 @@ datasheet section 2.2</text>
 <label x="86.36" y="127" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="M2_EA" class="0">
+<net name="M2_EB" class="0">
 <segment>
 <pinref part="M2" gate="-1" pin="S"/>
 <wire x1="261.62" y1="40.64" x2="251.46" y2="40.64" width="0.1524" layer="91"/>
@@ -15518,7 +15518,7 @@ datasheet section 2.2</text>
 <label x="198.12" y="38.1" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="M2_EB" class="0">
+<net name="M2_EA" class="0">
 <segment>
 <pinref part="M2" gate="-2" pin="S"/>
 <wire x1="287.02" y1="40.64" x2="276.86" y2="40.64" width="0.1524" layer="91"/>
