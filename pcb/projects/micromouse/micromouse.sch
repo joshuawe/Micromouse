@@ -15399,9 +15399,9 @@ datasheet section 2.2</text>
 <label x="35.56" y="35.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="PWM2L1/RP23/CN17/PMA0/RC7"/>
-<wire x1="91.44" y1="154.94" x2="116.84" y2="154.94" width="0.1524" layer="91"/>
-<label x="91.44" y="154.94" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="RP19/CN28/PMBE/RC3"/>
+<wire x1="322.58" y1="139.7" x2="299.72" y2="139.7" width="0.1524" layer="91"/>
+<label x="314.96" y="139.7" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1_EA" class="0">
@@ -15411,9 +15411,9 @@ datasheet section 2.2</text>
 <label x="60.96" y="35.56" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP24/CN20/PMA5/RC8"/>
-<wire x1="91.44" y1="152.4" x2="116.84" y2="152.4" width="0.1524" layer="91"/>
-<label x="91.44" y="152.4" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="TDI/PMA9/RA9"/>
+<wire x1="322.58" y1="137.16" x2="299.72" y2="137.16" width="0.1524" layer="91"/>
+<label x="314.96" y="137.16" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1-" class="0">
@@ -15459,9 +15459,9 @@ datasheet section 2.2</text>
 <label x="119.38" y="40.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="SDA1/RP9/CN21/PMD3/RB9"/>
-<wire x1="91.44" y1="160.02" x2="116.84" y2="160.02" width="0.1524" layer="91"/>
-<label x="91.44" y="160.02" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="RP21/CN26/PMA3/RC5"/>
+<wire x1="322.58" y1="144.78" x2="299.72" y2="144.78" width="0.1524" layer="91"/>
+<label x="314.96" y="144.78" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1_D2" class="0">
@@ -15471,9 +15471,9 @@ datasheet section 2.2</text>
 <label x="119.38" y="27.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="PWM2H1/RP22/CN18/PMA1/RC6"/>
-<wire x1="91.44" y1="157.48" x2="116.84" y2="157.48" width="0.1524" layer="91"/>
-<label x="91.44" y="157.48" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="RP20/CN25/PMA4/RC4"/>
+<wire x1="322.58" y1="142.24" x2="299.72" y2="142.24" width="0.1524" layer="91"/>
+<label x="314.96" y="142.24" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1_PWM" class="0">
@@ -15495,9 +15495,9 @@ datasheet section 2.2</text>
 <label x="251.46" y="40.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP19/CN28/PMBE/RC3"/>
-<wire x1="322.58" y1="139.7" x2="299.72" y2="139.7" width="0.1524" layer="91"/>
-<label x="314.96" y="139.7" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="PWM2L1/RP23/CN17/PMA0/RC7"/>
+<wire x1="91.44" y1="154.94" x2="116.84" y2="154.94" width="0.1524" layer="91"/>
+<label x="91.44" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M2-" class="0">
@@ -15525,9 +15525,9 @@ datasheet section 2.2</text>
 <label x="276.86" y="40.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="TDI/PMA9/RA9"/>
-<wire x1="322.58" y1="137.16" x2="299.72" y2="137.16" width="0.1524" layer="91"/>
-<label x="314.96" y="137.16" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="RP24/CN20/PMA5/RC8"/>
+<wire x1="91.44" y1="152.4" x2="116.84" y2="152.4" width="0.1524" layer="91"/>
+<label x="91.44" y="152.4" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M2+" class="0">
@@ -15569,9 +15569,9 @@ datasheet section 2.2</text>
 <label x="198.12" y="27.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP21/CN26/PMA3/RC5"/>
-<wire x1="322.58" y1="144.78" x2="299.72" y2="144.78" width="0.1524" layer="91"/>
-<label x="314.96" y="144.78" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="PWM2H1/RP22/CN18/PMA1/RC6"/>
+<wire x1="91.44" y1="157.48" x2="116.84" y2="157.48" width="0.1524" layer="91"/>
+<label x="91.44" y="157.48" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M2_D2" class="0">
@@ -15581,9 +15581,9 @@ datasheet section 2.2</text>
 <label x="198.12" y="40.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP20/CN25/PMA4/RC4"/>
-<wire x1="322.58" y1="142.24" x2="299.72" y2="142.24" width="0.1524" layer="91"/>
-<label x="314.96" y="142.24" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="SDA1/RP9/CN21/PMD3/RB9"/>
+<wire x1="91.44" y1="160.02" x2="116.84" y2="160.02" width="0.1524" layer="91"/>
+<label x="91.44" y="160.02" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$4" class="0">
@@ -15629,9 +15629,9 @@ datasheet section 2.2</text>
 <pinref part="DIST2S" gate="1" pin="P"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="AN5/C1IN+/RP3/CN7/RB3"/>
-<wire x1="320.04" y1="109.22" x2="299.72" y2="109.22" width="0.1524" layer="91"/>
-<label x="309.88" y="109.22" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="AN6/DAC1RM/RP16/CN8/RC0"/>
+<wire x1="320.04" y1="111.76" x2="299.72" y2="111.76" width="0.1524" layer="91"/>
+<label x="309.88" y="111.76" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DSENS3" class="0">
@@ -15641,9 +15641,9 @@ datasheet section 2.2</text>
 <pinref part="DIST3S" gate="1" pin="P"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="AN6/DAC1RM/RP16/CN8/RC0"/>
-<wire x1="320.04" y1="111.76" x2="299.72" y2="111.76" width="0.1524" layer="91"/>
-<label x="309.88" y="111.76" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="AN5/C1IN+/RP3/CN7/RB3"/>
+<wire x1="320.04" y1="109.22" x2="299.72" y2="109.22" width="0.1524" layer="91"/>
+<label x="309.88" y="109.22" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -15722,9 +15722,9 @@ datasheet section 2.2</text>
 <label x="342.9" y="78.74" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="SOSCO/T1CK/CN0/RA4"/>
-<wire x1="322.58" y1="134.62" x2="299.72" y2="134.62" width="0.1524" layer="91"/>
-<label x="314.96" y="134.62" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="AN7/DAC1LM/RP17/CN9/RC1"/>
+<wire x1="320.04" y1="114.3" x2="299.72" y2="114.3" width="0.1524" layer="91"/>
+<label x="309.88" y="114.3" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LED1" class="0">
