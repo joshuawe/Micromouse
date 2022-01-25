@@ -1,5 +1,6 @@
 #include "myTimers.h"
 #include "IOconfig.h"
+#include "encoder.h"
 
 static int myCount;
 int t;
@@ -94,67 +95,100 @@ void startTimer1(void)
  
 }
 
+// this routine found online somewhere, then tweaked
+ // returns pointer to ASCII string in a static buffer
+ char *itoa(int value) 
+ {
+     static char buffer[12];        // 12 bytes is big enough for an INT32
+     int original = value;        // save original value
+ 
+     int c = sizeof(buffer)-1;
+ 
+     buffer[c] = 0;                // write trailing null in last byte of buffer    
+ 
+     if (value < 0)                 // if it's negative, note that and take the absolute value
+         value = -value;
+     
+     do                             // write least significant digit of value that's left
+     {
+         buffer[--c] = (value % 10) + '0';    
+         value /= 10;
+     } while (value);
+ 
+     if (original < 0) 
+         buffer[--c] = '-';
+ 
+     return &buffer[c];
+ }
+
+
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
  
     IFS0bits.T1IF = 0;           // reset Timer 2 interrupt flag 
-    myCount++;
     
-    if (t<630){
-        LED4=~LED4;
-    }
-    else if (t<630*2){
-        if(myCount%2==0){
-            LED4=~LED4;            
-        }
-    }
-    else if (t<630*4){
-        if(myCount%4==0){
-            LED4=~LED4;            
-        }
-    }
-    else if (t<630*8){
-        if(myCount%8==0){
-            LED4=~LED4;            
-        }
-    }
-    else if (t<630*16){
-        if(myCount%16==0){
-            LED4=~LED4;            
-        }
-    }
+    char *num = itoa(longPOS);
     
-    
-    
-    /*
-    
-    if (LED6 == LEDON){
-        U1TXREG = 'A';
-    }
-    else{
-        U1TXREG = 'Z';
-    }
-    */
-    
-    //send all character from A to Z on the serial port
-   
-   static char dataOut='A';
-   U1TXREG=dataOut; //0x55;
-   dataOut++;
-   if(dataOut>'Z'){
-       dataOut='A';
-   }
-   
-   
-   //dataOut = 'A';
-   //U1TXREG=dataOut; //0x55;
-   //dataOut++;
-   //if(dataOut>'Z'){
-   //    dataOut='A';
-   //}
-   
-   //char * data = "Hello";
-   //putsUART1(data);
-   
+    putsUART1(num);
+    putsUART1("\r\n");
+//    
+//    myCount++;
+//    
+//    if (t<630){
+//        LED4=~LED4;
+//    }
+//    else if (t<630*2){
+//        if(myCount%2==0){
+//            LED4=~LED4;            
+//        }
+//    }
+//    else if (t<630*4){
+//        if(myCount%4==0){
+//            LED4=~LED4;            
+//        }
+//    }
+//    else if (t<630*8){
+//        if(myCount%8==0){
+//            LED4=~LED4;            
+//        }
+//    }
+//    else if (t<630*16){
+//        if(myCount%16==0){
+//            LED4=~LED4;            
+//        }
+//    }
+//    
+//    
+//    
+//    /*
+//    
+//    if (LED6 == LEDON){
+//        U1TXREG = 'A';
+//    }
+//    else{
+//        U1TXREG = 'Z';
+//    }
+//    */
+//    
+//    //send all character from A to Z on the serial port
+//   
+//   static char dataOut='A';
+//   U1TXREG=dataOut; //0x55;
+//   dataOut++;
+//   if(dataOut>'Z'){
+//       dataOut='A';
+//   }
+//   
+//   
+//   //dataOut = 'A';
+//   //U1TXREG=dataOut; //0x55;
+//   //dataOut++;
+//   //if(dataOut>'Z'){
+//   //    dataOut='A';
+//   //}
+//   
+//   //char * data = "Hello";
+//   //putsUART1(data);
+//   
     
 }//

@@ -48,6 +48,8 @@
 #include "xc.h"
 #include "IOconfig.h"
 #include "timer1.h"
+#include "encoder.h"
+#include "serialComms.h"
 
 
 /// Defines----------------------------
@@ -59,7 +61,7 @@
 int main() 
 {
     int pinStatus;
-#if (SEVEN_MEG_OSC == 0) 
+#if (SEVEN_MEG_OSC == 1) 
      /*** oscillator setup --------------------------------------------------
      * The external oscillator runs at 16MHz
      * PLL is used to generate 53.3 MHz clock (FOSC)
@@ -102,12 +104,14 @@ int main()
     // In reality, give some time to the PLL to lock
     while (OSCCONbits.LOCK != 1); //Wait for PPL to lock
  
-    //setupIO(); //configures inputs and outputs
+    setupIO(); //configures inputs and outputs
     //setupPWM(0.5,0,0,1); 
-    //initTimer1(500); //creates a x ms timer interrupt (x < 630 ms)
-    //startTimer1();
-    //setupUART1();
+    init_QEI();
+    initTimer1(50); //creates a x ms timer interrupt (x < 630 ms)
     setupIO_Motor();
+    
+    setupUART1();
+    startTimer1();
     //setupPWM(0,0,0.5);
     //setupADC1();
     //startADC1();
