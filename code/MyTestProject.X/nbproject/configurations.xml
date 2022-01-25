@@ -11,6 +11,7 @@
       <itemPath>dma.h</itemPath>
       <itemPath>myPWM.h</itemPath>
       <itemPath>timer1.h</itemPath>
+      <itemPath>MotorControl.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -27,6 +28,9 @@
       <itemPath>myPWM.c</itemPath>
       <itemPath>adc.c</itemPath>
       <itemPath>dma.c</itemPath>
+      <itemPath>MotorControl.c</itemPath>
+      <itemPath>ICC.c</itemPath>
+      <itemPath>mapping.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -45,7 +49,7 @@
         <targetDevice>dsPIC33FJ128MC802</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>pk4hybrid</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>1.70</languageToolchainVersion>
         <platform>3</platform>
