@@ -88,21 +88,25 @@ void setupIO_Motor(){
     
  
     //Setting input pins for encoder
-    RPINR14bits.QEA1R = 14; // pin RP14 = Pin 25 assigned to register 14A as input
-    RPINR14bits.QEB1R = 15; // pin RP15 = Pin 26 assigned to register 14B as input
+    // Pin 22 (RB11) Channel A
+    // Pin 21 (RB10) Channel B
+    RPINR14bits.QEA1R = 11;
+    RPINR14bits.QEB1R = 10;
     
     //Setting power and ground pins
-    TRISBbits.TRISB13 = 0; // output pin 24
     TRISBbits.TRISB12 = 0; // output pin 23
-    TRISBbits.TRISB15 = 0; // output pin 25 --> nachschauen!!!
-    LATBbits.LATB13 = 1; // Power pin 24
-    LATBbits.LATB12 = 0; // Ground pin 23
-    LATBbits.LATB15 = 0; // Ground pin 25 --> nachschauen!!!
-
+    TRISBbits.TRISB13 = 0; // output pin 24
+    TRISBbits.TRISB14 = 0; // output pin 25
+    TRISBbits.TRISB15 = 0; // output pin 26
+    LATBbits.LATB12 = 0; // Pin 23
+    LATBbits.LATB13 = 0; // Pin 24
+    LATBbits.LATB14 = 0; // Pin 25
+    LATBbits.LATB15 = 0; // Pin 26 (PWM1L)
+    
     //Setting PWM (pin 21 = PWM1H3, pin 22 = PWM1L3, pin 23 = H2, pin 24 = L2, pin25 = H1, pin26 = L1)
     
     
-    setupPWM(0.8,0,0,1);  
+    setupPWM(1,0,0,0);  
     
     //after mapping we lock again
      __builtin_write_OSCCONL(OSCCON | 0x40); // Lock PPS registers (lock again!)

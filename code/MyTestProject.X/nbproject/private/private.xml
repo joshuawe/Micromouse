@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Miriam%20Welser/MPLABXProjects/Micromouse2021/MyTestProject.X/IOconfig.c</file>
-            <file>file:/C:/Users/Miriam%20Welser/MPLABXProjects/Micromouse2021/MyTestProject.X/main.c</file>
-            <file>file:/C:/Users/Miriam%20Welser/MPLABXProjects/Micromouse2021/MyTestProject.X/myPWM.h</file>
-            <file>file:/C:/Users/Miriam%20Welser/MPLABXProjects/Micromouse2021/MyTestProject.X/IOconfig.h</file>
-            <file>file:/C:/Users/Miriam%20Welser/MPLABXProjects/Micromouse2021/MyTestProject.X/myPWM.c</file>
-            <file>file:/C:/Users/Miriam%20Welser/MPLABXProjects/Micromouse2021/MyTestProject.X/myTimers.c</file>
+            <file>file:/home/marius/workspace/Micromouse/code/MyTestProject.X/serialComms.c</file>
+            <file>file:/home/marius/workspace/Micromouse/code/MyTestProject.X/IOconfig.c</file>
+            <file>file:/home/marius/workspace/Micromouse/code/MyTestProject.X/main.c</file>
+            <file>file:/home/marius/workspace/Micromouse/code/MyTestProject.X/myTimers.c</file>
+            <file>file:/home/marius/workspace/Micromouse/code/MyTestProject.X/myPWM.c</file>
+            <file>file:/opt/microchip/mplabx/v5.50/packs/Microchip/dsPIC33F-GP-MC_DFP/1.3.64/xc16/support/dsPIC33F/h/p33FJ128MC802.h</file>
+            <file>file:/home/marius/workspace/Micromouse/code/MyTestProject.X/timer1.c</file>
         </group>
     </open-files>
 </project-private>
