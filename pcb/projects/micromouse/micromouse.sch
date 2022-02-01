@@ -16416,7 +16416,7 @@ Source: www.kingbright.com</description>
 <part name="PROG" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA06-1" device="" package3d_urn="urn:adsk.eagle:package:8340/1"/>
 <part name="VDD5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
+<part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="47k"/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1"/>
 <part name="VDD6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="RESET" library="switch-omron" library_urn="urn:adsk.eagle:library:377" deviceset="10-XX" device="" package3d_urn="urn:adsk.eagle:package:27496/1"/>
@@ -16450,7 +16450,6 @@ Source: www.kingbright.com</description>
 <part name="GND7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="VDD11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
-<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
 <part name="GND15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="VDD12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="GND16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -16498,8 +16497,6 @@ Source: www.kingbright.com</description>
 <text x="35.56" y="60.96" size="1.778" layer="93">Motor 1</text>
 <text x="251.46" y="66.04" size="1.778" layer="93">Motor 2</text>
 <text x="22.86" y="86.36" size="1.778" layer="97">TODO:
-- Double-check pin connections for
-programmer and UART connector
 - Add holes for LED on front</text>
 <text x="386.08" y="129.54" size="1.778" layer="93">Oscillator</text>
 <text x="365.76" y="259.08" size="1.778" layer="97">These capacitors are the decoupling capacitors for the
@@ -16665,10 +16662,6 @@ datasheet section 2.2</text>
 </instance>
 <instance part="VDD11" gate="G$1" x="342.9" y="152.4" smashed="yes">
 <attribute name="VALUE" x="340.36" y="149.86" size="1.778" layer="96" rot="R90"/>
-</instance>
-<instance part="C8" gate="G$1" x="177.8" y="200.66" smashed="yes">
-<attribute name="NAME" x="179.324" y="201.041" size="1.778" layer="95"/>
-<attribute name="VALUE" x="179.324" y="195.961" size="1.778" layer="96"/>
 </instance>
 <instance part="GND15" gate="1" x="60.96" y="119.38" smashed="yes">
 <attribute name="VALUE" x="58.42" y="116.84" size="1.778" layer="96"/>
@@ -16974,9 +16967,9 @@ datasheet section 2.2</text>
 <wire x1="60.96" y1="147.32" x2="60.96" y2="142.24" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="C8" gate="G$1" pin="2"/>
 <pinref part="GND8" gate="1" pin="GND"/>
-<wire x1="177.8" y1="195.58" x2="177.8" y2="193.04" width="0.1524" layer="91"/>
+<pinref part="RESET" gate="1" pin="P"/>
+<wire x1="177.8" y1="205.74" x2="177.8" y2="193.04" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="GND15" gate="1" pin="GND"/>
@@ -17543,13 +17536,6 @@ datasheet section 2.2</text>
 <pinref part="LED2" gate="G$1" pin="C"/>
 <pinref part="R4" gate="G$1" pin="1"/>
 <wire x1="401.32" y1="71.12" x2="403.86" y2="71.12" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$3" class="0">
-<segment>
-<pinref part="RESET" gate="1" pin="P"/>
-<pinref part="C8" gate="G$1" pin="1"/>
-<wire x1="177.8" y1="205.74" x2="177.8" y2="203.2" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
