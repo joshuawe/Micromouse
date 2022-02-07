@@ -16466,7 +16466,7 @@ Source: www.kingbright.com</description>
 <part name="S1" library="switch-omron" library_urn="urn:adsk.eagle:library:377" deviceset="10-XX" device="" package3d_urn="urn:adsk.eagle:package:27496/1"/>
 <part name="VDD3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="GND19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
+<part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
 <part name="LED1" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="CHIP-LED0805" package3d_urn="urn:adsk.eagle:package:15818/2"/>
 <part name="LED2" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="CHIP-LED0805" package3d_urn="urn:adsk.eagle:package:15818/2"/>
 <part name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="700Ohm"/>
@@ -16483,6 +16483,7 @@ Source: www.kingbright.com</description>
 <part name="DIST2" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-1" device="" package3d_urn="urn:adsk.eagle:package:8339/1"/>
 <part name="DIST3" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-1" device="" package3d_urn="urn:adsk.eagle:package:8339/1"/>
 <part name="G1" library="battery" library_urn="urn:adsk.eagle:library:109" deviceset="AB9V" device="" package3d_urn="urn:adsk.eagle:package:4600/1"/>
+<part name="LED3" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="3MM" package3d_urn="urn:adsk.eagle:package:15797/1"/>
 </parts>
 <sheets>
 <sheet>
@@ -16496,14 +16497,14 @@ Source: www.kingbright.com</description>
 <text x="147.32" y="58.42" size="1.778" layer="93">Motor Control</text>
 <text x="35.56" y="60.96" size="1.778" layer="93">Motor 1</text>
 <text x="251.46" y="66.04" size="1.778" layer="93">Motor 2</text>
-<text x="22.86" y="86.36" size="1.778" layer="97">TODO:
-- Add holes for LED on front</text>
 <text x="386.08" y="129.54" size="1.778" layer="93">Oscillator</text>
 <text x="365.76" y="259.08" size="1.778" layer="97">These capacitors are the decoupling capacitors for the
 microcontroller. On the PCB they must be placed next
 to the VDD/VSS and AVDD/AVSS pins. More info in the
 datasheet section 2.2</text>
 <text x="358.14" y="58.42" size="1.778" layer="97">Button und LEDs</text>
+<text x="391.16" y="50.8" size="1.778" layer="96">This LED is solely for keeping
+the front off the ground.</text>
 </plain>
 <instances>
 <instance part="FRAME1" gate="G$1" x="0" y="0" smashed="yes"/>
@@ -16785,6 +16786,10 @@ datasheet section 2.2</text>
 <instance part="G1" gate="G$1" x="218.44" y="236.22" smashed="yes" rot="R90">
 <attribute name="NAME" x="215.265" y="230.505" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="223.52" y="230.505" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="LED3" gate="G$1" x="386.08" y="48.26" smashed="yes">
+<attribute name="NAME" x="389.636" y="43.688" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="391.795" y="43.688" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
