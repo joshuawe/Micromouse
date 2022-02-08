@@ -57,7 +57,6 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-<<<<<<< HEAD
 SOURCEFILES_QUOTED_IF_SPACED=main.c IOconfig.c timer1.c myTimers.c serialComms.c myPWM.c adc.c dma.c MotorControl.c ICC.c mapping.c
 
 # Object Files Quoted if spaced
@@ -69,19 +68,6 @@ OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/timer1.o ${
 
 # Source Files
 SOURCEFILES=main.c IOconfig.c timer1.c myTimers.c serialComms.c myPWM.c adc.c dma.c MotorControl.c ICC.c mapping.c
-=======
-SOURCEFILES_QUOTED_IF_SPACED=main.c IOconfig.c timer1.c myTimers.c serialComms.c myPWM.c adc.c dma.c encoder.c
-
-# Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/timer1.o ${OBJECTDIR}/myTimers.o ${OBJECTDIR}/serialComms.o ${OBJECTDIR}/myPWM.o ${OBJECTDIR}/adc.o ${OBJECTDIR}/dma.o ${OBJECTDIR}/encoder.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/IOconfig.o.d ${OBJECTDIR}/timer1.o.d ${OBJECTDIR}/myTimers.o.d ${OBJECTDIR}/serialComms.o.d ${OBJECTDIR}/myPWM.o.d ${OBJECTDIR}/adc.o.d ${OBJECTDIR}/dma.o.d ${OBJECTDIR}/encoder.o.d
-
-# Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/IOconfig.o ${OBJECTDIR}/timer1.o ${OBJECTDIR}/myTimers.o ${OBJECTDIR}/serialComms.o ${OBJECTDIR}/myPWM.o ${OBJECTDIR}/adc.o ${OBJECTDIR}/dma.o ${OBJECTDIR}/encoder.o
-
-# Source Files
-SOURCEFILES=main.c IOconfig.c timer1.c myTimers.c serialComms.c myPWM.c adc.c dma.c encoder.c
->>>>>>> 518c0ae3b116ce17b3cea54e492f5348ff7f5dac
 
 
 
@@ -175,12 +161,6 @@ ${OBJECTDIR}/mapping.o: mapping.c  .generated_files/flags/default/63375be9ca0d67
 	@${RM} ${OBJECTDIR}/mapping.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  mapping.c  -o ${OBJECTDIR}/mapping.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mapping.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_SIMULATOR=1    -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/encoder.o: encoder.c  .generated_files/flags/default/b0e5a25dd6c776fb025490b1e1c2fc83f1403526 .generated_files/flags/default/c3bcb89a839b6aab43a2e4502bbfa70e66d2d91a
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/encoder.o.d 
-	@${RM} ${OBJECTDIR}/encoder.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  encoder.c  -o ${OBJECTDIR}/encoder.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/encoder.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
-	
 else
 ${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/8a014c9fe6b7aa2e9b1a46d683b877851f431f1 .generated_files/flags/default/d4814af898713311d11a33e76b91bdc91b39bcaa
 	@${MKDIR} "${OBJECTDIR}" 
@@ -230,7 +210,6 @@ ${OBJECTDIR}/dma.o: dma.c  .generated_files/flags/default/658631ff4eb6e25205aefc
 	@${RM} ${OBJECTDIR}/dma.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  dma.c  -o ${OBJECTDIR}/dma.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/dma.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-<<<<<<< HEAD
 ${OBJECTDIR}/MotorControl.o: MotorControl.c  .generated_files/flags/default/7f14798ee55d597c11a9f65b41eee9e92b5fa753 .generated_files/flags/default/d4814af898713311d11a33e76b91bdc91b39bcaa
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/MotorControl.o.d 
@@ -248,13 +227,6 @@ ${OBJECTDIR}/mapping.o: mapping.c  .generated_files/flags/default/8781c905e8a188
 	@${RM} ${OBJECTDIR}/mapping.o.d 
 	@${RM} ${OBJECTDIR}/mapping.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  mapping.c  -o ${OBJECTDIR}/mapping.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mapping.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
-=======
-${OBJECTDIR}/encoder.o: encoder.c  .generated_files/flags/default/3ded0acbfed7e9ce51d9e7ef436e0f29b415db07 .generated_files/flags/default/c3bcb89a839b6aab43a2e4502bbfa70e66d2d91a
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/encoder.o.d 
-	@${RM} ${OBJECTDIR}/encoder.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  encoder.c  -o ${OBJECTDIR}/encoder.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/encoder.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
->>>>>>> 518c0ae3b116ce17b3cea54e492f5348ff7f5dac
 	
 endif
 
