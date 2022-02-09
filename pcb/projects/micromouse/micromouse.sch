@@ -16483,7 +16483,6 @@ Source: www.kingbright.com</description>
 <part name="DIST2" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-1" device="" package3d_urn="urn:adsk.eagle:package:8339/1"/>
 <part name="DIST3" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-1" device="" package3d_urn="urn:adsk.eagle:package:8339/1"/>
 <part name="G1" library="battery" library_urn="urn:adsk.eagle:library:109" deviceset="AB9V" device="" package3d_urn="urn:adsk.eagle:package:4600/1"/>
-<part name="LED3" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="3MM" package3d_urn="urn:adsk.eagle:package:15797/1"/>
 </parts>
 <sheets>
 <sheet>
@@ -16786,10 +16785,6 @@ the front off the ground.</text>
 <instance part="G1" gate="G$1" x="218.44" y="236.22" smashed="yes" rot="R90">
 <attribute name="NAME" x="215.265" y="230.505" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="223.52" y="230.505" size="1.778" layer="96" rot="R90"/>
-</instance>
-<instance part="LED3" gate="G$1" x="386.08" y="48.26" smashed="yes">
-<attribute name="NAME" x="389.636" y="43.688" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="391.795" y="43.688" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
