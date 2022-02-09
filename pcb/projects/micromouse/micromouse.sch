@@ -16408,15 +16408,15 @@ Source: www.kingbright.com</description>
 <parts>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="FRAME_B_L" device=""/>
 <part name="VDD1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
-<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
-<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value=".33uF"/>
+<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10nF (T)"/>
+<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="10uF"/>
 <part name="GND2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="PROG" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA06-1" device="" package3d_urn="urn:adsk.eagle:package:8340/1"/>
 <part name="VDD5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="47k"/>
+<part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="4.7k"/>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1"/>
 <part name="VDD6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="RESET" library="switch-omron" library_urn="urn:adsk.eagle:library:377" deviceset="10-XX" device="" package3d_urn="urn:adsk.eagle:package:27496/1"/>
@@ -16446,7 +16446,7 @@ Source: www.kingbright.com</description>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="15pF"/>
 <part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="15pF"/>
 <part name="GND5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="4.7uF"/>
+<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="4.7uF (T)"/>
 <part name="GND7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="VDD11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
@@ -16483,6 +16483,9 @@ Source: www.kingbright.com</description>
 <part name="DIST2" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-1" device="" package3d_urn="urn:adsk.eagle:package:8339/1"/>
 <part name="DIST3" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-1" device="" package3d_urn="urn:adsk.eagle:package:8339/1"/>
 <part name="G1" library="battery" library_urn="urn:adsk.eagle:library:109" deviceset="AB9V" device="" package3d_urn="urn:adsk.eagle:package:4600/1"/>
+<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
+<part name="C16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
+<part name="LED3" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="5MM" package3d_urn="urn:adsk.eagle:package:15799/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -16786,6 +16789,18 @@ the front off the ground.</text>
 <attribute name="NAME" x="215.265" y="230.505" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="223.52" y="230.505" size="1.778" layer="96" rot="R90"/>
 </instance>
+<instance part="C8" gate="G$1" x="25.4" y="25.4" smashed="yes">
+<attribute name="NAME" x="26.924" y="25.781" size="1.778" layer="95"/>
+<attribute name="VALUE" x="26.924" y="20.701" size="1.778" layer="96"/>
+</instance>
+<instance part="C16" gate="G$1" x="243.84" y="30.48" smashed="yes">
+<attribute name="NAME" x="245.364" y="30.861" size="1.778" layer="95"/>
+<attribute name="VALUE" x="245.364" y="25.781" size="1.778" layer="96"/>
+</instance>
+<instance part="LED3" gate="G$1" x="383.54" y="48.26" smashed="yes">
+<attribute name="NAME" x="387.096" y="43.688" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="389.255" y="43.688" size="1.778" layer="96" rot="R90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -16826,6 +16841,9 @@ the front off the ground.</text>
 <pinref part="VDD10" gate="G$1" pin="VDD"/>
 <wire x1="243.84" y1="43.18" x2="243.84" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="MOTOR2" gate="1" pin="4"/>
+<pinref part="C16" gate="G$1" pin="1"/>
+<wire x1="243.84" y1="35.56" x2="243.84" y2="33.02" width="0.1524" layer="91"/>
+<junction x="243.84" y="35.56"/>
 </segment>
 <segment>
 <pinref part="VDD11" gate="G$1" pin="VDD"/>
@@ -16861,6 +16879,9 @@ the front off the ground.</text>
 <wire x1="25.4" y1="33.02" x2="45.72" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="VDD8" gate="G$1" pin="VDD"/>
 <wire x1="25.4" y1="40.64" x2="25.4" y2="33.02" width="0.1524" layer="91"/>
+<pinref part="C8" gate="G$1" pin="1"/>
+<wire x1="25.4" y1="33.02" x2="25.4" y2="27.94" width="0.1524" layer="91"/>
+<junction x="25.4" y="33.02"/>
 </segment>
 <segment>
 <pinref part="VDD3" gate="G$1" pin="VDD"/>
@@ -17085,6 +17106,10 @@ the front off the ground.</text>
 <wire x1="66.04" y1="17.78" x2="83.82" y2="17.78" width="0.1524" layer="91"/>
 <junction x="66.04" y="17.78"/>
 <junction x="83.82" y="17.78"/>
+<pinref part="C8" gate="G$1" pin="2"/>
+<wire x1="25.4" y1="20.32" x2="25.4" y2="17.78" width="0.1524" layer="91"/>
+<wire x1="25.4" y1="17.78" x2="40.64" y2="17.78" width="0.1524" layer="91"/>
+<junction x="40.64" y="17.78"/>
 </segment>
 <segment>
 <wire x1="271.78" y1="35.56" x2="289.56" y2="35.56" width="0.1524" layer="91"/>
@@ -17094,10 +17119,14 @@ the front off the ground.</text>
 <pinref part="D7" gate="G$1" pin="A"/>
 <pinref part="D6" gate="G$1" pin="A"/>
 <wire x1="289.56" y1="20.32" x2="289.56" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="251.46" y1="20.32" x2="276.86" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="251.46" y1="20.32" x2="254" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="254" y1="20.32" x2="276.86" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="276.86" y1="20.32" x2="289.56" y2="20.32" width="0.1524" layer="91"/>
 <junction x="276.86" y="20.32"/>
 <junction x="289.56" y="20.32"/>
+<pinref part="C16" gate="G$1" pin="2"/>
+<wire x1="243.84" y1="25.4" x2="243.84" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="243.84" y1="20.32" x2="251.46" y2="20.32" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="GND6" gate="1" pin="GND"/>
