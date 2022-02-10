@@ -75,11 +75,11 @@
 <wire x1="0" y1="10.16" x2="10.16" y2="0" width="0.1524" layer="48" style="shortdash"/>
 <text x="35.56" y="105.41" size="1.778" layer="48">Front</text>
 <text x="35.56" y="-7.62" size="1.778" layer="48">Back</text>
-<text x="5.08" y="22.86" size="1.778" layer="48" rot="R90">Motor 1</text>
-<text x="76.2" y="21.59" size="1.778" layer="48" rot="R90">Motor 2</text>
-<text x="6.35" y="67.31" size="1.778" layer="48" rot="R90">Sensor 1</text>
-<text x="76.2" y="66.04" size="1.778" layer="48" rot="R90">Sensor 3</text>
-<text x="41.91" y="93.98" size="1.778" layer="48" rot="R180">Sensor 2</text>
+<text x="5.08" y="22.86" size="1.778" layer="21" rot="R90">Motor 1</text>
+<text x="76.2" y="21.59" size="1.778" layer="21" rot="R90">Motor 2</text>
+<text x="6.35" y="67.31" size="1.778" layer="21" rot="R90">Sensor 1</text>
+<text x="76.2" y="66.04" size="1.778" layer="21" rot="R90">Sensor 3</text>
+<text x="41.91" y="93.98" size="1.778" layer="21" rot="R180">Sensor 2</text>
 <text x="83.82" y="91.44" size="1.778" layer="48">Dashed area should not be
 used to place components
 because parts will be mounted
@@ -100,6 +100,26 @@ there.</text>
 <wire x1="-0.122" y1="10.165" x2="-0.122" y2="85.165" width="0" layer="20"/>
 <wire x1="9.878" y1="0.165" x2="-0.122" y2="10.165" width="0" layer="20"/>
 <wire x1="69.878" y1="0.165" x2="9.878" y2="0.165" width="0" layer="20"/>
+<text x="17.145" y="56.388" size="0.8128" layer="21">RX   TX GND VDD</text>
+<text x="17.399" y="22.352" size="0.8128" layer="21">EB  GND</text>
+<text x="17.145" y="14.097" size="0.8128" layer="21">EA  VDD  M+</text>
+<text x="30.353" y="73.533" size="0.8128" layer="21" rot="R90">GND SEN +5V</text>
+<circle x="71.12" y="81.28" radius="1.79605" width="0" layer="22"/>
+<circle x="69.215" y="83.312" radius="1.27" width="0" layer="22"/>
+<circle x="72.898" y="83.312" radius="1.27" width="0" layer="22"/>
+<text x="73.66" y="62.23" size="1.27" layer="22" rot="MR0">Minimaus
+WS 2021/22
+Miriam Welser
+Michelle Bettendorf
+Marius Kleidl
+Joshua Wendland
+
+Made with little experience.
+Let's hope it works.</text>
+<text x="42.926" y="79.629" size="0.8128" layer="21" rot="R180">GND SEN +5V</text>
+<text x="55.118" y="80.899" size="0.8128" layer="21" rot="R270">GND SEN +5V</text>
+<text x="51.181" y="12.827" size="0.8128" layer="21">GND EB</text>
+<text x="48.641" y="21.336" size="0.8128" layer="21">M+  VDD</text>
 </plain>
 <libraries>
 <library name="rcl" urn="urn:adsk.eagle:library:334">
@@ -1343,7 +1363,7 @@ Based on the following sources:
 <vertex x="-0.6095" y="6.7984"/>
 </polygon>
 <text x="-7.747" y="4.1402" size="1.27" layer="21" ratio="6" rot="SR0">*</text>
-<text x="-1.7272" y="-0.635" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
+<text x="-2.9972" y="-9.525" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
 <wire x1="5.6642" y1="3.9878" x2="5.9944" y2="3.9878" width="0.1524" layer="47"/>
 <wire x1="5.9944" y1="3.9878" x2="8.5852" y2="3.9878" width="0.1524" layer="47"/>
 <wire x1="8.5852" y1="3.9878" x2="8.9662" y2="3.9878" width="0.1524" layer="47"/>
@@ -1604,7 +1624,7 @@ Based on the following sources:
 <wire x1="5.0038" y1="-5.0038" x2="5.0038" y2="5.0038" width="0.1524" layer="51"/>
 <wire x1="5.0038" y1="5.0038" x2="-5.0038" y2="5.0038" width="0.1524" layer="51"/>
 <text x="-5.207" y="3.7592" size="1.27" layer="51" ratio="6" rot="SR0">*</text>
-<text x="-3.2766" y="-0.635" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
+<text x="-3.2766" y="8.255" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
 </package>
 <package name="KCS0003B">
 <pad name="1" x="0" y="2.54" drill="0.9906" diameter="1.6002" shape="square"/>
@@ -1617,7 +1637,6 @@ Based on the following sources:
 <wire x1="2.8702" y1="-5.08" x2="2.8702" y2="5.08" width="0.1524" layer="51"/>
 <wire x1="1.6002" y1="-5.08" x2="1.6002" y2="5.08" width="0.1524" layer="51"/>
 <wire x1="1.6002" y1="-5.08" x2="2.8702" y2="-5.08" width="0.1524" layer="51"/>
-<text x="-1.143" y="1.778" size="1.27" layer="51" ratio="6" rot="SR270">.Designator</text>
 <wire x1="1.6002" y1="-5.08" x2="2.8702" y2="-5.08" width="0.2032" layer="21"/>
 <wire x1="1.6002" y1="-5.08" x2="1.6002" y2="5.08" width="0.2032" layer="21"/>
 <wire x1="1.6002" y1="5.08" x2="2.8702" y2="5.08" width="0.2032" layer="21"/>
@@ -1625,9 +1644,8 @@ Based on the following sources:
 <wire x1="-1.7018" y1="5.08" x2="1.6002" y2="5.08" width="0.2032" layer="21"/>
 <wire x1="-1.7018" y1="-5.08" x2="-1.7018" y2="5.08" width="0.2032" layer="21"/>
 <wire x1="-1.7018" y1="-5.08" x2="1.6002" y2="-5.08" width="0.2032" layer="21"/>
-<text x="-1.5494" y="5.8166" size="1.27" layer="21" ratio="6" rot="SR0">Designator282</text>
-<text x="-1.7272" y="-0.635" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
-<text x="-3.2766" y="-0.635" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
+<text x="-3.175" y="2.9972" size="1.27" layer="21" ratio="6" rot="SR270">&gt;Value</text>
+<text x="3.175" y="3.2766" size="1.27" layer="27" ratio="6" rot="SR270">&gt;Name</text>
 </package>
 </packages>
 <packages3d>
@@ -2381,8 +2399,7 @@ Covered vias can be set in Masks (Limit).
 <attribute name="VALUE" x="45.89" y="23.89" size="1.27" layer="28" rot="MR180"/>
 </element>
 <element name="L293B1" library="micromouse" package="L293P-DIP16" package3d_urn="urn:adsk.eagle:package:33483839/1" value="L293B" x="36.83" y="19.05" smashed="yes" rot="R180">
-<attribute name="NAME" x="36.83" y="8.5393" size="1.27" layer="25" rot="R180" align="bottom-center"/>
-<attribute name="VALUE" x="36.83" y="29.5607" size="1.27" layer="27" rot="R180" align="top-center"/>
+<attribute name="VALUE" x="36.83" y="6.7007" size="1.27" layer="27" rot="R180" align="top-center"/>
 </element>
 <element name="LED1" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIP-LED0805" package3d_urn="urn:adsk.eagle:package:15818/2" value="" x="25.4" y="63.5" smashed="yes" rot="R90">
 <attribute name="NAME" x="23.495" y="59.69" size="1.27" layer="25" rot="R90"/>
@@ -2445,7 +2462,7 @@ Covered vias can be set in Masks (Limit).
 <attribute name="POPULARITY" value="72" x="113.284" y="-32.131" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="60.706" y="-0.381" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="S1" library="switch-omron" library_urn="urn:adsk.eagle:library:377" package="B3F-10XX" package3d_urn="urn:adsk.eagle:package:27496/1" value="" x="47.625" y="65.659" smashed="yes" rot="R270">
+<element name="BUTTON" library="switch-omron" library_urn="urn:adsk.eagle:library:377" package="B3F-10XX" package3d_urn="urn:adsk.eagle:package:27496/1" value="" x="47.625" y="65.659" smashed="yes" rot="R270">
 <attribute name="MF" value="" x="10.795" y="5.969" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="B3F-1000" x="10.795" y="5.969" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="NAME" x="51.308" y="68.707" size="1.27" layer="25" ratio="10" rot="R270"/>
@@ -2454,30 +2471,27 @@ Covered vias can be set in Masks (Limit).
 <attribute name="POPULARITY" value="72" x="10.795" y="5.969" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="42.545" y="68.707" size="1.27" layer="27" ratio="10" rot="R270"/>
 </element>
-<element name="U1" library="micromouse" package="TQFP44_10X10MC_MCH-M" value="DSPIC33FJ64MC804-H/PTTQFP44_10X10MC_MCH-M" x="35.56" y="45.72" smashed="yes" rot="R90">
+<element name="DSPIC33FJ64MC804" library="micromouse" package="TQFP44_10X10MC_MCH-M" value="DSPIC33FJ64MC804-H/PTTQFP44_10X10MC_MCH-M" x="35.56" y="45.72" smashed="yes" rot="R90">
 <attribute name="COPYRIGHT" value="Copyright (C) 2022 Ultra Librarian. All rights reserved." x="57.15" y="80.01" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MANUFACTURER_PART_NUMBER" value="DSPIC33FJ64MC804-H/PT" x="57.15" y="80.01" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MFR_NAME" value="Microchip" x="57.15" y="80.01" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="36.195" y="42.4434" size="1.27" layer="27" ratio="6" rot="SR90"/>
-<attribute name="VALUE" x="36.195" y="43.9928" size="1.27" layer="21" ratio="6" rot="SR90"/>
+<attribute name="NAME" x="29.7434" y="53.975" size="1.27" layer="21" ratio="6" rot="SR0"/>
 </element>
-<element name="U2" library="micromouse" package="KCS0003B" value="UA78M33CKCS" x="60.96" y="59.69" smashed="yes" rot="R270">
+<element name="LM1085IT-3.3" library="micromouse" package="KCS0003B" value="UA78M33CKCS" x="60.96" y="59.69" smashed="yes" rot="R270">
 <attribute name="COPYRIGHT" value="Copyright (C) 2022 Ultra Librarian. All rights reserved." x="52.07" y="-15.24" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MANUFACTURER_PART_NUMBER" value="UA78M05CKCS" x="52.07" y="-15.24" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MFR_NAME" value="Texas Instruments" x="52.07" y="-15.24" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="60.325" y="62.9666" size="1.27" layer="27" ratio="6" rot="SR270"/>
+<attribute name="NAME" x="55.1434" y="61.595" size="1.27" layer="27" ratio="6" rot="SR0"/>
 <attribute name="REFDES" value="RefDes" x="52.07" y="-15.24" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="TYPE" value="TYPE" x="52.07" y="-15.24" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="60.325" y="61.4172" size="1.27" layer="21" ratio="6" rot="SR270"/>
 </element>
-<element name="U3" library="micromouse" package="KCS0003B" value="UA78M05CKCS" x="63.5" y="41.91" smashed="yes" rot="R180">
+<element name="UA78M05" library="micromouse" package="KCS0003B" value="UA78M05CKCS" x="63.5" y="41.91" smashed="yes" rot="R180">
 <attribute name="COPYRIGHT" value="Copyright (C) 2022 Ultra Librarian. All rights reserved." x="38.1" y="83.82" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MANUFACTURER_PART_NUMBER" value="UA78M05CKCS" x="38.1" y="83.82" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MFR_NAME" value="Texas Instruments" x="38.1" y="83.82" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="66.7766" y="42.545" size="1.27" layer="27" ratio="6" rot="SR180"/>
+<attribute name="NAME" x="65.405" y="45.1866" size="1.27" layer="27" ratio="6" rot="SR270"/>
 <attribute name="REFDES" value="RefDes" x="38.1" y="83.82" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="TYPE" value="TYPE" x="38.1" y="83.82" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="VALUE" x="65.2272" y="42.545" size="1.27" layer="21" ratio="6" rot="SR180"/>
 </element>
 <element name="UART" library="con-lstb" library_urn="urn:adsk.eagle:library:162" package="MA04-1" package3d_urn="urn:adsk.eagle:package:8337/1" value="" x="21.59" y="54.61" smashed="yes" rot="R180">
 <attribute name="MF" value="" x="-2.54" y="128.27" size="1.778" layer="27" rot="R180" display="off"/>
@@ -2559,13 +2573,13 @@ Covered vias can be set in Masks (Limit).
 <signals>
 <signal name="VDD">
 <contactref element="C1" pad="1"/>
-<contactref element="U2" pad="3"/>
+<contactref element="LM1085IT-3.3" pad="3"/>
 <contactref element="D1" pad="A"/>
 <contactref element="L293B1" pad="VSS"/>
 <contactref element="C6" pad="1"/>
-<contactref element="U1" pad="40"/>
-<contactref element="U1" pad="17"/>
-<contactref element="U1" pad="28"/>
+<contactref element="DSPIC33FJ64MC804" pad="40"/>
+<contactref element="DSPIC33FJ64MC804" pad="17"/>
+<contactref element="DSPIC33FJ64MC804" pad="28"/>
 <contactref element="C13" pad="1"/>
 <contactref element="C14" pad="1"/>
 <contactref element="C15" pad="1"/>
@@ -2580,7 +2594,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="35.56" y1="45.72" x2="34.615" y2="44.775" width="1.016" layer="16"/>
 <contactref element="PROG" pad="2"/>
 <contactref element="UART" pad="1"/>
-<contactref element="S1" pad="2"/>
+<contactref element="BUTTON" pad="2"/>
 <wire x1="58.42" y1="59.69" x2="55.7022" y2="62.4078" width="0.3048" layer="1"/>
 <wire x1="55.7022" y1="62.4078" x2="49.8856" y2="62.4078" width="0.3048" layer="1"/>
 <wire x1="26.67" y1="54.61" x2="25.4" y2="54.61" width="1.016" layer="16"/>
@@ -2648,7 +2662,7 @@ Covered vias can be set in Masks (Limit).
 <contactref element="D5" pad="C"/>
 <contactref element="D4" pad="C"/>
 <contactref element="C11" pad="1"/>
-<contactref element="U3" pad="1"/>
+<contactref element="UA78M05" pad="1"/>
 <contactref element="D8" pad="C"/>
 <contactref element="D9" pad="C"/>
 <contactref element="G1" pad="+"/>
@@ -2675,19 +2689,19 @@ Covered vias can be set in Masks (Limit).
 <contactref element="C3" pad="2"/>
 <contactref element="C2" pad="2"/>
 <contactref element="C5" pad="1"/>
-<contactref element="U1" pad="6"/>
-<contactref element="U1" pad="16"/>
-<contactref element="U1" pad="29"/>
+<contactref element="DSPIC33FJ64MC804" pad="6"/>
+<contactref element="DSPIC33FJ64MC804" pad="16"/>
+<contactref element="DSPIC33FJ64MC804" pad="29"/>
 <contactref element="C4" pad="2"/>
 <contactref element="C1" pad="2"/>
 <contactref element="C11" pad="2"/>
 <contactref element="C12" pad="2"/>
-<contactref element="U3" pad="2"/>
-<contactref element="U2" pad="2"/>
+<contactref element="UA78M05" pad="2"/>
+<contactref element="LM1085IT-3.3" pad="2"/>
 <contactref element="C13" pad="2"/>
 <contactref element="C14" pad="2"/>
 <contactref element="C15" pad="2"/>
-<contactref element="U1" pad="39"/>
+<contactref element="DSPIC33FJ64MC804" pad="39"/>
 <contactref element="R2" pad="1"/>
 <contactref element="R3" pad="2"/>
 <contactref element="R4" pad="2"/>
@@ -2745,7 +2759,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="54.93" y1="54.61" x2="53.34" y2="54.61" width="0.3048" layer="1"/>
 </signal>
 <signal name="MCLR">
-<contactref element="U1" pad="18"/>
+<contactref element="DSPIC33FJ64MC804" pad="18"/>
 <contactref element="PROG" pad="1"/>
 <wire x1="45.212" y1="3.175" x2="45.212" y2="3.302" width="0.3048" layer="1"/>
 <wire x1="45.212" y1="3.302" x2="46.99" y2="5.08" width="0.3048" layer="1"/>
@@ -2770,7 +2784,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="48.58" y1="45.4" x2="48.58" y2="46.99" width="0.3048" layer="16"/>
 </signal>
 <signal name="ICSP_DATA">
-<contactref element="U1" pad="21"/>
+<contactref element="DSPIC33FJ64MC804" pad="21"/>
 <contactref element="PROG" pad="4"/>
 <wire x1="51.41" y1="48.92" x2="41.2234" y2="48.92" width="0.3048" layer="1"/>
 <wire x1="37.592" y1="3.175" x2="40.132" y2="5.715" width="0.3048" layer="1"/>
@@ -2782,7 +2796,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="56.515" y1="38.3630375" x2="56.515" y2="43.815" width="0.3048" layer="1"/>
 </signal>
 <signal name="ICSP_CLOCK">
-<contactref element="U1" pad="22"/>
+<contactref element="DSPIC33FJ64MC804" pad="22"/>
 <contactref element="PROG" pad="5"/>
 <wire x1="35.052" y1="3.175" x2="38.227" y2="6.35" width="0.3048" layer="1"/>
 <wire x1="38.227" y1="6.35" x2="54.293625" y2="6.35" width="0.3048" layer="1"/>
@@ -2803,7 +2817,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="50.485" y1="46.995" x2="50.48" y2="46.99" width="0.3048" layer="16"/>
 </signal>
 <signal name="TX">
-<contactref element="U1" pad="43"/>
+<contactref element="DSPIC33FJ64MC804" pad="43"/>
 <contactref element="UART" pad="3"/>
 <via x="27.94" y="42.52" extent="1-16" drill="0.35"/>
 <wire x1="29.8966" y1="42.52" x2="27.94" y2="42.52" width="0.3048" layer="1"/>
@@ -2812,7 +2826,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="20.32" y1="43.18" x2="20.32" y2="54.61" width="0.3048" layer="16"/>
 </signal>
 <signal name="RX">
-<contactref element="U1" pad="44"/>
+<contactref element="DSPIC33FJ64MC804" pad="44"/>
 <contactref element="UART" pad="4"/>
 <via x="27.94" y="41.72" extent="1-16" drill="0.35"/>
 <wire x1="29.8966" y1="41.72" x2="27.94" y2="41.72" width="0.3048" layer="1"/>
@@ -2822,7 +2836,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="M1_EB">
 <contactref element="MOTOR1" pad="5"/>
-<contactref element="U1" pad="36"/>
+<contactref element="DSPIC33FJ64MC804" pad="36"/>
 <wire x1="29.8966" y1="48.12" x2="25.53725" y2="48.12" width="0.3048" layer="1"/>
 <wire x1="25.53725" y1="48.12" x2="22.53" y2="45.11275" width="0.3048" layer="1"/>
 <wire x1="15.24" y1="29.348625" x2="15.24" y2="21.59" width="0.3048" layer="1"/>
@@ -2833,7 +2847,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="M1_EA">
 <contactref element="MOTOR1" pad="6"/>
-<contactref element="U1" pad="35"/>
+<contactref element="DSPIC33FJ64MC804" pad="35"/>
 <wire x1="29.8966" y1="48.92" x2="25.205875" y2="48.92" width="0.3048" layer="1"/>
 <wire x1="25.205875" y1="48.92" x2="21.73" y2="45.444125" width="0.3048" layer="1"/>
 <wire x1="21.73" y1="36.97" x2="14.44" y2="29.68" width="0.3048" layer="1"/>
@@ -2869,7 +2883,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="M1_D1">
 <contactref element="L293B1" pad="INPUT3"/>
-<contactref element="U1" pad="38"/>
+<contactref element="DSPIC33FJ64MC804" pad="38"/>
 <wire x1="26.2" y1="46.52" x2="24.13" y2="44.45" width="0.3048" layer="1"/>
 <wire x1="29.8966" y1="46.52" x2="26.2" y2="46.52" width="0.3048" layer="1"/>
 <wire x1="24.13" y1="36.83" x2="25.4" y2="35.56" width="0.3048" layer="1"/>
@@ -2882,7 +2896,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="M1_D2">
 <contactref element="L293B1" pad="INPUT4"/>
-<contactref element="U1" pad="37"/>
+<contactref element="DSPIC33FJ64MC804" pad="37"/>
 <wire x1="29.8966" y1="47.32" x2="25.868625" y2="47.32" width="0.3048" layer="1"/>
 <wire x1="25.868625" y1="47.32" x2="23.33" y2="44.781375" width="0.3048" layer="1"/>
 <wire x1="23.33" y1="36.36" x2="25.4" y2="34.29" width="0.3048" layer="1"/>
@@ -2896,7 +2910,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="23.33" y1="44.781375" x2="23.33" y2="36.36" width="0.3048" layer="1"/>
 </signal>
 <signal name="M1_PWM">
-<contactref element="U1" pad="10"/>
+<contactref element="DSPIC33FJ64MC804" pad="10"/>
 <contactref element="L293B1" pad="ENABLE2"/>
 <wire x1="38.76" y1="40.0566" x2="38.76" y2="38.125" width="0.3048" layer="1"/>
 <wire x1="38.76" y1="38.125" x2="38.735" y2="38.1" width="0.3048" layer="1"/>
@@ -2910,7 +2924,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="60.96" y1="15.24" x2="64.135" y2="18.415" width="0.3048" layer="1"/>
 <wire x1="64.135" y1="28.2030375" x2="59.9530375" y2="32.385" width="0.3048" layer="1"/>
 <wire x1="64.135" y1="18.415" x2="64.135" y2="28.2030375" width="0.3048" layer="1"/>
-<contactref element="U1" pad="4"/>
+<contactref element="DSPIC33FJ64MC804" pad="4"/>
 <wire x1="33.96" y1="35.89" x2="33.96" y2="40.0566" width="0.3048" layer="1"/>
 <wire x1="59.9530375" y1="32.385" x2="37.465" y2="32.385" width="0.3048" layer="1"/>
 <wire x1="37.465" y1="32.385" x2="33.96" y2="35.89" width="0.3048" layer="1"/>
@@ -2932,7 +2946,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="54.61" y1="17.78" x2="62.23" y2="17.78" width="0.3048" layer="1"/>
 <wire x1="63.5" y1="27.94" x2="59.69" y2="31.75" width="0.3048" layer="1"/>
 <wire x1="63.5" y1="19.05" x2="63.5" y2="27.94" width="0.3048" layer="1"/>
-<contactref element="U1" pad="3"/>
+<contactref element="DSPIC33FJ64MC804" pad="3"/>
 <wire x1="33.16" y1="35.558625" x2="33.16" y2="40.0566" width="0.3048" layer="1"/>
 <wire x1="59.69" y1="31.75" x2="36.968625" y2="31.75" width="0.3048" layer="1"/>
 <wire x1="36.968625" y1="31.75" x2="33.16" y2="35.558625" width="0.3048" layer="1"/>
@@ -2950,7 +2964,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="48.9" y1="21.6" x2="48.89" y2="21.59" width="1.016" layer="16"/>
 </signal>
 <signal name="M2_PWM">
-<contactref element="U1" pad="14"/>
+<contactref element="DSPIC33FJ64MC804" pad="14"/>
 <contactref element="L293B1" pad="ENABLE1"/>
 <wire x1="40.64" y1="10.16" x2="43.815" y2="6.985" width="0.3048" layer="1"/>
 <wire x1="60.216075" y1="33.02" x2="46.99" y2="33.02" width="0.3048" layer="1"/>
@@ -2965,7 +2979,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="M2_D1">
 <contactref element="L293B1" pad="INPUT1"/>
-<contactref element="U1" pad="1"/>
+<contactref element="DSPIC33FJ64MC804" pad="1"/>
 <wire x1="31.56" y1="40.0566" x2="31.56" y2="34.895875" width="0.3048" layer="1"/>
 <wire x1="31.56" y1="34.895875" x2="36.83" y2="29.625875" width="0.3048" layer="1"/>
 <wire x1="36.83" y1="13.97" x2="38.1" y2="12.7" width="0.3048" layer="1"/>
@@ -2974,7 +2988,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="M2_D2">
 <contactref element="L293B1" pad="INPUT2"/>
-<contactref element="U1" pad="2"/>
+<contactref element="DSPIC33FJ64MC804" pad="2"/>
 <wire x1="32.36" y1="40.0566" x2="32.36" y2="35.22725" width="0.3048" layer="1"/>
 <wire x1="37.63" y1="29.95725" x2="37.63" y2="26.67" width="0.3048" layer="1"/>
 <wire x1="32.36" y1="35.22725" x2="37.63" y2="29.95725" width="0.3048" layer="1"/>
@@ -2984,7 +2998,7 @@ Covered vias can be set in Masks (Limit).
 <signal name="N$4">
 <contactref element="C3" pad="1"/>
 <contactref element="Q1" pad="2"/>
-<contactref element="U1" pad="30"/>
+<contactref element="DSPIC33FJ64MC804" pad="30"/>
 <wire x1="33.96" y1="51.3834" x2="33.96" y2="60.757" width="0.3048" layer="1"/>
 <wire x1="37.973" y1="68.9" x2="37.973" y2="64.77" width="0.3048" layer="16"/>
 <wire x1="33.96" y1="60.757" x2="37.973" y2="64.77" width="0.3048" layer="1"/>
@@ -2992,14 +3006,14 @@ Covered vias can be set in Masks (Limit).
 <signal name="N$5">
 <contactref element="C2" pad="1"/>
 <contactref element="Q1" pad="1"/>
-<contactref element="U1" pad="31"/>
+<contactref element="DSPIC33FJ64MC804" pad="31"/>
 <wire x1="33.147" y1="64.77" x2="33.147" y2="51.3964" width="0.3048" layer="1"/>
 <wire x1="33.147" y1="51.3964" x2="33.16" y2="51.3834" width="0.3048" layer="1"/>
 <wire x1="33.147" y1="64.77" x2="33.147" y2="68.9" width="0.3048" layer="16"/>
 </signal>
 <signal name="DSENS1">
 <contactref element="DIST1" pad="2"/>
-<contactref element="U1" pad="25"/>
+<contactref element="DSPIC33FJ64MC804" pad="25"/>
 <wire x1="30.48" y1="77.47" x2="27.94" y2="77.47" width="0.3048" layer="1"/>
 <wire x1="37.96" y1="51.3834" x2="37.96" y2="53.53675" width="0.3048" layer="1"/>
 <wire x1="37.96" y1="53.53675" x2="40.63325" y2="56.21" width="0.3048" layer="1"/>
@@ -3012,7 +3026,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="DSENS2">
 <contactref element="DIST2" pad="2"/>
-<contactref element="U1" pad="24"/>
+<contactref element="DSPIC33FJ64MC804" pad="24"/>
 <wire x1="39.37" y1="78.74" x2="39.37" y2="81.28" width="0.3048" layer="1"/>
 <wire x1="38.76" y1="51.3834" x2="38.76" y2="53.205375" width="0.3048" layer="1"/>
 <wire x1="38.76" y1="53.205375" x2="40.964625" y2="55.41" width="0.3048" layer="1"/>
@@ -3025,7 +3039,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="DSENS3">
 <contactref element="DIST3" pad="2"/>
-<contactref element="U1" pad="23"/>
+<contactref element="DSPIC33FJ64MC804" pad="23"/>
 <wire x1="39.56" y1="51.3834" x2="39.56" y2="52.873996875" width="0.3048" layer="1"/>
 <wire x1="39.56" y1="52.873996875" x2="41.296003125" y2="54.61" width="0.3048" layer="1"/>
 <wire x1="43.84275" y1="54.61" x2="48.59" y2="59.35725" width="0.3048" layer="1"/>
@@ -3035,7 +3049,7 @@ Covered vias can be set in Masks (Limit).
 <wire x1="50.8" y1="77.47" x2="53.34" y2="77.47" width="0.3048" layer="1"/>
 </signal>
 <signal name="VCAP">
-<contactref element="U1" pad="7"/>
+<contactref element="DSPIC33FJ64MC804" pad="7"/>
 <contactref element="C5" pad="2"/>
 <wire x1="36.36" y1="40.0566" x2="36.36" y2="38.265" width="0.508" layer="1"/>
 <wire x1="36.36" y1="38.265" x2="36.322" y2="38.227" width="0.3048" layer="1"/>
@@ -3045,8 +3059,8 @@ Covered vias can be set in Masks (Limit).
 <signal name="+5V">
 <contactref element="C12" pad="1"/>
 <contactref element="C4" pad="1"/>
-<contactref element="U2" pad="1"/>
-<contactref element="U3" pad="3"/>
+<contactref element="LM1085IT-3.3" pad="1"/>
+<contactref element="UA78M05" pad="3"/>
 <contactref element="C7" pad="1"/>
 <contactref element="C9" pad="1"/>
 <contactref element="C10" pad="1"/>
@@ -3072,9 +3086,9 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="BUTTON">
 <contactref element="R2" pad="2"/>
-<contactref element="U1" pad="26"/>
+<contactref element="DSPIC33FJ64MC804" pad="26"/>
 <wire x1="37.16" y1="51.3834" x2="37.16" y2="57.48" width="0.3048" layer="1"/>
-<contactref element="S1" pad="4"/>
+<contactref element="BUTTON" pad="4"/>
 <wire x1="42.0878" y1="62.4078" x2="45.3644" y2="62.4078" width="0.3048" layer="1"/>
 <wire x1="37.16" y1="57.48" x2="39.37" y2="59.69" width="0.3048" layer="1"/>
 <wire x1="39.37" y1="59.69" x2="42.0878" y2="62.4078" width="0.3048" layer="1"/>
@@ -3082,7 +3096,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="LED1">
 <contactref element="LED1" pad="A"/>
-<contactref element="U1" pad="33"/>
+<contactref element="DSPIC33FJ64MC804" pad="33"/>
 <wire x1="26.67" y1="63.5" x2="26.45" y2="63.5" width="0.3048" layer="1"/>
 <wire x1="31.56" y1="51.3834" x2="31.56" y2="54.8" width="0.3048" layer="1"/>
 <wire x1="31.56" y1="54.8" x2="27.14" y2="59.22" width="0.3048" layer="1"/>
@@ -3091,7 +3105,7 @@ Covered vias can be set in Masks (Limit).
 </signal>
 <signal name="LED2">
 <contactref element="LED2" pad="A"/>
-<contactref element="U1" pad="32"/>
+<contactref element="DSPIC33FJ64MC804" pad="32"/>
 <wire x1="32.36" y1="51.3834" x2="32.36" y2="55.131375" width="0.3048" layer="1"/>
 <wire x1="32.36" y1="55.131375" x2="27.94" y2="59.551375" width="0.3048" layer="1"/>
 <wire x1="27.94" y1="67.09" x2="26.45" y2="68.58" width="0.3048" layer="1"/>

@@ -1239,7 +1239,7 @@
 <vertex x="-0.6095" y="6.7984"/>
 </polygon>
 <text x="-7.747" y="4.1402" size="1.27" layer="21" ratio="6" rot="SR0">*</text>
-<text x="-1.7272" y="-0.635" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
+<text x="-2.9972" y="-9.525" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
 <wire x1="5.6642" y1="3.9878" x2="5.9944" y2="3.9878" width="0.1524" layer="47"/>
 <wire x1="5.9944" y1="3.9878" x2="8.5852" y2="3.9878" width="0.1524" layer="47"/>
 <wire x1="8.5852" y1="3.9878" x2="8.9662" y2="3.9878" width="0.1524" layer="47"/>
@@ -1500,7 +1500,7 @@
 <wire x1="5.0038" y1="-5.0038" x2="5.0038" y2="5.0038" width="0.1524" layer="51"/>
 <wire x1="5.0038" y1="5.0038" x2="-5.0038" y2="5.0038" width="0.1524" layer="51"/>
 <text x="-5.207" y="3.7592" size="1.27" layer="51" ratio="6" rot="SR0">*</text>
-<text x="-3.2766" y="-0.635" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
+<text x="-3.2766" y="8.255" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
 </package>
 <package name="TQFP44_10X10MC_MCH-L">
 <smd name="1" x="-5.5634" y="4" dx="0.4572" dy="1.162" layer="1" rot="R270"/>
@@ -1860,7 +1860,6 @@
 <wire x1="2.8702" y1="-5.08" x2="2.8702" y2="5.08" width="0.1524" layer="51"/>
 <wire x1="1.6002" y1="-5.08" x2="1.6002" y2="5.08" width="0.1524" layer="51"/>
 <wire x1="1.6002" y1="-5.08" x2="2.8702" y2="-5.08" width="0.1524" layer="51"/>
-<text x="-1.143" y="1.778" size="1.27" layer="51" ratio="6" rot="SR270">.Designator</text>
 <wire x1="1.6002" y1="-5.08" x2="2.8702" y2="-5.08" width="0.2032" layer="21"/>
 <wire x1="1.6002" y1="-5.08" x2="1.6002" y2="5.08" width="0.2032" layer="21"/>
 <wire x1="1.6002" y1="5.08" x2="2.8702" y2="5.08" width="0.2032" layer="21"/>
@@ -1868,9 +1867,8 @@
 <wire x1="-1.7018" y1="5.08" x2="1.6002" y2="5.08" width="0.2032" layer="21"/>
 <wire x1="-1.7018" y1="-5.08" x2="-1.7018" y2="5.08" width="0.2032" layer="21"/>
 <wire x1="-1.7018" y1="-5.08" x2="1.6002" y2="-5.08" width="0.2032" layer="21"/>
-<text x="-1.5494" y="5.8166" size="1.27" layer="21" ratio="6" rot="SR0">Designator282</text>
-<text x="-1.7272" y="-0.635" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
-<text x="-3.2766" y="-0.635" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
+<text x="-3.175" y="2.9972" size="1.27" layer="21" ratio="6" rot="SR270">&gt;Value</text>
+<text x="3.175" y="3.2766" size="1.27" layer="27" ratio="6" rot="SR270">&gt;Name</text>
 </package>
 <package name="KCS0003B_FORMA">
 <pad name="1" x="0" y="2.54" drill="0.9906" diameter="1.6002" shape="square"/>

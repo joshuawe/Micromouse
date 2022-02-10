@@ -796,7 +796,6 @@
 <wire x1="2.8702" y1="-5.08" x2="2.8702" y2="5.08" width="0.1524" layer="51"/>
 <wire x1="1.6002" y1="-5.08" x2="1.6002" y2="5.08" width="0.1524" layer="51"/>
 <wire x1="1.6002" y1="-5.08" x2="2.8702" y2="-5.08" width="0.1524" layer="51"/>
-<text x="-1.143" y="1.778" size="1.27" layer="51" ratio="6" rot="SR270">.Designator</text>
 <wire x1="1.6002" y1="-5.08" x2="2.8702" y2="-5.08" width="0.2032" layer="21"/>
 <wire x1="1.6002" y1="-5.08" x2="1.6002" y2="5.08" width="0.2032" layer="21"/>
 <wire x1="1.6002" y1="5.08" x2="2.8702" y2="5.08" width="0.2032" layer="21"/>
@@ -804,9 +803,8 @@
 <wire x1="-1.7018" y1="5.08" x2="1.6002" y2="5.08" width="0.2032" layer="21"/>
 <wire x1="-1.7018" y1="-5.08" x2="-1.7018" y2="5.08" width="0.2032" layer="21"/>
 <wire x1="-1.7018" y1="-5.08" x2="1.6002" y2="-5.08" width="0.2032" layer="21"/>
-<text x="-1.5494" y="5.8166" size="1.27" layer="21" ratio="6" rot="SR0">Designator282</text>
-<text x="-1.7272" y="-0.635" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
-<text x="-3.2766" y="-0.635" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
+<text x="-3.175" y="2.9972" size="1.27" layer="21" ratio="6" rot="SR270">&gt;Value</text>
+<text x="3.175" y="3.2766" size="1.27" layer="27" ratio="6" rot="SR270">&gt;Name</text>
 </package>
 <package name="KCS0003B_FORMA">
 <pad name="1" x="0" y="2.54" drill="0.9906" diameter="1.6002" shape="square"/>
@@ -919,7 +917,7 @@
 <vertex x="-0.6095" y="6.7984"/>
 </polygon>
 <text x="-7.747" y="4.1402" size="1.27" layer="21" ratio="6" rot="SR0">*</text>
-<text x="-1.7272" y="-0.635" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
+<text x="-2.9972" y="-9.525" size="1.27" layer="21" ratio="6" rot="SR0">&gt;Value</text>
 <wire x1="5.6642" y1="3.9878" x2="5.9944" y2="3.9878" width="0.1524" layer="47"/>
 <wire x1="5.9944" y1="3.9878" x2="8.5852" y2="3.9878" width="0.1524" layer="47"/>
 <wire x1="8.5852" y1="3.9878" x2="8.9662" y2="3.9878" width="0.1524" layer="47"/>
@@ -1180,7 +1178,7 @@
 <wire x1="5.0038" y1="-5.0038" x2="5.0038" y2="5.0038" width="0.1524" layer="51"/>
 <wire x1="5.0038" y1="5.0038" x2="-5.0038" y2="5.0038" width="0.1524" layer="51"/>
 <text x="-5.207" y="3.7592" size="1.27" layer="51" ratio="6" rot="SR0">*</text>
-<text x="-3.2766" y="-0.635" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
+<text x="-3.2766" y="8.255" size="1.27" layer="27" ratio="6" rot="SR0">&gt;Name</text>
 </package>
 </packages>
 <packages3d>
@@ -16441,7 +16439,7 @@ Source: www.kingbright.com</description>
 <part name="D9" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SOD123" package3d_urn="urn:adsk.eagle:package:43420/1"/>
 <part name="VDD8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="VDD10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
-<part name="U1" library="micromouse" deviceset="DSPIC33FJ64MC804-H/PT" device="TQFP44_10X10MC_MCH-M" value="DSPIC33FJ64MC804-H/PTTQFP44_10X10MC_MCH-M"/>
+<part name="DSPIC33FJ64MC804" library="micromouse" deviceset="DSPIC33FJ64MC804-H/PT" device="TQFP44_10X10MC_MCH-M" value="DSPIC33FJ64MC804-H/PTTQFP44_10X10MC_MCH-M"/>
 <part name="Q1" library="crystal" library_urn="urn:adsk.eagle:library:204" deviceset="CRYSTAL" device="HC49S" package3d_urn="urn:adsk.eagle:package:12071/1"/>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="15pF"/>
 <part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="15pF"/>
@@ -16463,7 +16461,7 @@ Source: www.kingbright.com</description>
 <part name="VDD2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND18" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="S1" library="switch-omron" library_urn="urn:adsk.eagle:library:377" deviceset="10-XX" device="" package3d_urn="urn:adsk.eagle:package:27496/1"/>
+<part name="BUTTON" library="switch-omron" library_urn="urn:adsk.eagle:library:377" deviceset="10-XX" device="" package3d_urn="urn:adsk.eagle:package:27496/1"/>
 <part name="VDD3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VDD" device=""/>
 <part name="GND19" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10k"/>
@@ -16475,8 +16473,8 @@ Source: www.kingbright.com</description>
 <part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
 <part name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
 <part name="C10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2" value="100nF"/>
-<part name="U2" library="micromouse" deviceset="UA78M33CKCS" device=""/>
-<part name="U3" library="micromouse" deviceset="UA78M05CKCS" device=""/>
+<part name="LM1085IT-3.3" library="micromouse" deviceset="UA78M33CKCS" device=""/>
+<part name="UA78M05" library="micromouse" deviceset="UA78M05CKCS" device=""/>
 <part name="MOTOR1" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-2" device="" package3d_urn="urn:adsk.eagle:package:8334/1"/>
 <part name="MOTOR2" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-2" device="" package3d_urn="urn:adsk.eagle:package:8334/1"/>
 <part name="DIST1" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA03-1" device="" package3d_urn="urn:adsk.eagle:package:8339/1"/>
@@ -16634,7 +16632,7 @@ the front off the ground.</text>
 <instance part="VDD10" gate="G$1" x="243.84" y="45.72" smashed="yes">
 <attribute name="VALUE" x="241.3" y="43.18" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="U1" gate="A" x="114.3" y="160.02" smashed="yes">
+<instance part="DSPIC33FJ64MC804" gate="A" x="114.3" y="160.02" smashed="yes">
 <attribute name="NAME" x="203.5556" y="169.1386" size="2.0828" layer="95" ratio="6" rot="SR0"/>
 <attribute name="VALUE" x="202.9206" y="166.5986" size="2.0828" layer="96" ratio="6" rot="SR0"/>
 </instance>
@@ -16710,7 +16708,7 @@ the front off the ground.</text>
 <instance part="GND18" gate="1" x="60.96" y="139.7" smashed="yes">
 <attribute name="VALUE" x="58.42" y="137.16" size="1.778" layer="96"/>
 </instance>
-<instance part="S1" gate="1" x="350.52" y="81.28" smashed="yes" rot="R270">
+<instance part="BUTTON" gate="1" x="350.52" y="81.28" smashed="yes" rot="R270">
 <attribute name="NAME" x="347.98" y="87.63" size="1.778" layer="95"/>
 <attribute name="VALUE" x="353.695" y="85.09" size="1.778" layer="96"/>
 </instance>
@@ -16755,13 +16753,13 @@ the front off the ground.</text>
 <attribute name="NAME" x="71.501" y="191.516" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="66.421" y="191.516" size="1.778" layer="96" rot="R270"/>
 </instance>
-<instance part="U2" gate="A" x="337.82" y="246.38" smashed="yes">
-<attribute name="NAME" x="333.0956" y="247.8786" size="2.0828" layer="95" ratio="6" rot="SR0"/>
+<instance part="LM1085IT-3.3" gate="A" x="337.82" y="246.38" smashed="yes">
+<attribute name="NAME" x="330.5556" y="255.4986" size="2.0828" layer="95" ratio="6" rot="SR0"/>
 <attribute name="VALUE" x="332.4606" y="245.3386" size="2.0828" layer="96" ratio="6" rot="SR0"/>
 <attribute name="VALUE" x="332.4606" y="245.3386" size="2.0828" layer="96" ratio="6" rot="SR0"/>
 </instance>
-<instance part="U3" gate="A" x="264.16" y="246.38" smashed="yes">
-<attribute name="NAME" x="259.4356" y="247.8786" size="2.0828" layer="95" ratio="6" rot="SR0"/>
+<instance part="UA78M05" gate="A" x="264.16" y="246.38" smashed="yes">
+<attribute name="NAME" x="256.8956" y="255.4986" size="2.0828" layer="95" ratio="6" rot="SR0"/>
 <attribute name="VALUE" x="258.8006" y="245.3386" size="2.0828" layer="96" ratio="6" rot="SR0"/>
 <attribute name="VALUE" x="258.8006" y="245.3386" size="2.0828" layer="96" ratio="6" rot="SR0"/>
 </instance>
@@ -16810,7 +16808,7 @@ the front off the ground.</text>
 <pinref part="VDD1" gate="G$1" pin="VDD"/>
 <pinref part="C1" gate="G$1" pin="1"/>
 <wire x1="363.22" y1="248.92" x2="373.38" y2="248.92" width="0.1524" layer="91"/>
-<pinref part="U2" gate="A" pin="OUTPUT"/>
+<pinref part="LM1085IT-3.3" gate="A" pin="OUTPUT"/>
 <wire x1="363.22" y1="248.92" x2="358.14" y2="248.92" width="0.1524" layer="91"/>
 <junction x="363.22" y="248.92"/>
 </segment>
@@ -16847,11 +16845,11 @@ the front off the ground.</text>
 </segment>
 <segment>
 <pinref part="VDD11" gate="G$1" pin="VDD"/>
-<pinref part="U1" gate="A" pin="VDD"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="VDD"/>
 <wire x1="342.9" y1="149.86" x2="299.72" y2="149.86" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="AVDD"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="AVDD"/>
 <wire x1="116.84" y1="119.38" x2="78.74" y2="119.38" width="0.1524" layer="91"/>
 <wire x1="78.74" y1="119.38" x2="78.74" y2="114.3" width="0.1524" layer="91"/>
 <pinref part="VDD12" gate="G$1" pin="VDD"/>
@@ -16861,7 +16859,7 @@ the front off the ground.</text>
 <pinref part="VDD13" gate="G$1" pin="VDD"/>
 <wire x1="353.06" y1="114.3" x2="337.82" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="337.82" y1="114.3" x2="337.82" y2="119.38" width="0.1524" layer="91"/>
-<pinref part="U1" gate="A" pin="VDD_2"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="VDD_2"/>
 <wire x1="337.82" y1="119.38" x2="299.72" y2="119.38" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -16886,7 +16884,7 @@ the front off the ground.</text>
 <segment>
 <pinref part="VDD3" gate="G$1" pin="VDD"/>
 <wire x1="365.76" y1="88.9" x2="365.76" y2="78.74" width="0.1524" layer="91"/>
-<pinref part="S1" gate="1" pin="S1"/>
+<pinref part="BUTTON" gate="1" pin="S1"/>
 <wire x1="355.6" y1="78.74" x2="365.76" y2="78.74" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -16932,7 +16930,7 @@ the front off the ground.</text>
 <pinref part="C11" gate="G$1" pin="1"/>
 <wire x1="233.68" y1="248.92" x2="218.44" y2="248.92" width="0.1524" layer="91"/>
 <junction x="233.68" y="248.92"/>
-<pinref part="U3" gate="A" pin="INPUT"/>
+<pinref part="UA78M05" gate="A" pin="INPUT"/>
 <pinref part="G1" gate="G$1" pin="+"/>
 </segment>
 </net>
@@ -16982,7 +16980,7 @@ the front off the ground.</text>
 <wire x1="73.66" y1="134.62" x2="73.66" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="VSS_2"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="VSS_2"/>
 <wire x1="116.84" y1="147.32" x2="60.96" y2="147.32" width="0.1524" layer="91"/>
 <pinref part="GND18" gate="1" pin="GND"/>
 <wire x1="60.96" y1="147.32" x2="60.96" y2="142.24" width="0.1524" layer="91"/>
@@ -16994,11 +16992,11 @@ the front off the ground.</text>
 </segment>
 <segment>
 <pinref part="GND15" gate="1" pin="GND"/>
-<pinref part="U1" gate="A" pin="AVSS"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="AVSS"/>
 <wire x1="60.96" y1="121.92" x2="116.84" y2="121.92" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="VSS_3"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="VSS_3"/>
 <wire x1="299.72" y1="121.92" x2="358.14" y2="121.92" width="0.1524" layer="91"/>
 <pinref part="GND16" gate="1" pin="GND"/>
 </segment>
@@ -17027,10 +17025,10 @@ the front off the ground.</text>
 <pinref part="GND1" gate="1" pin="GND"/>
 <wire x1="228.6" y1="220.98" x2="228.6" y2="223.52" width="0.1524" layer="91"/>
 <junction x="228.6" y="223.52"/>
-<pinref part="U3" gate="A" pin="COMMON"/>
+<pinref part="UA78M05" gate="A" pin="COMMON"/>
 <wire x1="284.48" y1="241.3" x2="284.48" y2="223.52" width="0.1524" layer="91"/>
 <junction x="284.48" y="223.52"/>
-<pinref part="U2" gate="A" pin="COMMON"/>
+<pinref part="LM1085IT-3.3" gate="A" pin="COMMON"/>
 <wire x1="358.14" y1="241.3" x2="358.14" y2="223.52" width="0.1524" layer="91"/>
 <junction x="358.14" y="223.52"/>
 <pinref part="G1" gate="G$1" pin="-"/>
@@ -17047,7 +17045,7 @@ the front off the ground.</text>
 <wire x1="393.7" y1="236.22" x2="393.7" y2="231.14" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="VSS"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="VSS"/>
 <wire x1="299.72" y1="147.32" x2="342.9" y2="147.32" width="0.1524" layer="91"/>
 <pinref part="GND13" gate="1" pin="GND"/>
 <wire x1="342.9" y1="147.32" x2="342.9" y2="142.24" width="0.1524" layer="91"/>
@@ -17138,7 +17136,7 @@ the front off the ground.</text>
 </net>
 <net name="MCLR" class="0">
 <segment>
-<pinref part="U1" gate="A" pin="!MCLR"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="!MCLR"/>
 <wire x1="106.68" y1="248.92" x2="106.68" y2="116.84" width="0.1524" layer="91"/>
 <wire x1="106.68" y1="116.84" x2="116.84" y2="116.84" width="0.1524" layer="91"/>
 <pinref part="PROG" gate="1" pin="1"/>
@@ -17158,7 +17156,7 @@ the front off the ground.</text>
 </net>
 <net name="ICSP_DATA" class="0">
 <segment>
-<pinref part="U1" gate="A" pin="PGED1/AN2/C2IN-/RP0/CN4/RB0"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="PGED1/AN2/C2IN-/RP0/CN4/RB0"/>
 <wire x1="116.84" y1="109.22" x2="109.22" y2="109.22" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="109.22" x2="109.22" y2="241.3" width="0.1524" layer="91"/>
 <pinref part="PROG" gate="1" pin="4"/>
@@ -17168,7 +17166,7 @@ the front off the ground.</text>
 </net>
 <net name="ICSP_CLOCK" class="0">
 <segment>
-<pinref part="U1" gate="A" pin="PGEC1/AN3/C2IN+/RP1/CN5/RB1"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="PGEC1/AN3/C2IN+/RP1/CN5/RB1"/>
 <wire x1="111.76" y1="238.76" x2="111.76" y2="106.68" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="106.68" x2="111.76" y2="106.68" width="0.1524" layer="91"/>
 <pinref part="PROG" gate="1" pin="5"/>
@@ -17186,7 +17184,7 @@ the front off the ground.</text>
 <net name="TX" class="0">
 <segment>
 <label x="332.74" y="157.48" size="1.778" layer="95"/>
-<pinref part="U1" gate="A" pin="INT0/RP7/CN23/PMD5/RB7"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="INT0/RP7/CN23/PMD5/RB7"/>
 <wire x1="299.72" y1="157.48" x2="383.54" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="UART" gate="1" pin="3"/>
 <wire x1="383.54" y1="157.48" x2="383.54" y2="144.78" width="0.1524" layer="91"/>
@@ -17195,7 +17193,7 @@ the front off the ground.</text>
 <net name="RX" class="0">
 <segment>
 <label x="332.74" y="160.02" size="1.778" layer="95"/>
-<pinref part="U1" gate="A" pin="SCL1/RP8/CN22/PMD4/RB8"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="SCL1/RP8/CN22/PMD4/RB8"/>
 <wire x1="299.72" y1="160.02" x2="381" y2="160.02" width="0.1524" layer="91"/>
 <pinref part="UART" gate="1" pin="4"/>
 <wire x1="381" y1="144.78" x2="381" y2="160.02" width="0.1524" layer="91"/>
@@ -17208,7 +17206,7 @@ the front off the ground.</text>
 <pinref part="MOTOR1" gate="1" pin="5"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP19/CN28/PMBE/RC3"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="RP19/CN28/PMBE/RC3"/>
 <wire x1="322.58" y1="139.7" x2="299.72" y2="139.7" width="0.1524" layer="91"/>
 <label x="314.96" y="139.7" size="1.778" layer="95"/>
 </segment>
@@ -17220,7 +17218,7 @@ the front off the ground.</text>
 <pinref part="MOTOR1" gate="1" pin="6"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="TDI/PMA9/RA9"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="TDI/PMA9/RA9"/>
 <wire x1="322.58" y1="137.16" x2="299.72" y2="137.16" width="0.1524" layer="91"/>
 <label x="314.96" y="137.16" size="1.778" layer="95"/>
 </segment>
@@ -17268,7 +17266,7 @@ the front off the ground.</text>
 <label x="198.12" y="27.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP21/CN26/PMA3/RC5"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="RP21/CN26/PMA3/RC5"/>
 <wire x1="322.58" y1="144.78" x2="299.72" y2="144.78" width="0.1524" layer="91"/>
 <label x="314.96" y="144.78" size="1.778" layer="95"/>
 </segment>
@@ -17280,14 +17278,14 @@ the front off the ground.</text>
 <label x="198.12" y="40.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP20/CN25/PMA4/RC4"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="RP20/CN25/PMA4/RC4"/>
 <wire x1="322.58" y1="142.24" x2="299.72" y2="142.24" width="0.1524" layer="91"/>
 <label x="314.96" y="142.24" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="M1_PWM" class="0">
 <segment>
-<pinref part="U1" gate="A" pin="PWM1H2/DAC1RP/RP12/CN14/PMD0/RB12"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="PWM1H2/DAC1RP/RP12/CN14/PMD0/RB12"/>
 <wire x1="116.84" y1="137.16" x2="86.36" y2="137.16" width="0.1524" layer="91"/>
 <label x="86.36" y="137.16" size="1.778" layer="95"/>
 </segment>
@@ -17305,7 +17303,7 @@ the front off the ground.</text>
 <pinref part="MOTOR2" gate="1" pin="5"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="RP24/CN20/PMA5/RC8"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="RP24/CN20/PMA5/RC8"/>
 <wire x1="91.44" y1="152.4" x2="116.84" y2="152.4" width="0.1524" layer="91"/>
 <label x="91.44" y="152.4" size="1.778" layer="95"/>
 </segment>
@@ -17335,7 +17333,7 @@ the front off the ground.</text>
 <pinref part="MOTOR2" gate="1" pin="6"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="PWM2L1/RP23/CN17/PMA0/RC7"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="PWM2L1/RP23/CN17/PMA0/RC7"/>
 <wire x1="91.44" y1="154.94" x2="116.84" y2="154.94" width="0.1524" layer="91"/>
 <label x="91.44" y="154.94" size="1.778" layer="95"/>
 </segment>
@@ -17360,7 +17358,7 @@ the front off the ground.</text>
 </net>
 <net name="M2_PWM" class="0">
 <segment>
-<pinref part="U1" gate="A" pin="PWM1H1/DAC1LP/RTCC/RP14/CN12/PMWR/RB14"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="PWM1H1/DAC1LP/RTCC/RP14/CN12/PMWR/RB14"/>
 <wire x1="86.36" y1="127" x2="116.84" y2="127" width="0.1524" layer="91"/>
 <label x="86.36" y="127" size="1.778" layer="95"/>
 </segment>
@@ -17377,7 +17375,7 @@ the front off the ground.</text>
 <label x="119.38" y="40.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="SDA1/RP9/CN21/PMD3/RB9"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="SDA1/RP9/CN21/PMD3/RB9"/>
 <wire x1="91.44" y1="160.02" x2="116.84" y2="160.02" width="0.1524" layer="91"/>
 <label x="91.44" y="160.02" size="1.778" layer="95"/>
 </segment>
@@ -17389,7 +17387,7 @@ the front off the ground.</text>
 <label x="119.38" y="27.94" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="PWM2H1/RP22/CN18/PMA1/RC6"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="PWM2H1/RP22/CN18/PMA1/RC6"/>
 <wire x1="91.44" y1="157.48" x2="116.84" y2="157.48" width="0.1524" layer="91"/>
 <label x="91.44" y="157.48" size="1.778" layer="95"/>
 </segment>
@@ -17400,7 +17398,7 @@ the front off the ground.</text>
 <pinref part="Q1" gate="G$1" pin="2"/>
 <wire x1="383.54" y1="119.38" x2="383.54" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="388.62" y1="119.38" x2="383.54" y2="119.38" width="0.1524" layer="91"/>
-<pinref part="U1" gate="A" pin="OSC1/CLKI/CN30/RA2"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="OSC1/CLKI/CN30/RA2"/>
 <wire x1="299.72" y1="124.46" x2="383.54" y2="124.46" width="0.1524" layer="91"/>
 <wire x1="383.54" y1="124.46" x2="383.54" y2="119.38" width="0.1524" layer="91"/>
 <junction x="383.54" y="119.38"/>
@@ -17414,7 +17412,7 @@ the front off the ground.</text>
 <wire x1="398.78" y1="119.38" x2="398.78" y2="127" width="0.1524" layer="91"/>
 <wire x1="393.7" y1="119.38" x2="398.78" y2="119.38" width="0.1524" layer="91"/>
 <junction x="398.78" y="119.38"/>
-<pinref part="U1" gate="A" pin="OSC2/CLKO/CN29/RA3"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="OSC2/CLKO/CN29/RA3"/>
 <wire x1="299.72" y1="127" x2="398.78" y2="127" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -17425,7 +17423,7 @@ the front off the ground.</text>
 <pinref part="DIST1" gate="G$1" pin="2"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="AN6/DAC1RM/RP16/CN8/RC0"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="AN6/DAC1RM/RP16/CN8/RC0"/>
 <wire x1="320.04" y1="111.76" x2="299.72" y2="111.76" width="0.1524" layer="91"/>
 <label x="309.88" y="111.76" size="1.778" layer="95"/>
 </segment>
@@ -17437,7 +17435,7 @@ the front off the ground.</text>
 <pinref part="DIST2" gate="G$1" pin="2"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="AN5/C1IN+/RP3/CN7/RB3"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="AN5/C1IN+/RP3/CN7/RB3"/>
 <wire x1="320.04" y1="109.22" x2="299.72" y2="109.22" width="0.1524" layer="91"/>
 <label x="309.88" y="109.22" size="1.778" layer="95"/>
 </segment>
@@ -17449,7 +17447,7 @@ the front off the ground.</text>
 <pinref part="DIST3" gate="G$1" pin="2"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="AN4/C1IN-/RP2/CN6/RB2"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="AN4/C1IN-/RP2/CN6/RB2"/>
 <wire x1="320.04" y1="106.68" x2="299.72" y2="106.68" width="0.1524" layer="91"/>
 <label x="309.88" y="106.68" size="1.778" layer="95"/>
 </segment>
@@ -17461,7 +17459,7 @@ the front off the ground.</text>
 </net>
 <net name="VCAP" class="0">
 <segment>
-<pinref part="U1" gate="A" pin="VCAP/VDDCORE"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="VCAP/VDDCORE"/>
 <pinref part="C5" gate="G$1" pin="2"/>
 <wire x1="116.84" y1="144.78" x2="73.66" y2="144.78" width="0.1524" layer="91"/>
 <wire x1="73.66" y1="144.78" x2="73.66" y2="142.24" width="0.1524" layer="91"/>
@@ -17480,10 +17478,10 @@ the front off the ground.</text>
 <wire x1="302.26" y1="254" x2="307.34" y2="254" width="0.1524" layer="91"/>
 <junction x="302.26" y="248.92"/>
 <label x="302.26" y="254" size="1.778" layer="95"/>
-<pinref part="U2" gate="A" pin="INPUT"/>
+<pinref part="LM1085IT-3.3" gate="A" pin="INPUT"/>
 <wire x1="317.5" y1="248.92" x2="309.88" y2="248.92" width="0.1524" layer="91"/>
 <junction x="309.88" y="248.92"/>
-<pinref part="U3" gate="A" pin="OUTPUT"/>
+<pinref part="UA78M05" gate="A" pin="OUTPUT"/>
 </segment>
 <segment>
 <wire x1="86.36" y1="243.84" x2="73.66" y2="243.84" width="0.1524" layer="91"/>
@@ -17519,12 +17517,12 @@ the front off the ground.</text>
 <wire x1="327.66" y1="78.74" x2="340.36" y2="78.74" width="0.1524" layer="91"/>
 <wire x1="340.36" y1="76.2" x2="340.36" y2="78.74" width="0.1524" layer="91"/>
 <label x="327.66" y="78.74" size="1.778" layer="95"/>
-<pinref part="S1" gate="1" pin="P1"/>
+<pinref part="BUTTON" gate="1" pin="P1"/>
 <wire x1="340.36" y1="78.74" x2="345.44" y2="78.74" width="0.1524" layer="91"/>
 <junction x="340.36" y="78.74"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="AN7/DAC1LM/RP17/CN9/RC1"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="AN7/DAC1LM/RP17/CN9/RC1"/>
 <wire x1="320.04" y1="114.3" x2="299.72" y2="114.3" width="0.1524" layer="91"/>
 <label x="309.88" y="114.3" size="1.778" layer="95"/>
 </segment>
@@ -17536,7 +17534,7 @@ the front off the ground.</text>
 <label x="381" y="83.82" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="SOSCI/RP4/CN1/RB4"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="SOSCI/RP4/CN1/RB4"/>
 <wire x1="322.58" y1="132.08" x2="299.72" y2="132.08" width="0.1524" layer="91"/>
 <label x="314.96" y="132.08" size="1.778" layer="95"/>
 </segment>
@@ -17548,7 +17546,7 @@ the front off the ground.</text>
 <label x="381" y="71.12" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="TDO/PMA8/RA8"/>
+<pinref part="DSPIC33FJ64MC804" gate="A" pin="TDO/PMA8/RA8"/>
 <wire x1="322.58" y1="129.54" x2="299.72" y2="129.54" width="0.1524" layer="91"/>
 <label x="314.96" y="129.54" size="1.778" layer="95"/>
 </segment>
