@@ -11,11 +11,8 @@
       <itemPath>dma.h</itemPath>
       <itemPath>myPWM.h</itemPath>
       <itemPath>timer1.h</itemPath>
-<<<<<<< HEAD
       <itemPath>MotorControl.h</itemPath>
-=======
       <itemPath>encoder.h</itemPath>
->>>>>>> 518c0ae3b116ce17b3cea54e492f5348ff7f5dac
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -32,13 +29,10 @@
       <itemPath>myPWM.c</itemPath>
       <itemPath>adc.c</itemPath>
       <itemPath>dma.c</itemPath>
-<<<<<<< HEAD
       <itemPath>MotorControl.c</itemPath>
       <itemPath>ICC.c</itemPath>
       <itemPath>mapping.c</itemPath>
-=======
       <itemPath>encoder.c</itemPath>
->>>>>>> 518c0ae3b116ce17b3cea54e492f5348ff7f5dac
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -57,7 +51,7 @@
         <targetDevice>dsPIC33FJ128MC802</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>Simulator</platformTool>
+        <platformTool>pk4hybrid</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>1.70</languageToolchainVersion>
         <platform>2</platform>
@@ -224,6 +218,9 @@
         <property key="codecoverage.enabled" value="Disable"/>
         <property key="codecoverage.enableoutputtofile" value="false"/>
         <property key="codecoverage.outputfile" value=""/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="lastid" value=""/>
         <property key="oscillator.auxfrequency" value="120"/>
         <property key="oscillator.auxfrequencyunit" value="Mega"/>
         <property key="oscillator.frequency" value="26.7264"/>
@@ -769,6 +766,8 @@
         <property key="periphComp5.gte" value="gt"/>
         <property key="periphComp6.gte" value="gt"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="/home/marius/workspace/Micromouse/code/MyTestProject.X/debug/default/MyTestProject_ptg"/>
         <property key="programmerToGoImageName" value="MyTestProject_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
@@ -1296,8 +1295,6 @@
         <property key="memories.programmemory.ranges" value="0-157ff"/>
         <property key="memories.rww" value="true"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="/home/marius/workspace/Micromouse/code/MyTestProject.X/debug/default/MyTestProject_ptg"/>
         <property key="programmerToGoImageName" value="MyTestProject_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
