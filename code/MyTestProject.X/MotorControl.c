@@ -9,10 +9,6 @@
 #include "xc.h"
 
 
-int main(void) {
-    return 0;
-}
-
 
 void left_wheel_forward_turns(int turns)
 {   
@@ -33,28 +29,28 @@ void right_wheel_backward_turns(int turns)
 
 void drive_forward()
 {
-    int turns;
+    int turns = 5;
     right_wheel_forward_turns(turns);
     left_wheel_forward_turns(turns);
 }
 
 void drive_backward()
 {
-    int turns;
+    int turns = 5;
     right_wheel_backward_turns(turns);
     left_wheel_backward_turns(turns);
 }
 
 void left_45degree()
 {
-    int turns; //90°
+    int turns = 5; //90°
     right_wheel_forward_turns(turns);
     left_wheel_backward_turns(turns);
 }
 
 void right_45degree()
 {
-    int turns; //90°
+    int turns= 5; //90°
     right_wheel_backward_turns(turns);
     left_wheel_forward_turns(turns);
 }
@@ -62,14 +58,14 @@ void right_45degree()
 
 void left_90degree()
 {
-    int turns; //180°
+    int turns= 5; //180°
     right_wheel_forward_turns(turns);
     left_wheel_backward_turns(turns);
 }
 
 void right_90degree()
 {
-    int turns; //180°
+    int turns= 5; //180°
     right_wheel_backward_turns(turns);
     left_wheel_forward_turns(turns);
 }

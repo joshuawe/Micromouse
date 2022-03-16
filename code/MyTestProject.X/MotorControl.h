@@ -18,7 +18,7 @@
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
  * TERMS. 
  */
-left_90degree();
+void left_90degree();
 /* 
  * File:   
  * Author: 

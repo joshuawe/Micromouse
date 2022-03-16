@@ -9,30 +9,27 @@
 #include "xc.h"
 #include "MotorControl.h"
 
-int main(void) {
-    return 0;
-}
-
 void drive(char next_step)
 {
-    if(next_step == "l")
+    if(next_step == 'l')
     {
         left_90degree();
     }
-    else if(next_step == "r")
+    else if(next_step == 'r')
     {
         right_90degree();
     }
-    else if(next_step == "f")
+    else if(next_step == 'f')
     {
         drive_forward();
     }
-    else if (next_step == "b")
+    else if (next_step == 'b')
     {
         drive_backward();
     }
-    else if (next_step == "t")
+    else if (next_step == 't')
     {
         turning();
     }
 }
+

@@ -11,6 +11,14 @@
  */
 
 #include "xc.h"
+#define squares 10
+
+typedef struct {
+        int front;
+        int back;
+        int left;
+        int right;             
+    }cell;
 
 int maze_size; //in cm
 int square_size = 1; //in cm
@@ -18,22 +26,10 @@ int position [2];
 double front_measurement; //in cm
 double right_measurement; // in cm
 double left_measurement; // in cm
-int squares = 0;
-int new_map [][];
 int i;
 int orientation; //front = 0, turned right = 1, back = 2 turned left = 3
-struct cell map[squares][squares];
 
-struct cell {
-        int front;
-        int back;
-        int left;
-        int right;             
-    };
-
-int main(void) {
-    return 0;   
-}
+cell map[squares][squares];
 
 void set_maze_size(int size)
 {
@@ -71,9 +67,7 @@ void set_measurements(double new_front_measurement, double new_right_measurement
  */
 void initalize_map()
 {
-    squares = (int)maze_size/square_size;
-    struct cell map[squares][squares];
-
+   // squares = (int)maze_size/square_size;
     for (i = 0; i < squares; i++)
     {
         map[0][i].back = 1;
@@ -91,6 +85,7 @@ void update_map(double new_front_measurement, double new_right_measurement, doub
     left_measurement = (int)new_left_measurement/square_size;
     int positionx = (int) new_positionx/square_size;
     int positiony = (int) new_positiony/square_size;
+
     if (orientation == 0)
     {
         if (front_measurement >= 2) // only considering the next two squares
