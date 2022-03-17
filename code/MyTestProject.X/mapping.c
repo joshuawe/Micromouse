@@ -67,6 +67,18 @@ void set_measurements(double new_front_measurement, double new_right_measurement
  */
 void initalize_map()
 {
+    for(int o = 0; o < squares; o++)
+    {
+        for(int j=0; j < squares; o++)
+        {
+            map[o][j].back = -1;
+            map[o][j].left = -1;
+            map[o][j].right = -1;
+            map[o][j].front = -1;
+            
+        }
+    }        
+    
    // squares = (int)maze_size/square_size;
     for (i = 0; i < squares; i++)
     {
