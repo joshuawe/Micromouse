@@ -23,7 +23,6 @@
                    projectFiles="true">
       <itemPath>main.c</itemPath>
       <itemPath>IOconfig.c</itemPath>
-      <itemPath>timer1.c</itemPath>
       <itemPath>myTimers.c</itemPath>
       <itemPath>serialComms.c</itemPath>
       <itemPath>myPWM.c</itemPath>

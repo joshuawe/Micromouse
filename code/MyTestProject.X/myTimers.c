@@ -7,11 +7,10 @@ int t;
 
 void initTimer1(unsigned int period) 
 {
-    //unsigned TimerControlValue;
+
     myCount = 0;
     t = period;
     T1CON = 0;              // ensure Timer 1 is in reset state
-    //TimerControlValue=T1CON;
     
     // *** prescaler TCKPS: 11 --> 1:256, 10 --> 1:64, 01 --> 1:8, 00 --> 1:1
     //unsigned int scale = period >> 11;
@@ -91,75 +90,49 @@ void initTimer1(unsigned int period)
 
 void startTimer1(void) 
 {
-    T1CONbits.TON = 1; //
- 
+    T1CONbits.TON = 1;
 }
 
 // this routine found online somewhere, then tweaked
- // returns pointer to ASCII string in a static buffer
- char *itoa(int value) 
- {
-     static char buffer[12];        // 12 bytes is big enough for an INT32
-     int original = value;        // save original value
- 
-     int c = sizeof(buffer)-1;
- 
-     buffer[c] = 0;                // write trailing null in last byte of buffer    
- 
-     if (value < 0)                 // if it's negative, note that and take the absolute value
-         value = -value;
-     
-     do                             // write least significant digit of value that's left
-     {
-         buffer[--c] = (value % 10) + '0';    
-         value /= 10;
-     } while (value);
- 
-     if (original < 0) 
-         buffer[--c] = '-';
- 
-     return &buffer[c];
- }
+// returns pointer to ASCII string in a static buffer
+char *itoa(int value) 
+{
+    static char buffer[12];        // 12 bytes is big enough for an INT32
+    int original = value;        // save original value
+
+    int c = sizeof(buffer)-1;
+
+    buffer[c] = 0;                // write trailing null in last byte of buffer    
+
+    if (value < 0)                 // if it's negative, note that and take the absolute value
+        value = -value;
+
+    do                             // write least significant digit of value that's left
+    {
+        buffer[--c] = (value % 10) + '0';    
+        value /= 10;
+    } while (value);
+
+    if (original < 0) 
+        buffer[--c] = '-';
+
+    return &buffer[c];
+}
 
 
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
- 
-    IFS0bits.T1IF = 0;           // reset Timer 2 interrupt flag 
+    // Reset timer 1 interrupt flag
+    IFS0bits.T1IF = 0;
     
     char *num = itoa(longPOS);
     
     putsUART1(num);
     putsUART1("\r\n");
+    
+    LED1 = ~LED1;
 //    
 //    myCount++;
-//    
-//    if (t<630){
-//        LED4=~LED4;
-//    }
-//    else if (t<630*2){
-//        if(myCount%2==0){
-//            LED4=~LED4;            
-//        }
-//    }
-//    else if (t<630*4){
-//        if(myCount%4==0){
-//            LED4=~LED4;            
-//        }
-//    }
-//    else if (t<630*8){
-//        if(myCount%8==0){
-//            LED4=~LED4;            
-//        }
-//    }
-//    else if (t<630*16){
-//        if(myCount%16==0){
-//            LED4=~LED4;            
-//        }
-//    }
-//    
-//    
-//    
 //    /*
 //    
 //    if (LED6 == LEDON){
@@ -189,6 +162,5 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 //   
 //   //char * data = "Hello";
 //   //putsUART1(data);
-//   
-    
-}//
+//      
+}
