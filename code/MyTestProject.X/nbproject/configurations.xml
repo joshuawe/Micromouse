@@ -10,7 +10,6 @@
       <itemPath>adc.h</itemPath>
       <itemPath>dma.h</itemPath>
       <itemPath>myPWM.h</itemPath>
-      <itemPath>timer1.h</itemPath>
       <itemPath>MotorControl.h</itemPath>
       <itemPath>encoder.h</itemPath>
     </logicalFolder>
@@ -1292,6 +1291,8 @@
         <property key="memories.programmemory.ranges" value="0-157ff"/>
         <property key="memories.rww" value="true"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="/home/marius/workspace/Micromouse/code/MyTestProject.X/debug/default/MyTestProject_ptg"/>
         <property key="programmerToGoImageName" value="MyTestProject_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
