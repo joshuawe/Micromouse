@@ -53,7 +53,8 @@
 
 
 /// Defines----------------------------
-#define SEVEN_MEG_OSC 0//set to 1 if we use slow (7.3728 MHz) oscillator and not 16 MHz
+// For our mouse, we use a 16MHz oscillator.
+#define SEVEN_MEG_OSC 0 //set to 1 if we use slow (7.3728 MHz) oscillator and not 16 MHz
 
 /*
  * 
@@ -61,8 +62,8 @@
 int main() 
 {
     int pinStatus;
-#if (SEVEN_MEG_OSC == 1) 
-     /*** oscillator setup --------------------------------------------------
+#if (SEVEN_MEG_OSC == 0)
+    /*** oscillator setup --------------------------------------------------
      * The external oscillator runs at 16MHz
      * PLL is used to generate 53.3 MHz clock (FOSC)
      * The relationship between oscillator and cycle frequency: FCY = FOSC/2
@@ -70,7 +71,7 @@ int main()
     
      * Result: FCY = 0.5 * (16MHz*20/(3*2)) = 26.666 MIPS, Tcycle=37.5nsec
     ---------------------------------------------------------------------***/
-    PLLFBDbits.PLLDIV = 18;                      //set PPL to M=20 (18+2)
+    PLLFBDbits.PLLDIV = 18;           //set PPL to M=20 (18+2)
     CLKDIVbits.PLLPRE = 1;            //N1 = input/3
     CLKDIVbits.PLLPOST = 0;           //N2 = output/2
     
@@ -78,7 +79,7 @@ int main()
     
 #else //Below the 7.3728 Setup 
     
-         /*** oscillator setup --------------------------------------------------
+    /*** oscillator setup --------------------------------------------------
      * The external oscillator runs at 7.3728 MHz
      * PLL is used to generate 53.3 MHz clock (FOSC)
      * The relationship between oscillator and cycle frequency: FCY = FOSC/2
@@ -87,7 +88,7 @@ int main()
      * Result: FCY = 0.5 * (7.3728 MHz*29/(2*2)) = 26.73 MIPS, which is 
           * not exactl Tcycle=37.5nsec, but close enough for our purposes
     ---------------------------------------------------------------------***/
-    PLLFBDbits.PLLDIV = 27;                      //set PPL to M=29 (27+2)
+    PLLFBDbits.PLLDIV = 27;           //set PPL to M=29 (27+2)
     CLKDIVbits.PLLPRE = 0;            //N1 = input/2
     CLKDIVbits.PLLPOST = 0;           //N2 = output/2
 #endif //SEVEN_MEG_OSC == 0
