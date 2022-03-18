@@ -30,8 +30,12 @@
 // more than once.  
 #ifndef __MYPWM_H__
 
-void setupPWM(float percentage1, float percentage2, float percentage3, int direction);
+#define DIRECTION_FWD 1
+#define DIRECTION_NONE 0
+#define DIRECTION_BWD -1
 
+void setupPWM();
+void setPWM(float left_motor, int left_direction, float right_motor, int right_direction);
 
 #define	__MYPWM_H__
 

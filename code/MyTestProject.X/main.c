@@ -49,6 +49,7 @@
 #include "IOconfig.h"
 #include "encoder.h"
 #include "serialComms.h"
+#include "myPWM.h"
 
 
 /// Defines----------------------------
@@ -105,13 +106,12 @@ int main()
     while (OSCCONbits.LOCK != 1); //Wait for PPL to lock
  
     setupIO(); //configures inputs and outputs
-    //setupPWM(0.5,0,0,1); 
-    init_QEI();
+    setupPWM(); 
+    //init_QEI();
     initTimer1(500); //creates a x ms timer interrupt (x < 630 ms)
     
     setupUART1();
     startTimer1();
-    //setupPWM(0,0,0.5);
     //setupADC1();
     //startADC1();
     
@@ -122,6 +122,8 @@ int main()
     
     LED1 = LEDON;
     LED2 = LEDON;
+    
+    setPWM(0.0, DIRECTION_NONE, 0.0, DIRECTION_NONE);
     
     //*** we do nothing forever --> wait until things are happening
     //*** --> but the interrupt function is called after xxx time
