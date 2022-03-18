@@ -38,6 +38,7 @@ void __attribute__((__interrupt__, auto_psv)) _T0Interrupt(void)
     
    IFS0bits.T1IF = 0;           // reset Timer 1 interrupt flag 
    
+   /*
    LED4=~LED4; //*** not equal <=> =~
   
    LED6=LEDOFF;
@@ -55,6 +56,7 @@ void __attribute__((__interrupt__, auto_psv)) _T0Interrupt(void)
            LED7=~LED7;
            count=0;
     }
+    */
  
    
    //send all character from A to Z on the serial port

@@ -117,21 +117,13 @@ int main()
     //setupADC1();
     //startADC1();
     
-    //LED4 = LEDON; //switches off
-  
-    //LED5 = LEDON; // -> should have a reduced brightness due to PWM
- 
-    //LED6 = LEDON;
-
-    //LED7 = LEDON;
-    
     //SRbits.IPL=3; //raise priority in order to...
     //    LED6 = LEDOFF;
     //    LED6 = LEDOFF;
     //SRbits.IPL=0; //back to normal
     
-    
-    
+    LED1 = LEDON;
+    LED2 = LEDON;
     
     //*** we do nothing forever --> wait until things are happening
     //*** --> but the interrupt function is called after xxx time

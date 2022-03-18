@@ -19,11 +19,11 @@ void setupIO()
                         // AD Converter does not work
     
     
-    // set LEDs as output
-    TRISBbits.TRISB15 = 0;
-    TRISBbits.TRISB14 = 0;
-    TRISBbits.TRISB13 = 0;
-    TRISBbits.TRISB12 = 0;
+    // LED configuration (set them as output)
+    // LED1 is pin 33 *RB4)
+    TRISBbits.TRISB4 = 0;
+    // LED2 is pin 32 (RA8)
+    TRISAbits.TRISA8 = 0;
     
     TRISBbits.TRISB8=0;// UART1 TX
 
