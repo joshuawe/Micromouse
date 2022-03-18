@@ -131,6 +131,10 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     putsUART1("\r\n");
 
     LED1 = ~LED1;
+
+    if (BUTTON) {
+        LED2 = ~LED2;
+    }
 //
 //    myCount++;
 //    /*

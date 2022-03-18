@@ -14,7 +14,8 @@
 #define LED1 LATBbits.LATB4
 #define LED2 LATAbits.LATA8
 
-#define SW1 !PORTBbits.RB5 
+// BUTTON is pin 26
+#define BUTTON PORTCbits.RC1
 
 #define LEDON 1
 #define LEDOFF 2
