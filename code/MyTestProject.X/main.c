@@ -47,7 +47,6 @@
 /// Include headers-------------------------------
 #include "xc.h"
 #include "IOconfig.h"
-#include "timer1.h"
 #include "encoder.h"
 #include "serialComms.h"
 
@@ -109,7 +108,6 @@ int main()
     //setupPWM(0.5,0,0,1); 
     init_QEI();
     initTimer1(500); //creates a x ms timer interrupt (x < 630 ms)
-    setupIO_Motor();
     
     setupUART1();
     startTimer1();

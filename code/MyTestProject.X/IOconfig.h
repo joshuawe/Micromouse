@@ -22,7 +22,5 @@
 
 void setupIO();
 
-void setupIO_Motor();
-
 #endif	/* IOCONFIG_H */
 
