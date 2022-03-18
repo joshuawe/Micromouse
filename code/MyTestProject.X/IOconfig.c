@@ -38,22 +38,19 @@ void setupIO()
     //before we map, we need to unlock
     __builtin_write_OSCCONL(OSCCON & 0xbf); // clear bit 6 (unlock, they are usually write protected)
 
-    // ***** defines the input pin *****
+    // TODO: Check if these pins are correct for us
+    // UART configuration
     // PERIPHERAL receives data from which INPUT
-    RPINR18bits.U1RXR = 9; //mapped to RP9 is U1 RX, CHANGE THIS
+    RPINR18bits.U1RXR = 9; //mapped to RP9 is U1 RX
+    //OUTPUT PIN receives data from which PERIPHERAL,
+    //see table 11-2 in datasheet to check peripheral codes
+    RPOR4bits.RP8R = 0b00011; //output bin RP2 gets data from peripheral U1 TX
 
 
     //PERIPHERAL QEA Encoder 1, receives data from RP10
    // RPINR14bits.QEA1R = 10;
     //PERIPHERAL QEB Encoder 1, receives data from RP11
    // RPINR14bits.QEB1R = 11;
-
-
-    // ***** defines the output pin *****
-    //OUTPUT PIN receives data from which PERIPHERAL,
-    //see table 11-2 in datasheet to check peripheral codes
-    RPOR4bits.RP8R = 0b00011; //output bin RP2 gets data from peripheral U1 TX
-
 
     //after mapping we lock again
      __builtin_write_OSCCONL(OSCCON | 0x40); // Lock PPS registers (lock again!)
