@@ -67,9 +67,10 @@ void set_measurements(double new_front_measurement, double new_right_measurement
  */
 void initalize_map()
 {
-    for(int o = 0; o < squares; o++)
+    int o, j;
+    for(o = 0; o < squares; o++)
     {
-        for(int j=0; j < squares; o++)
+        for(j=0; j < squares; o++)
         {
             map[o][j].back = -1;
             map[o][j].left = -1;
