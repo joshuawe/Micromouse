@@ -52,7 +52,7 @@
         <platformTool>pk4hybrid</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>1.70</languageToolchainVersion>
-        <platform>2</platform>
+        <platform>3</platform>
       </toolsSet>
       <packs>
         <pack name="dsPIC33F-GP-MC_DFP" vendor="Microchip" version="1.3.64"/>
@@ -683,8 +683,10 @@
         <property key="ADC 1" value="true"/>
         <property key="AutoSelectMemRanges" value="auto"/>
         <property key="CRC" value="true"/>
+        <property key="DAC 1" value="true"/>
         <property key="DUAL COMPARATOR" value="true"/>
         <property key="ECAN" value="true"/>
+        <property key="ECAN 1" value="true"/>
         <property key="Freeze All Other Peripherals" value="true"/>
         <property key="I2C1" value="true"/>
         <property key="INPUT CAPTURE 1" value="true"/>
@@ -1273,6 +1275,8 @@
         <property key="communication.interface" value=""/>
         <property key="communication.interface.jtag" value="2wire"/>
         <property key="communication.speed" value="${communication.speed.default}"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="true"/>
         <property key="freeze.timers" value="false"/>
@@ -1291,8 +1295,6 @@
         <property key="memories.programmemory.ranges" value="0-157ff"/>
         <property key="memories.rww" value="true"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="/home/marius/workspace/Micromouse/code/MyTestProject.X/debug/default/MyTestProject_ptg"/>
         <property key="programmerToGoImageName" value="MyTestProject_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>

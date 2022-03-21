@@ -17,7 +17,9 @@
 void setupUART1(void)
 {
 	U1MODEbits.UARTEN=0; //switch the uart off during set-up
-	U1BRG=28; // baud rate register
+    
+    
+	U1BRG= 173; // baud rate register
 	U1MODEbits.LPBACK=0; // in loopback mode for test! TODO: set to no loop-back (=0) after test 
 	
 	U1MODEbits.WAKE=0; //do not wake up on serial port activity

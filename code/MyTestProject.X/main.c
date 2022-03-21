@@ -130,6 +130,8 @@ int main()
     //*** (is called by the hardware e.g. every 10 ms if this is the setup)
     while(1) 
     {
+        // char* something = "hello";
+        // putsUART1(something);
         
        
     };

@@ -29,8 +29,6 @@ void setupIO()
     // BUTTON is pin 26 (RC1)
     TRISCbits.TRISC1 = 1;
 
-    TRISBbits.TRISB8=0;// UART1 TX
-
     //PIN MAPPING
     // ***** which PIN talks to which PIN ? *****
     // ***** define the multiplexers ! *****
@@ -38,13 +36,17 @@ void setupIO()
     //before we map, we need to unlock
     __builtin_write_OSCCONL(OSCCON & 0xbf); // clear bit 6 (unlock, they are usually write protected)
 
-    // TODO: Check if these pins are correct for us
-    // UART configuration
+    // UART configuration:
+    //              TX = PIN43/RB7/RP7
+    //              RX = PIN44/RB8/RP8
     // PERIPHERAL receives data from which INPUT
-    //RPINR18bits.U1RXR = 9; //mapped to RP9 is U1 RX
-    //OUTPUT PIN receives data from which PERIPHERAL,
-    //see table 11-2 in datasheet to check peripheral codes
-    //RPOR4bits.RP8R = 0b00011; //output bin RP2 gets data from peripheral U1 TX
+    // Map U1 RX to RP8
+    RPINR18bits.U1RXR = 8;
+    // OUTPUT PIN receives data from which PERIPHERAL,
+    // see table 11-2 in datasheet to check peripheral codes
+    // Map RP7 to U1 TX (other way than mapping RX)
+    RPOR3bits.RP7R = 0b00011;
+    TRISBbits.TRISB7=0;// UART1 TX
 
 
     //PERIPHERAL QEA Encoder 1, receives data from RP10
