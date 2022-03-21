@@ -21,7 +21,7 @@ void initDmaChannel4(void)
 
 	DMA4STA 	        = (__builtin_dmaoffset(&(adcData[0]))); // start address of DMA RAM
 	DMA4PAD 		= (volatile unsigned int) &ADC1BUF0;			// address of peripheral sfr (0x0300)
-	DMA4CNT			 = 1;	// we have 2 a2d  s/h channels for  measurement !!!CHANGE HERE!!!
+	DMA4CNT			 = 2;	// we have 3 a2d  s/h channels for  measurement !!!CHANGE HERE!!!
 
     // Interrupt settings
 	IFS2bits.DMA4IF 	= 0;	// Clear DMA interrupt

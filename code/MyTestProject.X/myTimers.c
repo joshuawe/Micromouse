@@ -1,6 +1,8 @@
 #include "myTimers.h"
 #include "IOconfig.h"
 #include "encoder.h"
+#include "dma.h"
+#include "myPWM.h"
 
 static int myCount;
 int t;
@@ -125,10 +127,18 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     // Reset timer 1 interrupt flag
     IFS0bits.T1IF = 0;
 
-    char *num = itoa(longPOS);
-
+    char *num = itoa(adcData[0]); // Right
+    putsUART1("R: ");
     putsUART1(num);
-    putsUART1("\r\n");
+    putsUART1("\r\nF: ");
+    
+    num = itoa(adcData[1]); // Front
+    putsUART1(num);
+    putsUART1("\r\nL: ");
+    
+    num = itoa(adcData[2]); // Left
+    putsUART1(num);
+    putsUART1("\r\n---\r\n");
 
     LED1 = ~LED1;
 

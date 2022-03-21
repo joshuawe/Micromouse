@@ -9,8 +9,8 @@ void setupIO()
 {
 
     int i;
-    AD1PCFGL=0xFFFF; //all pins are now digital, by default they are analogue
-    //AD1PCFGL = 0xFFDE; // 0b1111 1111 1101 1110; -> pin 0 and 5 are analog pins
+    //AD1PCFGL=0xFFFF; //all pins are now digital, by default they are analogue
+    AD1PCFGL = 0b1111111110001111; // -> pin 4, 5, and 6 are analog pins
                         // AN0 and AN5 are the only inputs !!!CHANGE HERE!!!
                         // AD1 Part Configuration -> by default all bits are 0
                         // Circuit Diagramm: IO6 connects to RB3

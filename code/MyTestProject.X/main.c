@@ -108,12 +108,13 @@ int main()
     setupIO(); //configures inputs and outputs
     setupPWM(); 
     //init_QEI();
-    initTimer1(500); //creates a x ms timer interrupt (x < 630 ms)
+    initTimer1(100); //creates a x ms timer interrupt (x < 630 ms)
     
     setupUART1();
     startTimer1();
-    //setupADC1();
-    //startADC1();
+    setupADC1();
+    initDmaChannel4();
+    startADC1();
     
     //SRbits.IPL=3; //raise priority in order to...
     //    LED6 = LEDOFF;
@@ -123,7 +124,7 @@ int main()
     LED1 = LEDON;
     LED2 = LEDON;
     
-    setPWM(0.0, DIRECTION_NONE, 0.0, DIRECTION_NONE);
+    setPWM(0.0, DIRECTION_FWD, 0.0, DIRECTION_FWD);
     
     //*** we do nothing forever --> wait until things are happening
     //*** --> but the interrupt function is called after xxx time
