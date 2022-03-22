@@ -274,15 +274,15 @@ void update_map(double new_front_measurement, double new_right_measurement, doub
 
 void explore(int positionx, int positiony)
 {
-    if(explorefront(int positionx, int positiony)== -1)
+    if(explorefront(positionx, positiony)== -1)
     {
-        if(exploreleft(int positionx, int positiony) == -1)
+        if(exploreleft( positionx,  positiony) == -1)
         {
-            if(exploreright(int positionx, int positiony) == -1)
+            if(exploreright( positionx,  positiony) == -1)
             {
                 if(allexplored() == -1)
                 {
-                    move(int positionx, int positiony);
+                    move( positionx,  positiony);
                 }
             }
         }
