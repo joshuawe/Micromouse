@@ -97,6 +97,7 @@ void startTimer1(void)
 
 // this routine found online somewhere, then tweaked
 // returns pointer to ASCII string in a static buffer
+// TODO: This does not work with long, of course
 char *itoa(int value)
 {
     static char buffer[12];        // 12 bytes is big enough for an INT32
@@ -137,6 +138,26 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     putsUART1("\r\nL: ");
     
     num = itoa(adcData[2]); // Left
+    putsUART1(num);
+    putsUART1("\r\nE1: ");
+    
+    
+    num = itoa(POS1CNT); // Encoder 1
+    putsUART1(num);
+    putsUART1("\r\nE2: ");
+    
+    num = itoa(POS2CNT); // Encoder 2
+    putsUART1(num);
+    putsUART1("\r\nD1: ");
+    
+    long distLeft, distRight;
+    getEncoderCounts(&distLeft, &distRight);
+    
+    num = itoa(distLeft); // Distance 1
+    putsUART1(num);
+    putsUART1("\r\nD2: ");
+    
+    num = itoa(distRight); // Distance 2
     putsUART1(num);
     putsUART1("\r\n---\r\n");
 

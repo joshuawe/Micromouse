@@ -48,18 +48,22 @@ void setupIO()
     RPOR4bits.RP8R = 0b00011;
     TRISBbits.TRISB8=0;// UART1 TX
 
-
-    //PERIPHERAL QEA Encoder 1, receives data from RP10
-   // RPINR14bits.QEA1R = 10;
-    //PERIPHERAL QEB Encoder 1, receives data from RP11
-   // RPINR14bits.QEB1R = 11;
-
-    // TODO: Configure ports for encoders
     // Encoder configuration
-    // Pin 22 (RB11) Channel A
-    // Pin 21 (RB10) Channel B
-    //RPINR14bits.QEA1R = 11;
-    //RPINR14bits.QEB1R = 10;
+    // Motor 1
+    // Pin 35 (RA9) Channel A
+    // Pin 36 (RP19) Channel B
+    TRISAbits.TRISA9 = 1;
+    TRISCbits.TRISC3 = 1;
+    RPINR14bits.QEA1R = 0; // TODO: Adapt once the cable is soldered in.
+    RPINR14bits.QEB1R = 19;
+    
+    // Motor 2
+    // Pin 3 (RP23) Channel A
+    // Pin 4 (RP24) Channel B
+    TRISCbits.TRISC7 = 1;
+    TRISCbits.TRISC8 = 1;
+    RPINR16bits.QEA2R = 23;
+    RPINR16bits.QEB2R = 24;
 
     // Motor 1 configuration (left motor)
     TRISCbits.TRISC5 = 0;  // Direction 1, pin 38, RC5
@@ -77,10 +81,6 @@ void setupIO()
     LATCbits.LATC6 = 0;  // Pin 2
     LATBbits.LATB14 = 0; // Pin 14
 
-    // TODO: Check this comment
-    //Setting PWM (pin 21 = PWM1H3, pin 22 = PWM1L3, pin 23 = H2, pin 24 = L2, pin25 = H1, pin26 = L1)
-    //setupPWM(1,0,0,0);
-    
     //after mapping we lock again
      __builtin_write_OSCCONL(OSCCON | 0x40); // Lock PPS registers (lock again!)
 
