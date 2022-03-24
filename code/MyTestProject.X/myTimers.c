@@ -4,6 +4,7 @@
 #include "dma.h"
 #include "myPWM.h"
 #include "proxSensors.h"
+#include "serialComms.h"
 
 static int myCount;
 int t;
@@ -96,86 +97,25 @@ void startTimer1(void)
     T1CONbits.TON = 1;
 }
 
-// this routine found online somewhere, then tweaked
-// returns pointer to ASCII string in a static buffer
-// TODO: This does not work with long, of course
-char *itoa(int value)
-{
-    static char buffer[12];        // 12 bytes is big enough for an INT32
-    int original = value;        // save original value
-
-    int c = sizeof(buffer)-1;
-
-    buffer[c] = 0;                // write trailing null in last byte of buffer
-
-    if (value < 0)                 // if it's negative, note that and take the absolute value
-        value = -value;
-
-    do                             // write least significant digit of value that's left
-    {
-        buffer[--c] = (value % 10) + '0';
-        value /= 10;
-    } while (value);
-
-    if (original < 0)
-        buffer[--c] = '-';
-
-    return &buffer[c];
-}
-
-
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
     // Reset timer 1 interrupt flag
     IFS0bits.T1IF = 0;
-
-    char *num = itoa(adcData[0]); // Right
-    putsUART1("R: ");
-    putsUART1(num);
-    putsUART1("\tF: ");
-    
-    num = itoa(adcData[1]); // Front
-    putsUART1(num);
-    putsUART1("\tL: ");
-    
-    num = itoa(adcData[2]); // Left
-    putsUART1(num);
-    putsUART1("\tE1: ");
-    num = itoa(POS1CNT); // Encoder 1
-    putsUART1(num);
-    
     
     float distanceLeft, distanceFront, distanceRight;
     getDistances(&distanceRight, &distanceFront, &distanceLeft);
     
-    num = itoa((int) (distanceLeft*10));
-    putsUART1("\tdLeft: ");
-    putsUART1(num);
+    logInt("dLeft", (int) (distanceLeft*10));
+    logInt("dFront", (int) (distanceFront*10));
+    logInt("dRight", (int) (distanceRight*10));
+        
+    long encLeft, encRight;
+    getEncoderCounts(&encLeft, &encRight);
     
-    num = itoa((int) (distanceFront*10));
-    putsUART1("\tdFront: ");
-    putsUART1(num);
+    logInt("eLeft", encLeft);
+    logInt("eRight", encRight);
     
-    num = itoa((int) (distanceRight*10));
-    putsUART1("\tdRight: ");
-    putsUART1(num);
-    
-    putsUART1("\tE2: ");
-    
-    num = itoa(POS2CNT); // Encoder 2
-    putsUART1(num);
-    putsUART1("\tD1: ");
-    
-    long distLeft, distRight;
-    getEncoderCounts(&distLeft, &distRight);
-    
-    num = itoa(distLeft); // Distance 1
-    putsUART1(num);
-    putsUART1("\tD2: ");
-    
-    num = itoa(distRight); // Distance 2
-    putsUART1(num);
-    putsUART1("\r\n---\r\n");
+    putsUART1("\r\n");
 
     LED1 = ~LED1;
 

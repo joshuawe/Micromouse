@@ -35,5 +35,6 @@
 
 void setupUART1(void);
 void putsUART1(char *buffer);
-#endif	/* SERIALCOMMS_H */
+void logInt(char * name, int num);
 
+#endif	/* SERIALCOMMS_H */

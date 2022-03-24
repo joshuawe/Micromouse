@@ -150,3 +150,39 @@ void putsUART1(char *buffer)
         }
     }
 }
+
+// this routine found online somewhere, then tweaked
+// returns pointer to ASCII string in a static buffer
+// TODO: This does not work with long, of course
+char *itoa(int value)
+{
+    static char buffer[12];        // 12 bytes is big enough for an INT32
+    int original = value;        // save original value
+
+    int c = sizeof(buffer)-1;
+
+    buffer[c] = 0;                // write trailing null in last byte of buffer
+
+    if (value < 0)                 // if it's negative, note that and take the absolute value
+        value = -value;
+
+    do                             // write least significant digit of value that's left
+    {
+        buffer[--c] = (value % 10) + '0';
+        value /= 10;
+    } while (value);
+
+    if (original < 0)
+        buffer[--c] = '-';
+
+    return &buffer[c];
+}
+
+void logInt(char * name, int num)
+{
+    char *str = itoa(num);
+    putsUART1(name);
+    putsUART1(": ");
+    putsUART1(str);
+    putsUART1("\t");
+}
