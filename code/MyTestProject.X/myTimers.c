@@ -3,6 +3,7 @@
 #include "encoder.h"
 #include "dma.h"
 #include "myPWM.h"
+#include "proxSensors.h"
 
 static int myCount;
 int t;
@@ -139,23 +140,38 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     
     num = itoa(adcData[2]); // Left
     putsUART1(num);
-    putsUART1("\r\nE1: ");
-    
-    
+    putsUART1("\tE1: ");
     num = itoa(POS1CNT); // Encoder 1
     putsUART1(num);
-    putsUART1("\r\nE2: ");
+    
+    
+    float distanceLeft, distanceFront, distanceRight;
+    getDistances(&distanceRight, &distanceFront, &distanceLeft);
+    
+    num = itoa((int) (distanceLeft*10));
+    putsUART1("\tdLeft: ");
+    putsUART1(num);
+    
+    num = itoa((int) (distanceFront*10));
+    putsUART1("\tdFront: ");
+    putsUART1(num);
+    
+    num = itoa((int) (distanceRight*10));
+    putsUART1("\tdRight: ");
+    putsUART1(num);
+    
+    putsUART1("\tE2: ");
     
     num = itoa(POS2CNT); // Encoder 2
     putsUART1(num);
-    putsUART1("\r\nD1: ");
+    putsUART1("\tD1: ");
     
     long distLeft, distRight;
     getEncoderCounts(&distLeft, &distRight);
     
     num = itoa(distLeft); // Distance 1
     putsUART1(num);
-    putsUART1("\r\nD2: ");
+    putsUART1("\tD2: ");
     
     num = itoa(distRight); // Distance 2
     putsUART1(num);
