@@ -50,11 +50,12 @@ void setupIO()
 
     // Encoder configuration
     // Motor 1
-    // Pin 35 (RA9) Channel A
+    // Pin 42 (RP6) Channel A
     // Pin 36 (RP19) Channel B
-    TRISAbits.TRISA9 = 1;
+    TRISAbits.TRISA9 = 1; // Through error, RA9 is also connected to the encoder, so we need it as an input.
+    TRISBbits.TRISB6 = 1;
     TRISCbits.TRISC3 = 1;
-    RPINR14bits.QEA1R = 0; // TODO: Adapt once the cable is soldered in.
+    RPINR14bits.QEA1R = 6;
     RPINR14bits.QEB1R = 19;
     
     // Motor 2

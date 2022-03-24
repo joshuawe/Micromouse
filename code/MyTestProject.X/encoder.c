@@ -21,7 +21,7 @@ void initQEI(void)
     // Configure QEI module
     QEI1CONbits.QEISIDL = 1; // Discontinue operation when in idle mode
     QEI1CONbits.QEIM = 0b111; // x4 edge gain and reset POSCNT when == MAXCNT
-    QEI1CONbits.SWPAB = 0; // Do not swap the polarity of phase comparison
+    QEI1CONbits.SWPAB = 1; // Swap the polarity of phase comparison, that forward direction causes positive encoder positions.
     QEI1CONbits.PCDOUT = 0; // Disable counter direction pin (normal I/O operation)
     QEI1CONbits.POSRES = 0; // index pulse does not reset POSCNT
     QEI1CONbits.TQCS = 0; // internal clock source (Tcy)
@@ -38,7 +38,7 @@ void initQEI(void)
     // Motor 2 encoder
     QEI2CONbits.QEISIDL = 1; // Discontinue operation when in idle mode
     QEI2CONbits.QEIM = 0b111; // x4 edge gain and reset POSCNT when == MAXCNT
-    QEI2CONbits.SWPAB = 1; // Swap the polarity of phase comparison (we need that for the 2 encoder)
+    QEI2CONbits.SWPAB = 0; // Do not swap the polarity of phase comparison
     QEI2CONbits.PCDOUT = 0; // Disable counter direction pin (normal I/O operation)
     QEI2CONbits.POSRES = 0; // index pulse does not reset POSCNT
     QEI2CONbits.TQCS = 0; // internal clock source (Tcy)
