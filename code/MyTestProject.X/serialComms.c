@@ -65,6 +65,8 @@ void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt(void)
  
 	IFS0bits.U1RXIF=0;
 
+    LED2 =~LED2;
+    
     //LED4=~LED4;
     //LED5=~LED5;
 	
@@ -75,7 +77,9 @@ void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 	rxData=U1RXREG;
     
     //and copy it back out to UART
-    U1TXREG=rxData;
+    // For our micromouse: Do not output all input back again. Otherwise the
+    // bluetooth module can get messed up.
+    //U1TXREG=rxData;
         //wait until the character is gone...
 
 	//we should also clear the overflow bit if it has been set (i.e. if we were to slow to read out the fifo)
