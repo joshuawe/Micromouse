@@ -36,6 +36,7 @@
 
 void setupPWM();
 void setPWM(float left_motor, int left_direction, float right_motor, int right_direction);
+void setMotorSpeed(float left, float right);
 
 #define	__MYPWM_H__
 

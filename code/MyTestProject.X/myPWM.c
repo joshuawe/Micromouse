@@ -68,3 +68,21 @@ void setPWM(float left_motor, int left_direction, float right_motor, int right_d
     P1DC1 = right_motor*MYPWM_MAX;
     P1DC2 = left_motor*MYPWM_MAX;
 }
+
+
+void setMotorSpeed(float left, float right) {
+    int directionLeft, directionRight;
+    
+    directionLeft = DIRECTION_FWD;
+    directionRight = DIRECTION_FWD;
+    
+    if (left<0) {
+        directionLeft = DIRECTION_BWD;
+        left = -1*left;
+    }
+    if (right<0) {
+        directionRight = DIRECTION_BWD;
+        right = -1*right;        
+    }
+    setPWM(left, directionLeft, right, directionRight);
+}
