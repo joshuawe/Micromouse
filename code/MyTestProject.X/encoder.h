@@ -33,8 +33,8 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
-extern long longPOS;
-void init_QEI(void);
+void initQEI(void);
+void getEncoderCounts(long* left, long* right);
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 

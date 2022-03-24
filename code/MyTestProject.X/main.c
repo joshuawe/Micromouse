@@ -107,8 +107,8 @@ int main()
  
     setupIO(); //configures inputs and outputs
     setupPWM(); 
-    //init_QEI();
-    initTimer1(100); //creates a x ms timer interrupt (x < 630 ms)
+    initQEI();
+    initTimer1(500); //creates a x ms timer interrupt (x < 630 ms)
     
     setupUART1();
     startTimer1();
