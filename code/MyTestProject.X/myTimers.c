@@ -130,21 +130,35 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     char *num = itoa(adcData[0]); // Right
     putsUART1("R: ");
     putsUART1(num);
-    putsUART1("\r\nF: ");
+    putsUART1("\tF: ");
     
     num = itoa(adcData[1]); // Front
     putsUART1(num);
-    putsUART1("\r\nL: ");
+    putsUART1("\tL: ");
     
     num = itoa(adcData[2]); // Left
     putsUART1(num);
-    putsUART1("\r\n---\r\n");
+    putsUART1("\r\n");
 
     LED1 = ~LED1;
 
     if (BUTTON) {
         LED2 = ~LED2;
     }
+    
+    float speed1 = 0.0;
+    float speed2 = 0.0;
+    if (adcData[1] < 400 && adcData[1]>50) {
+        speed1 = -0.3;
+        speed2 = 0.3;
+    }
+    else if (adcData[1] < 50) {
+        speed1 = 0.2;
+        speed2 = 0.2;  
+    }
+    
+    setMotorSpeed(0, 0);
+    
 //
 //    myCount++;
 //    /*
