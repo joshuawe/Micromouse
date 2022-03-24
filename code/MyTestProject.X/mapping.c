@@ -12,7 +12,10 @@
 
 #include "xc.h"
 #include <stdbool.h>
-#define squares 10
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#define squares 8
 
 typedef struct {
         int front;
@@ -20,7 +23,14 @@ typedef struct {
         int left;
         int right;             
     }cell;
+    
+typedef struct node {
+    int val;
+    struct node * next;
+} node_t; 
 
+int goalpositionx = 3;
+int goalpositiony = 3;
 int maze_size; //in cm
 int square_size = 1; //in cm
 int position [2];
@@ -31,6 +41,13 @@ int i;
 int orientation; //front = 0, turned right = 1, back = 2 turned left = 3
 bool visited[squares][squares];
 cell map[squares][squares];
+
+//path: 0 move front, 1 move right, 2 move back, 3 move left
+node_t * shortestpath = NULL;
+node_t * currentpath = NULL;
+int currentdistance;
+int mindistance = 10000;
+
 
 void set_maze_size(int size)
 {
@@ -272,23 +289,6 @@ void update_map(double new_front_measurement, double new_right_measurement, doub
     }
 }
 
-void explore(int positionx, int positiony)
-{
-    if(explorefront(positionx, positiony)== -1)
-    {
-        if(exploreleft( positionx,  positiony) == -1)
-        {
-            if(exploreright( positionx,  positiony) == -1)
-            {
-                if(allexplored() == -1)
-                {
-                    move( positionx,  positiony);
-                }
-            }
-        }
-    }
-}
-
 int exploreleft(int positionx, int positiony)
 {
     if(positionx == 0 || map[positionx][positiony].left == 1) // if the robot is on the very left of the maze or there is a wall on the left
@@ -353,4 +353,113 @@ int allexplored()
 void move(int positionx, int positiony)
 {
     //try to move somewhere new
+}
+
+void explore(int positionx, int positiony)
+{
+    if(explorefront(positionx, positiony)== -1)
+    {
+        if(exploreleft( positionx,  positiony) == -1)
+        {
+            if(exploreright( positionx,  positiony) == -1)
+            {
+                if(allexplored() == -1)
+                {
+                    move(positionx,  positiony);
+                }
+            }
+        }
+    }
+}
+
+
+// list functions from https://www.learn-c.org/de/Linked%20lists
+
+void remove_last(node_t * head) {
+    /* wenn nur ein Element in der Liste ist, entferne es */
+    if (head->next == NULL) {
+        head->val;
+        free(head);
+        head = NULL;
+    }
+
+    node_t * current = head;
+
+    while (current->next->next != NULL) {
+        current = current->next;
+    }
+}
+
+void push(node_t * head, int val) {
+    node_t * current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+
+    /* jetzt koennen wir eine neue Variable hinzufuegen */
+    current->next = malloc(sizeof(node_t));
+    current->next->val = val;
+    current->next->next = NULL;
+}
+
+void replace_list(node_t * current, node_t * old) {
+
+    while (current != NULL && old != NULL) {
+        old->val = current->val;
+        current = current->next;
+        old = old->next;
+    }
+}
+
+
+void calculatepath(int positionx, int positiony)
+{
+    if(positionx == goalpositionx && positiony == goalpositiony && currentdistance < mindistance)
+    {
+        replace_list(currentpath, shortestpath); //currentpath will get the shortestpath
+        mindistance = currentdistance;
+        currentdistance--;
+        remove_last(currentpath);
+    }
+    else
+    {
+        if(currentdistance < mindistance)
+        {
+            if(map[positionx][positiony].front == 0)
+            {
+                currentdistance++;
+                push(currentpath, 0);
+                calculatepath(positionx, positiony + 1);
+            }
+            else if(map[positionx][positiony].right == 0)
+            {
+                currentdistance++;
+                push(currentpath, 1);
+                calculatepath(positionx+1, positiony);
+            }
+            else if(map[positionx][positiony].back == 0)
+            {
+                currentdistance++;
+                push(currentpath, 2);
+                calculatepath(positionx, positiony-1);
+            }
+            else if(map[positionx][positiony].left == 0)
+            {
+                currentdistance++;
+                push(currentpath, 3);
+                calculatepath(positionx-1, positiony);
+            }
+            else
+            {
+                // ERROR STATE
+            }
+        }
+    }
+}
+node_t * calculateshortestpath(int positionx, int positiony)
+{
+    shortestpath = malloc(sizeof(node_t));
+    currentpath = malloc(sizeof(node_t));
+    calculatepath(positionx, positiony);
+    return shortestpath;
 }
