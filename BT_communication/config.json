@@ -14,11 +14,11 @@
             "timeout": 3
         }
     },
-    "variable_parse":
+    "variableParse":
     {
         "signature": "MMMJ",
         "delimiter": ":",
-        "format": "signature:var_name:message:signature",
+        "format": "signature:varName:varValue",
         "description": "Each line that is read in from the Serial can contain information for a variable. It will have to start with the signature, followed by a colon ':'. Then comes the variables name, another ':' and the message (the variable's content) followed by a colon ':' and finally the signature again. The newline signals the end."
     },
     "variables":
