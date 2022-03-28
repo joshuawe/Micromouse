@@ -11,7 +11,7 @@
         {
             "port": "COM1",
             "baudrate": 9600,
-            "timeout": 3
+            "timeout": 5
         }
     },
     "variableParse":
@@ -26,6 +26,10 @@
         "dLeft": "float",
         "dFront": "float",
         "dRight": "float"
+    },
+    "dash":
+    {
+        "dequeMaxlen": 50
     }
 
 }

@@ -31,7 +31,7 @@ class SerialHandler():
     def connect(self):
         """Connect to the Serial port.
         """
-        print(" ... connecting")
+        print(" ... connecting", end="")
         port = self.profile["port"]
         baudrate = self.profile["baudrate"]
         timeout = self.profile["timeout"]
@@ -58,30 +58,37 @@ class SerialHandler():
         newVars = dict()
         # Go through all the lines
         for i,line in enumerate(lines):
-            if verbose: print(f"Line {i}\t", end="")
+            consoleMsg = f"Line {i}\t"
             message = line.strip()
             message = message.split(delimiter)
             if (len(message) != splittings):
                 # Invalid, could be that a delimiter was used inside the variable content
-                if verbose: print(f"Invalid input, too many delimiters: '{line}'")
+                consoleMsg +=  f"Invalid input, too many delimiters: '{line}'"
             elif (message[0] != signature):
                 # Invalid signature
-                if verbose: print(f"Invalid, Wrong signature, Expected {signature}, got {message[0]}: '{line}'")
+                consoleMsg += f"Invalid, Wrong signature, Expected {signature}, got {message[0]}: '{line}'"
             elif message[1] not in varKeys:
                 # Invalid variable name
-                if verbose: print(f"Invalid variable name: '{line}'")
+                consoleMsg += f"Invalid variable name: '{line}'"
             else:
-                newVars[message[1]] = message[2]
-                if verbose: print(f"Correct parsing: {message[1]} = {message[2]}")
+                # parsing succesful
+                if message[1] not in newVars.keys():
+                    newVars[message[1]] = list() # if it is the first entry, create a list
+                newVars[message[1]].append(message[2])
 
-        print("All variables:")
-        print(newVars)
+                consoleMsg += f"Correct parsing: {message[1]} = {message[2]}"
+
+        if verbose: 
+            print(consoleMsg)
+            print("All variables:")
+            print(newVars)
+        return newVars
 
 
 
 
 
-    def collectLines(self, lines, consolePrint=True):
+    def collectLines(self, lines, consolePrint=False):
         """Print X many lines from the serial. Connection has to be established already.
 
         Args:
@@ -105,7 +112,26 @@ class SerialHandler():
 
 if __name__ == "__main__":
     print("Starting")
-    obj = SerialHandler("BT_communication\config.json")
-    obj.print_lines(10)
+    communicator = SerialHandler("BT_communication\config.json")
+    communicator.connect()
+    lines = communicator.collectLines(10)
 
-    obj.serial.readlines()
+    varDict = dict()
+    maxlen = communicator.settings["dash"]["dequeMaxlen"]
+    for key in communicator.settings["variables"]:
+        from collections import deque
+        varDict[key] = deque(maxlen=maxlen)
+    
+    newVarDict = communicator.parseLines(lines)
+
+    for key in newVarDict.keys():
+        if key in varDict.keys():
+            varDict[key].extend(newVarDict[key])
+
+    import numpy as np
+    X = np.arange(-len(varDict['dFront']), 0)
+    Y = varDict['dFront']
+    print(f"X: {X}")
+    print(f"Y: {Y}")
+    print(f"min(x), max(x): {min(X)}, {max(X)}")
+    print(f"min(Y), max(Y): {min(Y)}, {max(Y)}")
