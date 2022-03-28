@@ -1,14 +1,24 @@
 {
-    "Josh": 
+    "Profiles":
     {
-        "port": "COM5",
-        "baudrate": 9600,
-        "timeout": 3
+        "Josh": 
+        {
+            "port": "COM5",
+            "baudrate": 9600,
+            "timeout": 3
+        },
+        "Default":
+        {
+            "port": "COM1",
+            "baudrate": 9600,
+            "timeout": 3
+        }
     },
-    "Default":
+    "Variables":
     {
-        "port": "COM1",
-        "baudrate": 9600,
-        "timeout": 3
+        "dLeft": "float",
+        "dFront": "float",
+        "dRight": "float"
     }
+
 }

@@ -24,7 +24,7 @@ class SerialHandler():
         f = open(config_path)
         data = json.load(f)
         f.close()
-        self.settings = data[profile]
+        self.settings = data["Profiles"][profile]
 
     def connect(self):
         port = self.settings["port"]
