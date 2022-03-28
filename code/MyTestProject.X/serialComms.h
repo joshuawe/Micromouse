@@ -36,5 +36,10 @@
 void setupUART1(void);
 void putsUART1(char *buffer);
 void logInt(char * name, int num);
+void sendFloat(char * name, float num);
+void sendInt(char * name, int num);
+void reverse(char* str, int len);
+int intToStr(int x, char str[], int d);
+void ftoa(float n, char* res, int afterpoint);
 
 #endif	/* SERIALCOMMS_H */
