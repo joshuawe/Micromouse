@@ -1,0 +1,14 @@
+{
+    "Josh": 
+    {
+        "port": "COM5",
+        "baudrate": 9600,
+        "timeout": 3
+    },
+    "Default":
+    {
+        "port": "COM1",
+        "baudrate": 9600,
+        "timeout": 3
+    }
+}
