@@ -111,6 +111,9 @@ void initalize_map()
     
 }
 
+/*
+ * add from the new measurements walls in the map
+ */
 void update_map(double new_front_measurement, double new_right_measurement, double new_left_measurement, double new_positionx, double new_positiony)
 {
     front_measurement = (int)new_front_measurement/square_size;
@@ -289,6 +292,8 @@ void update_map(double new_front_measurement, double new_right_measurement, doub
     }
 }
 
+/* explore left part of the map
+ */
 int exploreleft(int positionx, int positiony)
 {
     if(positionx == 0 || map[positionx][positiony].left == 1) // if the robot is on the very left of the maze or there is a wall on the left
@@ -304,6 +309,8 @@ int exploreleft(int positionx, int positiony)
     return 1;
 }
 
+/* explore front part of the map
+ */
 int explorefront(int positionx, int positiony)
 {
     if(positionx == squares -1 || map[positionx][positiony].front == 1) // if the robot is on the very top of the maze or there is a wall on the left
@@ -319,6 +326,8 @@ int explorefront(int positionx, int positiony)
     return 1;
 }
 
+/* explore right part of the map
+ */
 int exploreright(int positionx, int positiony)
 {
     if(positionx == squares -1 || map[positionx][positiony].right == 1) // if the robot is on the very left of the maze or there is a wall on the left
@@ -334,6 +343,8 @@ int exploreright(int positionx, int positiony)
     return 1;
 }
 
+/* check if every square of the map is explored
+ */
 int allexplored()
 {
     int k,l;
@@ -355,6 +366,8 @@ void move(int positionx, int positiony)
     //try to move somewhere new
 }
 
+/* explore the whole maze
+ */
 void explore(int positionx, int positiony)
 {
     if(explorefront(positionx, positiony)== -1)
@@ -373,10 +386,11 @@ void explore(int positionx, int positiony)
 }
 
 
-// list functions from https://www.learn-c.org/de/Linked%20lists
-
+/* list functions from https://www.learn-c.org/de/Linked%20lists
+ * remove the last element from a list
+*/
 void remove_last(node_t * head) {
-    /* wenn nur ein Element in der Liste ist, entferne es */
+    /* if there is only one element */
     if (head->next == NULL) {
         head->val;
         free(head);
@@ -390,6 +404,8 @@ void remove_last(node_t * head) {
     }
 }
 
+/* add a value to list
+ */
 void push(node_t * head, int val) {
     node_t * current = head;
     while (current->next != NULL) {
@@ -402,6 +418,8 @@ void push(node_t * head, int val) {
     current->next->next = NULL;
 }
 
+/*replace the values of one list to the other
+ */
 void replace_list(node_t * current, node_t * old) {
 
     while (current != NULL && old != NULL) {
@@ -409,9 +427,14 @@ void replace_list(node_t * current, node_t * old) {
         current = current->next;
         old = old->next;
     }
+    //if current is shorter than old, remove the rest of the old list
+    while (old->next->next != NULL) {
+        old = old->next;
+    }
 }
 
-
+/* recursive method to find the shortest path 
+ */
 void calculatepath(int positionx, int positiony)
 {
     if(positionx == goalpositionx && positiony == goalpositiony && currentdistance < mindistance)
@@ -456,6 +479,9 @@ void calculatepath(int positionx, int positiony)
         }
     }
 }
+
+/* calculates the shortest path from the start position to the goalposition
+ */
 node_t * calculateshortestpath(int positionx, int positiony)
 {
     shortestpath = malloc(sizeof(node_t));
