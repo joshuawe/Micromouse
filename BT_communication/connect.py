@@ -114,24 +114,29 @@ if __name__ == "__main__":
     print("Starting")
     communicator = SerialHandler("BT_communication\config.json")
     communicator.connect()
-    lines = communicator.collectLines(10)
 
     varDict = dict()
     maxlen = communicator.settings["dash"]["dequeMaxlen"]
+    maxlen = 5
     for key in communicator.settings["variables"]:
         from collections import deque
         varDict[key] = deque(maxlen=maxlen)
     
-    newVarDict = communicator.parseLines(lines)
+    for i in range(8):
+        lines = communicator.collectLines(10)
+        newVarDict = communicator.parseLines(lines)
 
-    for key in newVarDict.keys():
-        if key in varDict.keys():
-            varDict[key].extend(newVarDict[key])
+        for key in newVarDict.keys():
+            if key in varDict.keys():
+                varDict[key].extend(newVarDict[key])
 
-    import numpy as np
-    X = np.arange(-len(varDict['dFront']), 0)
-    Y = varDict['dFront']
-    print(f"X: {X}")
-    print(f"Y: {Y}")
-    print(f"min(x), max(x): {min(X)}, {max(X)}")
-    print(f"min(Y), max(Y): {min(Y)}, {max(Y)}")
+        import numpy as np
+        X = np.arange(-len(varDict['dFront']), 0)
+        Y = varDict['dFront']
+        print(f"\n=== Round {i} ===")
+        print(f"newVarDict: {newVarDict['dFront']}")
+        print(f"varDict: {varDict['dFront']}")
+        # print(f"X: {X}")
+        # print(f"Y: {Y}")
+        # print(f"min(x), max(x): {min(X)}, {max(X)}")
+        # print(f"min(Y), max(Y): {min(Y)}, {max(Y)}")

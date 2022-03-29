@@ -5,7 +5,7 @@
         {
             "port": "COM5",
             "baudrate": 9600,
-            "timeout": 3
+            "timeout": 5
         },
         "Default":
         {
@@ -29,7 +29,7 @@
     },
     "dash":
     {
-        "dequeMaxlen": 50
+        "dequeMaxlen": 15
     }
 
 }
