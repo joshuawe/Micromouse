@@ -74,10 +74,36 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-struct Sensors;
-struct Encoders;
-struct Velocities;
-struct CurrentMeasurements;
+typedef struct{
+    static float vLeft;
+    static float vRight;
+} Velocities;
+
+typedef struct{
+    static float sLeftNow;
+    static float sRightNow;
+    static float sFrontNow;
+    static float sLeftLast;
+    static float sRightLast;
+    static float sFrontLast;
+} Sensors;
+
+typedef struct{
+    static int eLeftNow;            
+    static int eRightNow;
+    static int eLeftLast;
+    static int eRightLast;
+} Encoders;
+
+typedef struct{
+    static float sLeftNow;          // current distance to left wall in cm
+    static float sRightNow;         // current distance to right wall in cm
+    static float sFrontNow;         // current distance to front wall in cm
+    static float sTime;             // time between this and last sensor measurement
+    static float eLeftNow;          // current left encoder position (0 ... 1)
+    static float eRightNow;         // current right encoder position (0 ... 1)
+    static float eTime;             // time between this and last encoder measurement
+} CurrentMeasurements;
 
 CurrentMeasurements getSensorData(void);
 void updateSensorsAndEncoders();
