@@ -74,5 +74,12 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
+
+typedef struct{
+    double kP;
+    double kI;
+    double kD;
+} PIDParameters;
+
 #endif	/* XC_HEADER_TEMPLATE_H */
 

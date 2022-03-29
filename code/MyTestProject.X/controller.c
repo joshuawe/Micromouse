@@ -78,34 +78,6 @@ float giveCommandToRightMotor()
     
 }
 
-void controlHighlevel(Sensors s, Velocities v)
-{
-    if (isWallLeft(s) && isWallRight(s) && !isWallFront(s)){
-        continueStraight();
-        controlMidOfCell();
-    }
-    else if (isWallLeft(s) && isWallRight(s) && !isWallFront(s)){
-        turn180();
-    }
-    else if (!isWallLeft(s) && isWallRight(s) && isWallFront(s)){
-        turnLeft90();
-    }
-    else if (isWallLeft(s) && !isWallRight(s) && isWallFront(s)){
-        turnRight90();
-    }
-    else if (!isWallLeft(s) && !isWallRight(s) && isWallFront(s)){
-        decideLeftOrRight();
-    }
-    else if (!isWallLeft(s) && isWallRight(s) && !isWallFront(s)){
-        decideLeftOrFront();
-    }
-    else if (isWallLeft(s) && !isWallRight(s) && !isWallFront(s)){
-        decideRightOrFront();
-    }
-    else if (!isWallLeft(s) && !isWallRight(s) && !isWallFront(s)){
-        decideLeftOrRightOrFront();
-    }
-}
 
 
 void controlMidOfCell(Sensors s, Velocities v)

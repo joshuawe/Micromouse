@@ -59,6 +59,7 @@
 <layer number="99" name="SpiceOrder" color="5" fill="1" visible="yes" active="yes"/>
 </layers>
 <schematic xreflabel="%F%N/%S.%C%R" xrefpart="/%S.%C%R">
+<fusionteam huburn="a.YnVzaW5lc3M6bXl0dW03NTE" projecturn="a.YnVzaW5lc3M6bXl0dW03NTEjMjAyMjAxMTg0ODY2MTA4MzE" folderUrn="urn:adsk.wipprod:fs.folder:co.neirjBaTQuejS-Ni6Tw34Q" urn="urn:adsk.wipprod:dm.lineage:_H42IPTtS0-EgH_ykn_zHg"  versionUrn="urn:adsk.wipprod:fs.file:vf._H42IPTtS0-EgH_ykn_zHg?version=1" camFileUrn="" camFileVersionUrn="" lastpublishedchangeguid="32941b01-e65b-7d09-c655-8b35a2d01520"/>
 <libraries>
 <library name="micromouse">
 <packages>
