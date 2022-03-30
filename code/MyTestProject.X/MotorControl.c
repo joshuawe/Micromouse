@@ -7,8 +7,9 @@
 
 
 #include "xc.h"
+#include "MotorControl.h"
 
-#define PI = 3.14159265359d;
+#define PI 3.14159265359d
 
 const double cellSize = 18.0;       // length and width of each cell in maze
 const double rWheels = 3.0;         // radius of each wheel in cm
@@ -16,9 +17,7 @@ const double aWheels = 10.2;        // distance between wheels in cm
 static PIDParameters params = {1.0,1.0,0.0};
 
 void controllerWheelVelocityLeft(double OscillationPeriod){
-    initController(double OscillationPeriod);
-    
-    
+    initController(OscillationPeriod);
 }
 
 void initController(double OscillationPeriod)
