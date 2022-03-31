@@ -81,5 +81,36 @@ typedef struct{
     double kD;
 } PIDParameters;
 
+
+
+
+
+void initController(double OscillationPeriod);
+
+void getMeasurements();
+
+int driveStraight(double goalDistance);
+int turnAroundXrad(double angleInRad);
+
+void adjustLeftVelocity(double output);
+void adjustRightVelocity(double output);
+
+
+double countInMM(long count);
+long mmInCount(double mm);
+double turnsInMM(double turns);
+double mmInTurns(double mm);
+
+void left_wheel_forward_cm(double turns);
+void left_wheel_backward_cm(double turns);
+void right_wheel_forward_mm(double turns);
+void right_wheel_backward_mm(double turns);
+
+void drive_forward();
+void drive_backward();
+void left_90degree();
+void right_90degree();
+void turning();
+
 #endif	/* XC_HEADER_TEMPLATE_H */
 
