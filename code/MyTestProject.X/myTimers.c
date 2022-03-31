@@ -130,9 +130,9 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     putsUART1(",");
     putsUART1(ftoa(distanceRight));    
     putsUART1(",");
-    putsUART1(itoa(encLeft));
+    putsUART1(ltoa(encLeft));
     putsUART1(",");    
-    putsUART1(itoa(encRight));
+    putsUART1(ltoa(encRight));
     putsUART1("*/");
 
     LED1 = ~LED1;
@@ -152,7 +152,7 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
         speed2 = 0.2;  
     }
     
-    setMotorSpeed(0, 0);
+    setMotorSpeed(0.5, 0);
     
 //
 //    myCount++;

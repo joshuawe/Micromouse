@@ -5,7 +5,7 @@
 
 // measurement values for the individual sensors
 const int NUM_VALUES = 13;   // number of elements for each array or sub-array 
-const int SENSOR_DISTANCES[] = {30, 26, 23, 20, 17, 15, 13, 10, 8, 6, 5, 4, 2}; // [cm]
+const int SENSOR_DISTANCES[] = {300, 260, 230, 200, 170, 150, 130, 100, 80, 60, 50, 40, 20}; // [mm]
 const int SENSOR_VALUES[3][13] = {
                              {22, 23, 40, 150, 305, 420, 505, 675, 830, 1080, 1250, 1500, 2600},  // right
                              {26, 37, 50, 70, 145, 270, 420, 670, 850, 1120, 1300, 1600, 2700},   // front

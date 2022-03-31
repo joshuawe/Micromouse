@@ -31,7 +31,17 @@
 #ifndef ENCODER_H
 #define	ENCODER_H
 
-#include <xc.h> // include processor files - each processor file is guarded.  
+#include <xc.h> // include processor files - each processor file is guarded. 
+
+/*
+ * Impulse pro Umdrehung:   16
+ * Übersetzung Getriebe:    33:1
+ * Edges pro Puls:          4
+ * =======================
+ * Edges pro Rotation:      16 * 33 * 4 = 2112
+ */
+//#define PULSES_ROTATION 2112    // Number of encoder pulses for one rotation (360°)
+
 
 void initQEI(void);
 void getEncoderCounts(long* left, long* right);
