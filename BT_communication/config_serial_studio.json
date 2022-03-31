@@ -1,0 +1,90 @@
+{
+    "frameEnd": "",
+    "frameStart": "",
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarm": 350,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "graph": true,
+                    "led": false,
+                    "log": false,
+                    "max": 350,
+                    "min": 0,
+                    "title": "dLeft",
+                    "units": "mm",
+                    "value": "%1",
+                    "widget": ""
+                },
+                {
+                    "alarm": 350,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "graph": true,
+                    "led": false,
+                    "log": false,
+                    "max": 350,
+                    "min": 0,
+                    "title": "dFront",
+                    "units": "mm",
+                    "value": "%2",
+                    "widget": ""
+                },
+                {
+                    "alarm": 350,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "graph": true,
+                    "led": false,
+                    "log": false,
+                    "max": 350,
+                    "min": 0,
+                    "title": "dRight",
+                    "units": "mm",
+                    "value": "%3",
+                    "widget": ""
+                }
+            ],
+            "title": "Proximity Sensors",
+            "widget": ""
+        },
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "graph": true,
+                    "led": false,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Encoder Left",
+                    "units": "edges",
+                    "value": "%4",
+                    "widget": ""
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "graph": true,
+                    "led": false,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Encoder Right",
+                    "units": "edges",
+                    "value": "%5",
+                    "widget": ""
+                }
+            ],
+            "title": "Encoders",
+            "widget": ""
+        }
+    ],
+    "separator": ",",
+    "title": "Minimouse"
+}
