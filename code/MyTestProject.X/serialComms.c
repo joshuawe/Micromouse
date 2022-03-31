@@ -5,7 +5,6 @@
 
 // signature for the protocoll for communication with PC
 const char SIGNATURE[] = "MMMJ";
-const int PRECISION = 4;   // logging precision for double/float variables
 
 
 /*
@@ -237,6 +236,8 @@ char *itoa(int value)
     return &buffer[c];
 }
 
+
+
 void logInt(char * name, int num)
 {
     char *str = itoa(num);
@@ -250,8 +251,7 @@ void logInt(char * name, int num)
 void sendFloat(char * name, float num)
 {
     int endpoint = PRECISION;
-    char str[10];
-    ftoa(num, str, endpoint);
+    char* str = ftoa(num);
     putsUART1("\n");
     putsUART1(SIGNATURE);
     putsUART1(":");
@@ -315,8 +315,11 @@ int intToStr(int x, char str[], int d)
 }
   
 // Converts avoid ftoa(float n, char* res, int afterpoint) floating-point/double number to a string.
-void ftoa(float n, char* res, int afterpoint)
+char* ftoa(float n)
 {
+    static char* res[100];
+    
+    int afterpoint = PRECISION;
     // Extract integer part
     int ipart = (int)n;
   
@@ -337,4 +340,6 @@ void ftoa(float n, char* res, int afterpoint)
   
         intToStr((int)fpart, res + i + 1, afterpoint);
     }
+    
+    return res;
 }
