@@ -39,6 +39,7 @@ double right_measurement; // in cm
 double left_measurement; // in cm
 int i;
 int orientation; //front = 0, turned right = 1, back = 2 turned left = 3
+char next_step;
 bool visited[squares][squares];
 cell map[squares][squares];
 
@@ -68,6 +69,12 @@ void set_position(int positionx, int positiony)
     position[1] = positiony/square_size;
 }
 
+void get_measurements()
+{
+    float distanceLeft, distanceFront, distanceRight;
+    getDistances(&distanceRight, &distanceFront, &distanceLeft);
+    set_measurements((double)distanceFront, (double)distanceRight, (double)distanceLeft);
+}
 /*
  * Measurement in relation of the square sizes (measurment = 1 -> the obstacle is one square away)
  */
@@ -305,7 +312,7 @@ int exploreleft(int positionx, int positiony)
         return -1;
     }
     
-    //turn to the left and drive one square forward
+    next_step = 'l';
     return 1;
 }
 
@@ -322,7 +329,7 @@ int explorefront(int positionx, int positiony)
         return -1;
     }
     
-    // drive one square forward
+    next_step= 'f';
     return 1;
 }
 
@@ -339,7 +346,7 @@ int exploreright(int positionx, int positiony)
         return -1;
     }
     
-    //turn to the right and drive one step forward
+    next_step = 'r';
     return 1;
 }
 
@@ -402,6 +409,23 @@ void remove_last(node_t * head) {
     while (current->next->next != NULL) {
         current = current->next;
     }
+}
+
+/* remove the first element of a list */
+int pop(node_t ** head) {
+    int retval = -1;
+    node_t * next_node = NULL;
+
+    if (*head == NULL) {
+        return -1;
+    }
+
+    next_node = (*head)->next;
+    retval = (*head)->val;
+    free(*head);
+    *head = next_node;
+
+    return retval;
 }
 
 /* add a value to list
@@ -489,3 +513,5 @@ node_t * calculateshortestpath(int positionx, int positiony)
     calculatepath(positionx, positiony);
     return shortestpath;
 }
+
+

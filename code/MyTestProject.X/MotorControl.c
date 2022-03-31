@@ -69,44 +69,30 @@ void right_wheel_backward_cm(double turns)
 void drive_forward()
 {
     double turns = cmInTurns(cellSize);
-    right_wheel_forward_turns(turns);
-    left_wheel_forward_turns(turns);
+    right_wheel_forward_cm(turns);
+    left_wheel_forward_cm(turns);
 }
 
 void drive_backward()
 {
     double turns = cmInTurns(cellSize);
-    right_wheel_backward_turns(turns);
-    left_wheel_backward_turns(turns);
-}
-
-void left_45degree()
-{
-    int turns = 5; //90°
-    right_wheel_forward_turns(turns);
-    left_wheel_backward_turns(turns);
-}
-
-void right_45degree()
-{
-    int turns= 5; //90°
-    right_wheel_backward_turns(turns);
-    left_wheel_forward_turns(turns);
+    right_wheel_backward_cm(turns);
+    left_wheel_backward_cm(turns);
 }
 
 
 void left_90degree()
 {
-    int turns= 5; //180°
-    right_wheel_forward_turns(turns);
-    left_wheel_backward_turns(turns);
+    int turns= 5; 
+    right_wheel_forward_cm(turns);
+    left_wheel_backward_cm(turns);
 }
 
 void right_90degree()
 {
-    int turns= 5; //180°
-    right_wheel_backward_turns(turns);
-    left_wheel_forward_turns(turns);
+    int turns= 5; 
+    right_wheel_backward_cm(turns);
+    left_wheel_forward_cm(turns);
 }
 
 void turning()
