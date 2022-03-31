@@ -152,7 +152,7 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
         speed2 = 0.2;  
     }
     
-    setMotorSpeed(0.5, 0);
+    setMotorSpeed(0, 0);
     
 //
 //    myCount++;
