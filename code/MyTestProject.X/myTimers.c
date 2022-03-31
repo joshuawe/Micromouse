@@ -120,6 +120,20 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     logInt("eRight", encRight);
     
     putsUART1("\r\n");
+    
+    
+    // for SerialStudio
+    putsUART1("/*");
+    putsUART1(itoa((int) (distanceLeft*10)));
+    putsUART1(",");
+    putsUART1(itoa((int) (distanceFront*10)));
+    putsUART1(",");
+    putsUART1(itoa((int) (distanceRight*10)));    
+    putsUART1(",");
+    putsUART1(itoa(encLeft));
+    putsUART1(",");    
+    putsUART1(itoa(encRight));
+    putsUART1("*/");
 
     LED1 = ~LED1;
 
