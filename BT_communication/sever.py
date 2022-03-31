@@ -1,7 +1,8 @@
 import dash
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State
 # import dash_core_components as dcc
 # import dash_html_components as html
+from dash.exceptions import PreventUpdate
 from dash import html
 from dash import dcc
 import plotly
@@ -10,9 +11,17 @@ import plotly.graph_objs as go
 from collections import deque
 import numpy as np
 
+import json
+from json import JSONEncoder
 import connect
 
 
+
+class DequeEncoder(JSONEncoder):
+    def default(self, obj):
+       if isinstance(obj, deque):
+          return list(obj)
+       return JSONEncoder.default(self, obj)
 
 # varDict = dict()
 # varDict["dFront"] = deque(np.zeros(10), maxlen=50)
@@ -21,6 +30,12 @@ import connect
 # Y = deque(maxlen=20)
 # Y.append(1)
 
+
+################################################################
+################################################################
+#        APP LAYOUT
+################################################################
+################################################################
 
 app = dash.Dash(__name__)
 app.layout = html.Div(
@@ -39,9 +54,80 @@ app.layout = html.Div(
             interval=1000,
             n_intervals = 0
         ),
+        dcc.Store(id="varDict", data=[])
     ]
 )
 
+
+################################################################
+################################################################
+#    FUNCTIONS
+################################################################
+################################################################
+
+# This function is triggered to get the newest SERIAL readings
+@app.callback(Output('varDict', 'data'),
+              Input('graph-update', 'n_intervals'))
+def getValues(n_intervals):
+    print("-> getValues()")
+    varDict = None
+    if (n_intervals < 1) or (varDict is None):
+        print("First call!")
+        varDict = dict()
+        for key in communicator.settings["variables"]:
+            varDict[key] = [0]
+
+    else:
+        print(f"JSON stuff. received data type: {type(varDict)}", flush=True)
+        lines = communicator.collectLines(15)
+        newVarDict = communicator.parseLines(lines)
+
+        jsonData = json.dumps(newVarDict)
+        varDict = communicator.mergeDicts(varDict, newVarDict)
+
+        print("before JSON: ", newVarDict)
+        print("jsonData: ", jsonData)
+
+    return {"something": 2345678}
+
+    
+# This function updates the graph if the data is updated
+@app.callback(Output('dFront', 'figure'),
+        [Input('varDict', 'data')])
+def updateGraph(varDict):
+    print("-> updateGraph()")
+    print("just received varDict: ", varDict, ", type: ", type(varDict))
+    raise PreventUpdate
+
+    if varDict is None:
+        raise PreventUpdate
+
+    X = varDict["dFront"]
+
+    data = plotly.graph_objs.Scatter(
+            x=list(X),
+            y=list(Y),
+            name='Scatter',
+            mode= 'lines+markers'
+            )
+
+    raise PreventUpdate
+
+    return {'data': data}
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 @app.callback(Output('dFront', 'figure'),
         [Input('graph-update', 'n_intervals')])
 
@@ -75,18 +161,31 @@ def getVars(n):
     newVarDict = communicator.parseLines(lines)
 
     print(f"varDict: {varDict['dFront']}")
-    print(f"newVarDict: {newVarDict['dFront']}")
+    print(f"newVarDict: {newVarDict}")
 
     for key in newVarDict.keys():
         if key in varDict.keys():
             varDict[key].extend(newVarDict[key])
-
-    if len(newVarDict["dFront"]) == 0:
-        print("Did not find any new values.") 
+    try:
+        if len(newVarDict["dFront"]) == 0:
+            print("Did not find any new values.") 
+    except KeyError:
+        pass
     # print("after merging them")
     # print(f"varDict: {varDict}")
 
+
+
+"""
+
+
+
     
+################################################################
+################################################################
+#         M A I N 
+################################################################
+################################################################
 
 
 
@@ -100,8 +199,9 @@ if __name__ == '__main__':
     maxlen = communicator.settings["dash"]["dequeMaxlen"]
     for key in communicator.settings["variables"]:
         print(f"key: {key}")
-        varDict[key] = deque([0,1], maxlen=maxlen)
+        varDict[key] = [0,0]
 
     print(f"varDict: {varDict}")
+    print("\n============== Running App ==============")
 
     app.run_server(debug=False)

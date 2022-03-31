@@ -31,13 +31,13 @@ class SerialHandler():
     def connect(self):
         """Connect to the Serial port.
         """
-        print(" ... connecting", end="")
+        print(" ... connecting", end="", flush=True)
         port = self.profile["port"]
         baudrate = self.profile["baudrate"]
         timeout = self.profile["timeout"]
         self.serial = serial.Serial(port, baudrate, timeout=timeout)
         self.serial.flushInput()
-        print(" -> connected")
+        print(" -> connected", flush=True)
 
 
     def parseLines(self, lines:'list[str]', verbose=False):
@@ -74,6 +74,8 @@ class SerialHandler():
                 # parsing succesful
                 if message[1] not in newVars.keys():
                     newVars[message[1]] = list() # if it is the first entry, create a list
+                if self.settings["variables"][message[1]] != "str":
+                    message[2] = float(message[2])
                 newVars[message[1]].append(message[2])
 
                 consoleMsg += f"Correct parsing: {message[1]} = {message[2]}"
@@ -88,8 +90,9 @@ class SerialHandler():
 
 
 
-    def collectLines(self, lines, consolePrint=False):
+    def collectLines(self, lines=0, consolePrint=False):
         """Print X many lines from the serial. Connection has to be established already.
+        If lines==0, then all the characters from serial are read. It is possible for a line to be cut into half.
 
         Args:
             lines (int): Number of lines to be read.
@@ -98,13 +101,41 @@ class SerialHandler():
             list(str): All the lines that were read.
         """
         messages = list()
-        for i in range(lines):
-            serial_bytes = self.serial.readline()
-            message = serial_bytes.decode()
-            if consolePrint: print(message, end="")
-            messages.append(message)
+        if lines != 0:
+            for i in range(lines):
+                serial_bytes = self.serial.readline()
+                message = serial_bytes.decode()
+                if consolePrint: print(message, end="")
+                messages.append(message)
+        else:
+            waitingBytes = self.serial.in_waiting
+            input = self.serial.read_all().decode()
+            messages = input.split()
+            print("messages: ", messages, flush=True)
 
         return messages
+
+
+    def mergeDicts(self, dictOld, dictNew):
+        """Takes two dicts and merges the new one into the old one.
+
+        Args:
+            dictOld (dict): Old dict, where values are added to.
+            dictNew (dict): New dict, where new values are taken from.
+
+        Returns:
+            dict: Merged dicts.
+        """
+        for key in dictNew.keys():
+            if key in dictOld.keys():
+                dictOld[key] += dictNew[key] # this only works for concatenating lists
+            else:
+                dictOld[key] = dictNew[key]
+        return dictOld
+
+
+            
+
 
 
 
@@ -122,19 +153,21 @@ if __name__ == "__main__":
         from collections import deque
         varDict[key] = deque(maxlen=maxlen)
     
-    for i in range(8):
-        lines = communicator.collectLines(10)
+    import numpy as np
+    import time 
+    for i in range(10):
+        time.sleep(0.1)
+        lines = communicator.collectLines(3)
         newVarDict = communicator.parseLines(lines)
 
         for key in newVarDict.keys():
             if key in varDict.keys():
                 varDict[key].extend(newVarDict[key])
 
-        import numpy as np
         X = np.arange(-len(varDict['dFront']), 0)
         Y = varDict['dFront']
         print(f"\n=== Round {i} ===")
-        print(f"newVarDict: {newVarDict['dFront']}")
+        print(f"newVarDict: {newVarDict}")
         print(f"varDict: {varDict['dFront']}")
         # print(f"X: {X}")
         # print(f"Y: {Y}")
