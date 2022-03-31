@@ -33,13 +33,17 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
+#define PRECISION 4   // logging precision for double/float variables
+
 void setupUART1(void);
 void putsUART1(char *buffer);
 void logInt(char * name, int num);
 void sendFloat(char * name, float num);
+char *itoa(int value);
+char *ltoa(long value);
 void sendInt(char * name, int num);
 void reverse(char* str, int len);
 int intToStr(int x, char str[], int d);
-void ftoa(float n, char* res, int afterpoint);
+char* ftoa(float n);
 
 #endif	/* SERIALCOMMS_H */

@@ -238,6 +238,32 @@ char *itoa(int value)
 
 
 
+char *ltoa(long value)
+{
+    static char buffer[80];        // 80 bytes is big enough for an long???
+    long original = value;        // save original value
+
+    int c = sizeof(buffer)-1;
+
+    buffer[c] = 0;                // write trailing null in last byte of buffer
+
+    if (value < 0)                 // if it's negative, note that and take the absolute value
+        value = -value;
+
+    do                             // write least significant digit of value that's left
+    {
+        buffer[--c] = (value % 10) + '0';
+        value /= 10;
+    } while (value);
+
+    if (original < 0)
+        buffer[--c] = '-';
+
+    return &buffer[c];
+}
+
+
+
 void logInt(char * name, int num)
 {
     char *str = itoa(num);
