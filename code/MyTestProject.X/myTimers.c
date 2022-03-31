@@ -108,7 +108,7 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     sendFloat("dLeft", distanceLeft);
     sendFloat("dFront", distanceFront);
     sendFloat("dRight", distanceRight);
-    
+
     logInt("dLeft", (int) (distanceLeft*10));
     logInt("dFront", (int) (distanceFront*10));
     logInt("dRight", (int) (distanceRight*10));
@@ -124,11 +124,11 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     
     // for SerialStudio
     putsUART1("/*");
-    putsUART1(itoa((int) (distanceLeft*10)));
+    putsUART1(ftoa(distanceLeft));
     putsUART1(",");
-    putsUART1(itoa((int) (distanceFront*10)));
+    putsUART1(ftoa(distanceFront));
     putsUART1(",");
-    putsUART1(itoa((int) (distanceRight*10)));    
+    putsUART1(ftoa(distanceRight));    
     putsUART1(",");
     putsUART1(itoa(encLeft));
     putsUART1(",");    
