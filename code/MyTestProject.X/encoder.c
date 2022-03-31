@@ -8,9 +8,12 @@
 
 #include "xc.h"
 #include "encoder.h"
+//#include <stdlib.h>
 
 int resets1 = 0;
 int resets2 = 0;
+//unsigned long totalCountsLeft, totalCountsRight;   // will store the absolute Encoder counts
+//unsigned long lastCountsLeft, lastCountsRight;     // will store the Encoder counts from previous function call
 
 void initQEI(void)
 {
@@ -54,30 +57,30 @@ void initQEI(void)
 }
 
 // interrupt service routine
-void __attribute__((interrupt, auto_psv)) _QEIInterrupt(void)
+void __attribute__((interrupt, auto_psv)) _QEI1Interrupt(void)
 {
-    if (IFS3bits.QEI1IF) {
-        // Encoder 1 interrupt
-        IFS3bits.QEI1IF = 0;
-        
-        if(POS1CNT<MAX2CNT/2)
-            resets1++; // over-run condition caused interrupt
-        else
-            resets1--; // under-run condition caused interrupt
-    }
+    // Encoder 1 interrupt
+    IFS3bits.QEI1IF = 0;
+
+    if(POS1CNT<MAX2CNT/2)
+        resets1++; // over-run condition caused interrupt
+    else
+        resets1--; // under-run condition caused interrupt
+}
+   
+void __attribute__((interrupt, auto_psv)) _QEI2Interrupt(void) 
+{
+    // Encoder 2 interrupt
+    IFS4bits.QEI2IF = 0;
+
+    if(POS2CNT<MAX2CNT/2)
+        resets2++; // over-run condition caused interrupt
+    else
+        resets2--; // under-run condition caused interrupt
+
+    // TODO: Do we need to reset in the middle again?
+    //POS2CNT += 0x7fff;
     
-    if (IFS4bits.QEI2IF) {
-        // Encoder 2 interrupt
-        IFS4bits.QEI2IF = 0;
-        
-        if(POS2CNT<MAX2CNT/2)
-            resets2++; // over-run condition caused interrupt
-        else
-            resets2--; // under-run condition caused interrupt
-        
-        // TODO: Do we need to reset in the middle again?
-        //POS2CNT += 0x7fff;
-    }
 }
 
 void getEncoderCounts(long* left_out, long* right_out) {
@@ -89,3 +92,15 @@ void getEncoderCounts(long* left_out, long* right_out) {
     dist += POS2CNT - 0x7fff;
     *right_out = dist;
 }
+
+//void addEncoderCounts() {    
+//    long left_out, right_out;  // current encoder values
+//    // retrieve current encoder count values
+//    getEncoderCounts(left_out, right_out);
+//    // add the absolute encoder count difference to our counters
+//    totalCountsLeft += abs(lastCountsLeft - left_out);
+//    totalCountsRight += abs(lastCountsRight - right_out);
+//    // Save the current encoder values for the next function call
+//    lastCountsLeft = (unsigned long) left_out;
+//    lastCountsRight = (unsigned long) right_out;    
+//}
