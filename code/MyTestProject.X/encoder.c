@@ -100,18 +100,20 @@ void getEncoderCounts(long* left_out, long* right_out) {
     *right_out = dist;
 }
 
+
 /*
  * Should be called periodically. Calculates the Encoder counts.
  */
 void getEncoderCountsNew(void) {
-    long dist = resets1 << 16;
-    dist += POS1CNT - 0x7fff;
+    long dist = ((long) resets1) << 16;
+    dist += POS1CNT;
     encoderCountsLeft = dist;
     
-    dist = resets2 << 16;
-    dist += POS2CNT - 0x7fff;
+    dist = ((long) resets2) << 16;
+    dist += POS2CNT;
     encoderCountsRight = dist;
 }
+
 
 /*
  * This function should be called periodically, as it uses the old distances and new distances and calculates the speed.
