@@ -108,7 +108,8 @@ int main()
     setupIO(); //configures inputs and outputs
     setupPWM(); 
     initQEI();
-    initTimer1(500); //creates a x ms timer interrupt (x < 630 ms)
+    int deltaT = 500;   // time in [ms] determining the frequency
+    initTimer1(deltaT); //creates a x ms timer interrupt (x < 630 ms)
     
     setupUART1();
     startTimer1();
