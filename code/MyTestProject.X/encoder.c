@@ -10,10 +10,17 @@
 #include "encoder.h"
 //#include <stdlib.h>
 
+extern int deltaT;
+
 int resets1 = 0;
 int resets2 = 0;
-//unsigned long totalCountsLeft, totalCountsRight;   // will store the absolute Encoder counts
-//unsigned long lastCountsLeft, lastCountsRight;     // will store the Encoder counts from previous function call
+long encoderCountsLeft = 0;
+long encoderCountsRight = 0;
+double speedAbs   = 0;   // the absolute speed: sqrt(speedLeft**2 + speedRight**2)
+double speedLeft  = 0;
+double speedRight = 0;
+double WheelDistanceLeft = 0;   // [mm]
+double WheelDistanceRight = 0;
 
 void initQEI(void)
 {
@@ -93,14 +100,29 @@ void getEncoderCounts(long* left_out, long* right_out) {
     *right_out = dist;
 }
 
-//void addEncoderCounts() {    
-//    long left_out, right_out;  // current encoder values
-//    // retrieve current encoder count values
-//    getEncoderCounts(left_out, right_out);
-//    // add the absolute encoder count difference to our counters
-//    totalCountsLeft += abs(lastCountsLeft - left_out);
-//    totalCountsRight += abs(lastCountsRight - right_out);
-//    // Save the current encoder values for the next function call
-//    lastCountsLeft = (unsigned long) left_out;
-//    lastCountsRight = (unsigned long) right_out;    
-//}
+/*
+ * Should be called periodically. Calculates the Encoder counts.
+ */
+void getEncoderCountsNew(void) {
+    long dist = resets1 << 16;
+    dist += POS1CNT - 0x7fff;
+    encoderCountsLeft = dist;
+    
+    dist = resets2 << 16;
+    dist += POS2CNT - 0x7fff;
+    encoderCountsRight = dist;
+}
+
+/*
+ * This function should be called periodically, as it uses the old distances and new distances and calculates the speed.
+ */
+void updateSpeed(void) {
+    static double WheelDistanceLeftOld;
+    static double WheelDistanceRightOld;
+    // calculate the new speeds
+    speedLeft = (WheelDistanceLeft - WheelDistanceLeftOld) / deltaT;
+    speedRight = (WheelDistanceRight - WheelDistanceRightOld) / deltaT;
+    // save the current wheel distance for the next speed calculations
+    WheelDistanceLeftOld = WheelDistanceLeft;
+    WheelDistanceRightOld = WheelDistanceRight;
+}

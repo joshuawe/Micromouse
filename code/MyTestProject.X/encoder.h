@@ -40,11 +40,13 @@
  * =======================
  * Edges pro Rotation:      16 * 33 * 4 = 2112
  */
-//#define PULSES_ROTATION 2112    // Number of encoder pulses for one rotation (360°)
+//#define PULSES_PER_ROTATION 2112    // Number of encoder pulses for one rotation (360°)
 
 
 void initQEI(void);
 void getEncoderCounts(long* left, long* right);
+void getEncoderCountsNew(void);
+void updateSpeed(void);
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
