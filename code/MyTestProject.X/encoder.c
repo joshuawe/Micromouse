@@ -38,7 +38,7 @@ void initQEI(void)
     DFLT1CONbits.QEOUT = 0; // disable digital filters
     // set initial counter value and maximum range
     MAX1CNT = 0xffff; // set the highest possible time out
-    POS1CNT = 0x7fff; // set POSCNT into middle of range
+    POS1CNT = 0; // set POSCNT into the beginning of range
 
     // Configure Interrupt controller
     IFS3bits.QEI1IF = 0; // clear interrupt flag
@@ -55,7 +55,7 @@ void initQEI(void)
     DFLT2CONbits.QEOUT = 0; // disable digital filters
     // set initial counter value and maximum range
     MAX2CNT = 0xffff; // set the highest possible time out
-    POS2CNT = 0x7fff; // set POSCNT into middle of range
+    POS2CNT = 0; // set POSCNT into the beginning of range
 
     // Configure Interrupt controller
     IFS4bits.QEI2IF = 0; // clear interrupt flag
@@ -91,12 +91,12 @@ void __attribute__((interrupt, auto_psv)) _QEI2Interrupt(void)
 }
 
 void getEncoderCounts(long* left_out, long* right_out) {
-    long dist = resets1 << 16;
-    dist += POS1CNT - 0x7fff;
+    long dist = ((long) resets1) << 16;
+    dist += POS1CNT;
     *left_out = dist;
     
-    dist = resets2 << 16;
-    dist += POS2CNT - 0x7fff;
+    dist = ((long) resets2) << 16;
+    dist += POS2CNT;
     *right_out = dist;
 }
 
