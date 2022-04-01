@@ -56,6 +56,10 @@
 // For our mouse, we use a 16MHz oscillator.
 #define SEVEN_MEG_OSC 0 //set to 1 if we use slow (7.3728 MHz) oscillator and not 16 MHz
 
+
+int delta_t_timer = 500;   // time in [ms] determining the frequency, sorry for the ugly name
+
+
 /*
  * 
  */
@@ -108,8 +112,7 @@ int main()
     setupIO(); //configures inputs and outputs
     setupPWM(); 
     initQEI();
-    int deltaT = 500;   // time in [ms] determining the frequency
-    initTimer1(deltaT); //creates a x ms timer interrupt (x < 630 ms)
+    initTimer1(delta_t_timer); //creates a x ms timer interrupt (x < 630 ms)
     
     setupUART1();
     startTimer1();

@@ -10,17 +10,23 @@
 #include "encoder.h"
 //#include <stdlib.h>
 
-extern int deltaT;
+extern int delta_t_timer;
 
-int resets1 = 0;
-int resets2 = 0;
-long encoderCountsLeft = 0;
-long encoderCountsRight = 0;
-double speedAbs   = 0;   // the absolute speed: sqrt(speedLeft**2 + speedRight**2)
-double speedLeft  = 0;
-double speedRight = 0;
-double WheelDistanceLeft = 0;   // [mm]
-double WheelDistanceRight = 0;
+int resets1 = 0;  // [-]
+int resets2 = 0;  // [-]
+long encoderCountsLeft  = 0;  // [-]
+long encoderCountsRight = 0;  // [-]
+double speedAbs   = 0;   // [??] the absolute speed: (speedLeft + speedRight)/2
+double speedLeft  = 0;   // [??]
+double speedRight = 0;   // [??]
+double WheelDistanceLeft           = 0;   // [mm] The distance the wheel covered over ground
+double WheelDistanceRight          = 0;   // [mm]
+double WheelDistanceLeftAbsolute   = 0;   // [mm]  This includes forward and backward motion
+double WheelDistanceRightAbsolute  = 0;   // [mm]
+double WheelRotationsLeft          = 0;  // [-] The num rotations the wheel has turned
+double WheelRotationsRight         = 0;  // [-]
+double WheelRotationsLeftAbsolute  = 0;  // [-] Includes forward and backward rotation
+double WheelRotationsRightAbsolute = 0;  // [-]
 
 void initQEI(void)
 {
@@ -102,9 +108,9 @@ void getEncoderCounts(long* left_out, long* right_out) {
 
 
 /*
- * Should be called periodically. Calculates the Encoder counts.
+ * Should be called periodically. Calculates the Encoder counts and makes them globally available.
  */
-void getEncoderCountsNew(void) {
+void updateEncoderCounts(void) {
     long dist = ((long) resets1) << 16;
     dist += POS1CNT;
     encoderCountsLeft = dist;
@@ -122,9 +128,24 @@ void updateSpeed(void) {
     static double WheelDistanceLeftOld;
     static double WheelDistanceRightOld;
     // calculate the new speeds
-    speedLeft = (WheelDistanceLeft - WheelDistanceLeftOld) / deltaT;
-    speedRight = (WheelDistanceRight - WheelDistanceRightOld) / deltaT;
+    speedLeft = (WheelDistanceLeft - WheelDistanceLeftOld) / delta_t_timer;
+    speedRight = (WheelDistanceRight - WheelDistanceRightOld) / delta_t_timer;
+    speedAbs = (speedLeft + speedRight) / 2;
     // save the current wheel distance for the next speed calculations
     WheelDistanceLeftOld = WheelDistanceLeft;
     WheelDistanceRightOld = WheelDistanceRight;
+}
+
+
+/*
+ * Should be called periodically. Updates the distance covered by the wheels as well as the number of rotations of the wheel.
+ */
+void updateWheelDistanceRotation(void) {
+    static long encoderCountsLeftOld = 0;
+    static long encoderCountsRightOld = 0;
+    
+    WheelRotationsLeft += (encoderCountsLeft - encoderCountsLeftOld) / PULSES_PER_ROTATION;
+    WheelRotationsRight += (encoderCountsRight - encoderCountsRightOld) / PULSES_PER_ROTATION;
+    
+    
 }
