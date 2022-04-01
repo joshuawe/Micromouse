@@ -33,6 +33,10 @@
 
 #include <xc.h> // include processor files - each processor file is guarded. 
 
+#ifndef PI 
+#define PI 3.14159265359
+#endif
+
 /*
  * Impulse pro Umdrehung:   16
  * Übersetzung Getriebe:    33:1
@@ -41,6 +45,8 @@
  * Edges pro Rotation:      16 * 33 * 4 = 2112
  */
 #define PULSES_PER_ROTATION 2112      // Number of encoder pulses for one rotation (360°)
+#define WHEEL_RADIUS 60    // [mm]
+#define WHEEL_CIRCUMFERENCE (2 * PI * WHEEL_RADIUS)  // [MM]
 
 
 void initQEI(void);

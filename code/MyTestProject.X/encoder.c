@@ -8,7 +8,7 @@
 
 #include "xc.h"
 #include "encoder.h"
-//#include <stdlib.h>
+#include <stdlib.h>
 
 extern int delta_t_timer;
 
@@ -141,11 +141,28 @@ void updateSpeed(void) {
  * Should be called periodically. Updates the distance covered by the wheels as well as the number of rotations of the wheel.
  */
 void updateWheelDistanceRotation(void) {
-    static long encoderCountsLeftOld = 0;
-    static long encoderCountsRightOld = 0;
-    
-    WheelRotationsLeft += (encoderCountsLeft - encoderCountsLeftOld) / PULSES_PER_ROTATION;
-    WheelRotationsRight += (encoderCountsRight - encoderCountsRightOld) / PULSES_PER_ROTATION;
-    
-    
+    // Defining the 'old' values from previous function calls
+    static long encoderCountsLeftOld, encoderCountsRightOld;
+    static long WheelRotationsLeftOld, WheelRotationsRightOld;
+    long temp = 0;
+    double dTemp = 0;
+    // First, the Wheel Rotations are calculated
+    temp = (encoderCountsLeft - encoderCountsLeftOld) / PULSES_PER_ROTATION;
+    WheelRotationsLeft += temp;
+    WheelRotationsLeftAbsolute += abs(temp);
+    temp = (encoderCountsRight - encoderCountsRightOld) / PULSES_PER_ROTATION;
+    WheelRotationsRight += temp;
+    WheelRotationsRightAbsolute += abs(temp);
+    // Second, the distance travelled by the wheel is calculated
+    dTemp = (WheelRotationsLeft - WheelRotationsLeftOld) * WHEEL_CIRCUMFERENCE;
+    WheelRotationsLeftOld += dTemp;
+    WheelDistanceLeftAbsolute += abs(dTemp);
+    dTemp = (WheelRotationsRight - WheelRotationsRightOld) * WHEEL_CIRCUMFERENCE;
+    WheelDistanceRight += dTemp;
+    WheelDistanceRightAbsolute += abs(dTemp);
+    // Last, the current values are stored for the next function call
+    encoderCountsLeftOld = encoderCountsLeft;
+    encoderCountsRightOld = encoderCountsRight;
+    WheelRotationsLeftOld = WheelRotationsLeft;
+    WheelRotationsRightOld = WheelRotationsRight;
 }
