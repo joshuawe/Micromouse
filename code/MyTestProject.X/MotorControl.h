@@ -79,9 +79,21 @@ typedef struct{
     double kP;
     double kI;
     double kD;
-} PIDParameters;
+    double integralLimit;
+    double tolerance;
+    double error;
+    double integral;
+    double derivative;
+    double errorMemory;
+    double integralMemory;
+    double output;
+} PID_Controller;
 
-
+typedef struct{
+    double absoluteGoalDistanceLeft;
+    double absoluteGoalDistanceRight;
+    int turn;
+} Control_Cycle;
 
 
 

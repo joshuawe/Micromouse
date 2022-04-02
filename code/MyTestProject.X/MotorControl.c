@@ -14,152 +14,226 @@
 
 #define PI 3.14159265359lf
 
-const double cellSize = 180;       // length and width of each cell in maze in mm
-const double rWheels = 30;         // radius of each wheel in mm
-const double aWheels = 102;        // distance between wheels in mm
-static double deltaT = 0.1;        // time difference between two measurements
-static int encoderCountsPerWheelTurn = 16*1257;
+const double cellSize = 180;            // length and width of each cell in maze in mm
+const double rWheels = 30;              // radius of each wheel in mm
+const double UWheels = 2*PI*rWheels;    // circumference of each wheel in mm
+const double aWheels = 102;             // distance between wheels in mm -> CHANGE THIS!!! (from CAD)
+const double aSensors = 64;             // distance between sensors in mm -> CHANGE THIS!!! (from CAD)
+const double defaultDistanceSensorWall = 58;     // distance sensor to wall in mm -> CHANGE THIS!!! (from CAD)
+const double maxPossibleDistanceToWall = 1.5 * (cellSize - aWheels/2 - aSensors/2);     // CHANGE THIS!!! (factor 1.5 is random value > 1 that ensures that there really is no wall)
 
-static PIDParameters params = {1.0,1.0,0.0};    // initial control parameters
-static double distanceRight, distanceFront, distanceLeft;   // distance measurements
-static long countLeft, countRight;                          // encoder counts
-static double velocityLeft, velocityRight;                  // to be controlled
+// Other necessary variables
+extern int delta_t_timer;
+const double integralLimit = 1000;              // TO CHANGE!!!
+const double tolerance = 1;                     // TO CHANGE!!! tolerated error between goal and current distance in mm
+const double influenceProximity = 1;            // TO CHANGE!!! influence of proximity measurements on control
+const double convertOutputToPWMsignal = 1;      // TO CHANGE!!! output in mm/s should be transformed to % PWM
 
-static double distanceError = 0.0;
-static double integral = 0.0;
-static double derivative = 0.0;
-static double distanceErrorMemory = 0.0;
-static double integralMemory = 0.0;
-static double bias = 0.0;
-static double output = 0.0;
+// Controller
+static PID_Controller pid_base_velocity;
+static PID_Controller pid_velocity_left;
+static PID_Controller pid_velocity_right;
+static PID_Controller pid_distance_wall_left;
+static PID_Controller pid_distance_wall_right;
 
 
+// Encoder
+extern double speedAbs;                 // [??] the absolute speed: (speedLeft + speedRight)/2
+extern double speedLeft;                // [??]
+extern double speedRight;               // [??]
+extern double WheelDistanceLeft;        //[mm] The distance the wheel covered over ground
+extern double WheelDistanceRight;       //[mm] The distance the wheel covered over ground
+
+// Control cycle with goals
+static Control_Cycle cc;
+
+// Proximity measurements
+static double distanceRight;
+static double distanceLeft;
+static double distanceFront;
 
 
-void initController(double OscillationPeriod)
+void initController()
 {
-    deltaT = OscillationPeriod;
-    params.kP = 1;                      // hint: Ziegler-Nichols method --> kP = 0.45 kU
-    params.kI = 1.2*params.kP/deltaT;   // hint: Ziegler-Nichols method --> kP = 1.2 kP/Pu
-    params.kD = 0;                      // hint: http://robotsforroboticists.com/pid-control/
+    PID_Controller init;
+    init.kP = 1;                            // hint: Ziegler-Nichols method --> kP = 0.45 kU
+    init.kI = 1.2*init.kP/delta_t_timer;    // hint: Ziegler-Nichols method --> kP = 1.2 kP/Pu
+    init.kD = 0;                            // hint: http://robotsforroboticists.com/pid-control/
+    init.integralLimit = integralLimit;
+    init.tolerance = tolerance;
+    pid_velocity_left = {init.kP, init.kI, init.kD, init.integralLimit,init.tolerance,0,0,0,0,0,0};
+    pid_velocity_right = {init.kP, init.kI, init.kD, init.integralLimit,init.tolerance,0,0,0,0,0,0};
+    pid_distance_wall_left = {init.kP, init.kI, init.kD, init.integralLimit,init.tolerance,0,0,0,0,0,0};
+    pid_distance_wall_right = {init.kP, init.kI, init.kD, init.integralLimit,init.tolerance,0,0,0,0,0,0};
+}
+
+void setControllerParameter(PID_Controller pid, double kP, double kI, double kD, double integralLimit, double tolerance){
+    pid.kP = kP;
+    pid.kI = kI;
+    pid.kD = kD;
+    pid.integralLimit = integralLimit;
+    pid.tolerance = tolerance;
 }
 
 
-void getMeasurements(){
-    getDistances(distanceRight, distanceFront, distanceLeft);
-    getEncoderCounts(countLeft, countRight);
+static void controlStep(PID_Controller pid, double error){
+    pid.error = error;
+    pid.integral = pid.integralMemory + pid.error * delta_t_timer;
+    pid.derivative = (pid.error - pid.errorMemory) / delta_t_timer;
+    pid.errorMemory = pid.error;
+    pid.integralMemory = pid.integral;
+    pid.output = pid.kP * pid.error + pid.kI * pid.integral + pid.kD * pid.derivative;
 }
 
-int driveStraight(double goalDistance){
-    static double currentDistanceDriven = 0.0;
+
+static void initNewControlCycle(int controlCase, double goalValue)
+{
+    double relativeGoalDistanceLeft = 0;
+    double relativeGoalDistanceRight = 0;
+    switch (controlCase){
+        case 1:             // drive forward -> goalValue in mm
+            relativeGoalDistanceLeft = goalValue;
+            relativeGoalDistanceRight = goalValue;
+            cc.turn = 0;
+            break;
+        case 2:             // drive backward -> goalValue in mm
+            relativeGoalDistanceLeft = - goalValue;
+            relativeGoalDistanceRight = - goalValue;
+            cc.turn = 0;
+            break;
+        case 3:             // turn x degrees left -> goalValue in rad
+            relativeGoalDistanceLeft = - UWheels * goalValue / (2*PI);
+            relativeGoalDistanceRight = UWheels * goalValue / (2*PI);
+            cc.turn = 1;
+            break;
+        case 4:             // turn x degrees right -> goalValue in rad
+            relativeGoalDistanceLeft = UWheels * goalValue / (2*PI);
+            relativeGoalDistanceRight = - UWheels * goalValue / (2*PI);
+            cc.turn = 1;
+            break;
+    }
+    cc.absoluteGoalDistanceLeft = WheelDistanceLeft + relativeGoalDistanceLeft;
+    cc.absoluteGoalDistanceRight = WheelDistanceRight + relativeGoalDistanceRight;
+}
+
+
+static int controlBaseVelocity()
+{    
+    double errorLeft = cc.absoluteGoalDistanceLeft - WheelDistanceLeft;
+    double errorRight = cc.absoluteGoalDistanceRight - WheelDistanceRight;
     
-    while (currentDistanceDriven <= goalDistance){
-        getMeasurements();
-        
-        distanceError = distanceRight - distanceLeft;
-        integral = integralMemory + distanceError * deltaT;
-        derivative = (distanceError - distanceErrorMemory) / deltaT;
-        output = params.kP * distanceError + params.kI * integral + params.kD * derivative + bias;
-        
-        adjustLeftVelocity(output);
-        adjustRightVelocity(output);
-        
-        currentDistanceDriven = currentDistanceDriven + countInMM((countLeft + countRight)/2);
-        
-        distanceErrorMemory = distanceError;
-        integralMemory = integral;
+    // goal already reached
+    if (errorLeft < tolerance && errorRight < tolerance){
+        return 1;
+    }
+    controlStep(pid_velocity_left,errorLeft);
+    controlStep(pid_velocity_right,errorRight);
+    return 0;
+}
+
+static void controlStraightVelocityBasedOnDistanceMeasurements()
+{
+    double errorLeft;
+    double errorRight;
+    
+    // no walls to each side -> just continue with base velocity
+    if(distanceLeft > maxPossibleDistanceToWall && distanceRight > maxPossibleDistanceToWall){
+        return 0;
+    }
+    // no wall on left side
+    else if(distanceLeft > maxPossibleDistanceToWall){
+        errorRight = defaultDistanceSensorWall - distanceRight;
+        errorLeft = cellSize - errorRight;
+    }
+    // no wall on right side
+    else if(distanceRight > maxPossibleDistanceToWall){
+        errorLeft = defaultDistanceSensorWall - distanceLeft;
+        errorRight = cellSize - errorLeft;
+    }
+    else{
+        errorLeft = defaultDistanceSensorWall - distanceLeft;
+        errorRight = defaultDistanceSensorWall - distanceRight;
     }
     
-    return 1;
-}
-
-int turnAroundXrad(double angleInRad){
+    controlStep(pid_distance_wall_left,errorLeft);
+    controlStep(pid_distance_wall_right,errorRight);
     
-    return 1;
 }
 
-double countInMM(long count)
+
+int executeControl(){
+    int goalReached = controlBaseVelocity();
+    // goal is already reached
+    if (goalReached == 1){
+        return 1;
+    }
+    
+    double outputLeft = 0;
+    double outputRight = 0;
+    // only use proximity control if the mouse is not turning
+    if (cc.turn == 0){
+        getDistances(distanceRight, distanceFront, distanceLeft);
+        controlStraightVelocityBasedOnDistanceMeasurements();
+        outputLeft = pid_velocity_left.output + influenceProximity * pid_distance_wall_left.output;
+        outputRight = pid_velocity_right.output + influenceProximity * pid_distance_wall_right.output;
+    }
+    else{
+        outputLeft = pid_velocity_left.output;
+        outputRight = pid_velocity_right.output;
+    }
+    adjustVelocity(outputLeft, outputRight);
+    return 0;
+}
+
+void adjustVelocity(double outputLeft, double outputRight){
+    double velocityLeft = convertOutputToPWMsignal * outputLeft;
+    double velocityRight = convertOutputToPWMsignal * outputRight;
+    setMotorSpeed(float(velocityLeft), float(velocityRight));
+}
+
+
+void drive_forward_X_cells(double numberOfCells)
 {
-    double turns = count / encoderCountsPerWheelTurn;
-    double mm = turnsInMM(turns);
-    return mm;
+    initNewControlCycle(1,numberOfCells*cellSize);
 }
 
-double mmInCount(double mm)
+void drive_backward_X_cells(double numberOfCells)
 {
-    double turns = mmInTurns(mm);
-    long count = round(turns*encoderCountsPerWheelTurn);
-    return count;
+    initNewControlCycle(2,numberOfCells*cellSize);
 }
 
-double turnsInMM(double turns)
+void left_X_rad(double angleInRad)
 {
-    double mm = 2 * PI * turns * rWheels;
-    return mm;
+    initNewControlCycle(3,angleInRad);
 }
 
-double mmInTurns(double mm)
+void right_X_rad(double angleInRad)
 {
-    double turns = mm / (2 * PI * rWheels);
-    return turns;
+    initNewControlCycle(4,angleInRad);
 }
-
-void left_wheel_forward_cm(double turns)
-{   
-    double mm = turnsInMM(turns);
-    double velocity;
-}
-
-void left_wheel_backward_cm(double turns)
-{
-    double mm = turnsInMM(-turns);
-    double velocity;
-}
-
-void right_wheel_forward_mm(double turns)
-{   
-    double mm = turnsInMM(turns);
-    double velocity;
-}
-
-void right_wheel_backward_mm(double turns)
-{
-    double mm = turnsInMM(-turns);
-    double velocity;
-}
-
 
 void drive_forward()
 {
-    double turns = mmInTurns(cellSize);
-    right_wheel_forward_mm(turns);
-    left_wheel_forward_mm(turns);
+    initNewControlCycle(1,cellSize);
 }
 
 void drive_backward()
 {
-    double turns = mmInTurns(cellSize);
-    right_wheel_backward_mm(turns);
-    left_wheel_backward_mm(turns);
+    initNewControlCycle(2,cellSize);
 }
 
 
 void left_90degree()
 {
-    int turns= 5; 
-    right_wheel_forward_mm(turns);
-    left_wheel_backward_mm(turns);
+    initNewControlCycle(3,PI/4);
 }
 
 void right_90degree()
 {
-    int turns= 5; 
-    right_wheel_backward_mm(turns);
-    left_wheel_forward_mm(turns);
+    initNewControlCycle(4,PI/4);
 }
 
 void turning()
 {
-    left_90degree();
-    left_90degree();
+    initNewControlCycle(3,PI/2);
 }

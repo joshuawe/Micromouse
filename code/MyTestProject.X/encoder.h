@@ -45,7 +45,7 @@
  * Edges pro Rotation:      16 * 33 * 4 = 2112
  */
 #define PULSES_PER_ROTATION 2112      // Number of encoder pulses for one rotation (360°)
-#define WHEEL_RADIUS 60    // [mm]
+#define WHEEL_RADIUS 30    // [mm]    // 60 mm / 2 :)
 #define WHEEL_CIRCUMFERENCE (2 * PI * WHEEL_RADIUS)  // [MM]
 
 
