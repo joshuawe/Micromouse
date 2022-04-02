@@ -19,8 +19,8 @@ long encoderCountsRight = 0;  // [-]
 double speedAbs   = 0;   // [??] the absolute speed: (speedLeft + speedRight)/2
 double speedLeft  = 0;   // [??]    -> mm/s
 double speedRight = 0;   // [??]    -> mm/s
-double speedTurningLeft = 0;              // [rounds/s]
-double speedTurningRight = 0;             // [rounds/s]
+double speedAngularLeft = 0;              // [rounds/s]
+double speedAngularRight = 0;             // [rounds/s]
 double WheelDistanceLeft           = 0;   // [mm] The distance the wheel covered over ground
 double WheelDistanceRight          = 0;   // [mm]
 double WheelDistanceLeftAbsolute   = 0;   // [mm]  This includes forward and backward motion
@@ -140,7 +140,7 @@ void updateSpeed(void) {
     // save the current wheel distance for the next speed calculations
     WheelDistanceLeftOld = WheelDistanceLeft;
     WheelDistanceRightOld = WheelDistanceRight;
-    WheelRotationsLeftOld = WheelRotationLeft;
+    WheelRotationsLeftOld = WheelRotationsLeft;
     WheelRotationsRightOld = WheelRotationsRight;
 }
 
