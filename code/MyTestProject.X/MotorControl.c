@@ -5,154 +5,138 @@
  * Created on 25. Januar 2022, 10:08
  */
 
-
 #include "xc.h"
 #include "MotorControl.h"
 #include "proxSensors.h"
 #include "encoder.h"
-#include "math.h"
+#include "myPWM.h"
 
-#define PI 3.14159265359lf
-
-const double cellSize = 180;            // length and width of each cell in maze in mm
-const double rWheels = 30;              // radius of each wheel in mm
-const double UWheels = 2*PI*rWheels;    // circumference of each wheel in mm
-const double aWheels = 102;             // distance between wheels in mm -> CHANGE THIS!!! (from CAD)
-const double aSensors = 64;             // distance between sensors in mm -> CHANGE THIS!!! (from CAD)
-const double defaultDistanceSensorWall = 58;     // distance sensor to wall in mm -> CHANGE THIS!!! (from CAD)
-const double maxPossibleDistanceToWall = 1.5 * (cellSize - aWheels/2 - aSensors/2);     // CHANGE THIS!!! (factor 1.5 is random value > 1 that ensures that there really is no wall)
-
-// Other necessary variables
+// Necessary variables
 extern int delta_t_timer;
-const double integralLimit = 1000;              // TO CHANGE!!!
-const double tolerance = 1;                     // TO CHANGE!!! tolerated error between goal and current distance in mm
-const double influenceProximity = 1;            // TO CHANGE!!! influence of proximity measurements on control
-const double convertOutputToPWMsignal = 1;      // TO CHANGE!!! output in mm/s should be transformed to % PWM
+double tolerance = 2.0;                   // TO CHANGE!!! [mm] tolerated error between goal and current distance
+double influenceProximity = 0.3;          // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
+double desiredTurningSpeed = 0.25;        // TO CHANGE!!! [rounds/s]
+double desiredDrivingSpeed = 1.5;         // TO CHANGE!!! [rounds/s]
+double maximumOutput = 1.0;               // TO CHANGE!!! [rounds/s]
 
 // Controller
-static PID_Controller pid_base_velocity;
-static PID_Controller pid_velocity_left;
-static PID_Controller pid_velocity_right;
-static PID_Controller pid_distance_wall_left;
-static PID_Controller pid_distance_wall_right;
+static PID_Controller pid_velocity_left;        // Controller for velocity of left wheel
+static PID_Controller pid_velocity_right;       // Controller for velocity of right wheel
+static PID_Controller pid_distance_wall_left;   // Controller for distance to left wall
+static PID_Controller pid_distance_wall_right;  // Controller for distance to right wall
 
-
-// Encoder
-extern double speedAbs;                 // [??] the absolute speed: (speedLeft + speedRight)/2
-extern double speedLeft;                // [??]
-extern double speedRight;               // [??]
-extern double WheelDistanceLeft;        //[mm] The distance the wheel covered over ground
-extern double WheelDistanceRight;       //[mm] The distance the wheel covered over ground
-
-// Control cycle with goals
+// Control cycle with goals of movement
 static Control_Cycle cc;
 
+// Encoder measurements
+extern double speedAngularLeft;         // [rounds/s] wheel turns per second
+extern double speedAngularRight;        // [rounds/s] wheel turns per second
+extern double WheelDistanceLeft;        // [mm] The distance the wheel covered over ground
+extern double WheelDistanceRight;       // [mm] The distance the wheel covered over ground
+
 // Proximity measurements
-static double distanceRight;
-static double distanceLeft;
-static double distanceFront;
+static float* distanceRight;
+static float* distanceLeft;
+static float* distanceFront;
+static double measurementDistanceRight = 0;     // [mm] distance from right sensor to wall
+static double measurementDistanceLeft = 0;      // [mm] distance from left sensor to wall
+static double measurementDistanceFront = 0;     // [mm] distance from front sensor to wall
 
 
+/*
+ Entry point 0 for highlevel code
+ * Initialization of controller -> called 1 time before program starts  
+ */
 void initController()
 {
     PID_Controller init;
-    init.kP = 1;                            // hint: Ziegler-Nichols method --> kP = 0.45 kU
-    init.kI = 1.2*init.kP/delta_t_timer;    // hint: Ziegler-Nichols method --> kP = 1.2 kP/Pu
-    init.kD = 0;                            // hint: http://robotsforroboticists.com/pid-control/
-    init.integralLimit = integralLimit;
-    init.tolerance = tolerance;
-    pid_velocity_left = {init.kP, init.kI, init.kD, init.integralLimit,init.tolerance,0,0,0,0,0,0};
-    pid_velocity_right = {init.kP, init.kI, init.kD, init.integralLimit,init.tolerance,0,0,0,0,0,0};
-    pid_distance_wall_left = {init.kP, init.kI, init.kD, init.integralLimit,init.tolerance,0,0,0,0,0,0};
-    pid_distance_wall_right = {init.kP, init.kI, init.kD, init.integralLimit,init.tolerance,0,0,0,0,0,0};
+    init.kFF = 0;                           // TO CHANGE!!! feed-forward factor allows smaller kP
+    init.kP = 1;                            // TO CHANGE!!! hint: Ziegler-Nichols method --> kP = 0.45 kU
+    init.kI = 1.2*init.kP/delta_t_timer;    // TO CHANGE!!! hint: Ziegler-Nichols method --> kP = 1.2 kP/Pu
+    init.kD = 0;                            // TO CHANGE!!! hint: http://robotsforroboticists.com/pid-control/
+    init.integralLimit = 1000;              // TO CHANGE!!! limits the integral because the integral slows it down
+    init.error = 0;
+    init.derivative = 0;
+    init.integral = 0;
+    init.integralMemory = 0;
+    init.errorMemory = 0;
+    init.output = 0;
+    pid_velocity_left = init;
+    pid_velocity_right = init;
+    pid_distance_wall_left = init;
+    pid_distance_wall_right = init;
+    setControllerParameter(pid_velocity_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);       // TO CHANGE!!!
+    setControllerParameter(pid_velocity_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);      // TO CHANGE!!!
+    setControllerParameter(pid_distance_wall_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);  // TO CHANGE!!!
+    setControllerParameter(pid_distance_wall_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit); // TO CHANGE!!!
 }
 
-void setControllerParameter(PID_Controller pid, double kP, double kI, double kD, double integralLimit, double tolerance){
+/*
+ Possibility to tune parameters of the four controller
+ * either by editing the values in the call of setControllerParameter in initController
+ * or by calling the function (also possible from outside ?!) 
+ */
+void setControllerParameter(PID_Controller pid, double kFF, double kP, double kI, double kD, double integralLimit){
+    pid.kFF = kFF;
     pid.kP = kP;
     pid.kI = kI;
     pid.kD = kD;
     pid.integralLimit = integralLimit;
-    pid.tolerance = tolerance;
 }
 
-
-static void controlStep(PID_Controller pid, double error){
+/*
+ Main control step that receives an error and the corresponding pid controller as input and computes the output
+ * called by controlBaseVelocity and controlStraightVelocityBasedOnDistanceMeasurements
+ */
+void controlStep(PID_Controller pid, double error){
     pid.error = error;
     pid.integral = pid.integralMemory + pid.error * delta_t_timer;
+    pid.integral = (pid.integral < pid.integralLimit) ? pid.integral : pid.integralLimit;
     pid.derivative = (pid.error - pid.errorMemory) / delta_t_timer;
     pid.errorMemory = pid.error;
     pid.integralMemory = pid.integral;
-    pid.output = pid.kP * pid.error + pid.kI * pid.integral + pid.kD * pid.derivative;
+    pid.output = pid.kFF * pid.error + pid.kP * pid.error + pid.kI * pid.integral + pid.kD * pid.derivative;
 }
 
 
-static void initNewControlCycle(int controlCase, double goalValue)
-{
-    double relativeGoalDistanceLeft = 0;
-    double relativeGoalDistanceRight = 0;
-    switch (controlCase){
-        case 1:             // drive forward -> goalValue in mm
-            relativeGoalDistanceLeft = goalValue;
-            relativeGoalDistanceRight = goalValue;
-            cc.turn = 0;
-            break;
-        case 2:             // drive backward -> goalValue in mm
-            relativeGoalDistanceLeft = - goalValue;
-            relativeGoalDistanceRight = - goalValue;
-            cc.turn = 0;
-            break;
-        case 3:             // turn x degrees left -> goalValue in rad
-            relativeGoalDistanceLeft = - UWheels * goalValue / (2*PI);
-            relativeGoalDistanceRight = UWheels * goalValue / (2*PI);
-            cc.turn = 1;
-            break;
-        case 4:             // turn x degrees right -> goalValue in rad
-            relativeGoalDistanceLeft = UWheels * goalValue / (2*PI);
-            relativeGoalDistanceRight = - UWheels * goalValue / (2*PI);
-            cc.turn = 1;
-            break;
-    }
-    cc.absoluteGoalDistanceLeft = WheelDistanceLeft + relativeGoalDistanceLeft;
-    cc.absoluteGoalDistanceRight = WheelDistanceRight + relativeGoalDistanceRight;
-}
-
-
-static int controlBaseVelocity()
+/*
+ Control of base velocity of the two wheels
+ * called by executeControl for turning and straight movement
+ */
+void controlBaseVelocity()
 {    
-    double errorLeft = cc.absoluteGoalDistanceLeft - WheelDistanceLeft;
-    double errorRight = cc.absoluteGoalDistanceRight - WheelDistanceRight;
-    
-    // goal already reached
-    if (errorLeft < tolerance && errorRight < tolerance){
-        return 1;
-    }
-    controlStep(pid_velocity_left,errorLeft);
-    controlStep(pid_velocity_right,errorRight);
-    return 0;
+    double errorSpeedLeft = cc.desiredSpeedLeft - speedAngularLeft;
+    double errorSpeedRight = cc.desiredSpeedRight - speedAngularRight;    
+    controlStep(pid_velocity_left,errorSpeedLeft);
+    controlStep(pid_velocity_right,errorSpeedRight);
 }
 
-static void controlStraightVelocityBasedOnDistanceMeasurements()
+/*
+ Control of velocity based on distance measurement
+ * called by executeControl for straight movement only
+ */
+void controlStraightVelocityBasedOnDistanceMeasurements()
 {
     double errorLeft;
     double errorRight;
     
-    // no walls to each side -> just continue with base velocity
-    if(distanceLeft > maxPossibleDistanceToWall && distanceRight > maxPossibleDistanceToWall){
-        return 0;
+    // no walls to both sides -> just continue with base velocity
+    if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL && measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
+        return;
     }
     // no wall on left side
-    else if(distanceLeft > maxPossibleDistanceToWall){
-        errorRight = defaultDistanceSensorWall - distanceRight;
-        errorLeft = cellSize - errorRight;
+    else if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL){
+        errorLeft = CELL_SIZE - measurementDistanceRight - A_SENSORS - DISTANCE_SENSOR_WALL;
+        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
     }
     // no wall on right side
-    else if(distanceRight > maxPossibleDistanceToWall){
-        errorLeft = defaultDistanceSensorWall - distanceLeft;
-        errorRight = cellSize - errorLeft;
+    else if(measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
+        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
+        errorRight = CELL_SIZE - measurementDistanceLeft - A_SENSORS - DISTANCE_SENSOR_WALL;
     }
     else{
-        errorLeft = defaultDistanceSensorWall - distanceLeft;
-        errorRight = defaultDistanceSensorWall - distanceRight;
+        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
+        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
     }
     
     controlStep(pid_distance_wall_left,errorLeft);
@@ -160,46 +144,101 @@ static void controlStraightVelocityBasedOnDistanceMeasurements()
     
 }
 
-
-int executeControl(){
-    int goalReached = controlBaseVelocity();
-    // goal is already reached
-    if (goalReached == 1){
+/*
+ Entry point 2 for highlevel code
+ * executes the actual control of the current control cycle
+ * checks if goal position is already reached
+ * controls base velocity depending on the task
+ * if no turning movement: controls velocity based on distance measurements to drive straight in the middle of the cell
+ * returns 1 if goal position is already reached
+ * returns 0 if not
+ */
+int executeControl()
+{
+    // check if goal is already reached
+    double distanceToGoalLeft = cc.absoluteGoalDistanceLeft - WheelDistanceLeft;
+    double distanceToGoalRight = cc.absoluteGoalDistanceRight - WheelDistanceRight;  
+    if (distanceToGoalLeft < tolerance && distanceToGoalRight < tolerance){
         return 1;
     }
     
-    double outputLeft = 0;
-    double outputRight = 0;
-    // only use proximity control if the mouse is not turning
+    // control of base velocity
+    controlBaseVelocity();
+    double outputLeft;
+    double outputRight;
+    
+    // use velocity and proximity control if the mouse is not turning
     if (cc.turn == 0){
-        getDistances(distanceRight, distanceFront, distanceLeft);
+        getMeasurements();
         controlStraightVelocityBasedOnDistanceMeasurements();
         outputLeft = pid_velocity_left.output + influenceProximity * pid_distance_wall_left.output;
         outputRight = pid_velocity_right.output + influenceProximity * pid_distance_wall_right.output;
+        outputLeft = (outputLeft < maximumOutput) ? outputLeft : maximumOutput;
+        outputRight= (outputRight < maximumOutput) ? outputRight : maximumOutput;
+        adjustVelocity(outputLeft, outputRight);   
     }
-    else{
-        outputLeft = pid_velocity_left.output;
-        outputRight = pid_velocity_right.output;
+    else{ // use only proximity control if the mouse is turning
+        outputLeft = (pid_velocity_left.output < maximumOutput) ? pid_velocity_left.output : maximumOutput;
+        outputRight = (pid_velocity_right.output < maximumOutput) ? pid_velocity_right.output : maximumOutput;
+        adjustVelocity(outputLeft, outputRight);        
     }
-    adjustVelocity(outputLeft, outputRight);
     return 0;
 }
 
-void adjustVelocity(double outputLeft, double outputRight){
-    double velocityLeft = convertOutputToPWMsignal * outputLeft;
-    double velocityRight = convertOutputToPWMsignal * outputRight;
-    setMotorSpeed(float(velocityLeft), float(velocityRight));
+/*
+ Input measurements of distance sensors
+ * write pointer value in local variable
+ */
+void getMeasurements(){
+    getDistances(distanceRight, distanceFront, distanceLeft);
+    measurementDistanceRight = *distanceRight;
+    measurementDistanceLeft = *distanceLeft;
+    measurementDistanceFront = *distanceFront;
 }
 
+/*
+ Command to motor (PWM Signal)
+ */
+void adjustVelocity(double outputLeft, double outputRight)
+{
+    float pwmLeft = convertOutputToPWMsignal(outputLeft);
+    float pwmRight = convertOutputToPWMsignal(outputRight);
+    setMotorSpeed(pwmLeft, pwmRight);
+}
 
+/*
+ Helper function to compute PWM Signal
+ */
+float convertOutputToPWMsignal(double output)
+{
+    double outputVoltage = output / SPEED_CONSTANT;
+    float pwmSignal = outputVoltage / MAX_VOLTAGE;
+    return pwmSignal;
+}       
+
+
+
+/*
+ Entry point 1 for highlevel code
+ * initializes controller for this control cycle depending on called function:
+ * drive_forward_X_cells -> input: double numberOfCells
+ * drive_backward_X_cells -> input: double numberOfCells
+ * left_X_rad -> input: angleInRad
+ * right_X_rad -> input: angleInRad
+ * drive_forward
+ * drive_backward
+ * left_90degree
+ * right_90degree
+ * turn_around 
+ */
 void drive_forward_X_cells(double numberOfCells)
 {
-    initNewControlCycle(1,numberOfCells*cellSize);
+    initNewControlCycle(1,numberOfCells*CELL_SIZE);
 }
 
 void drive_backward_X_cells(double numberOfCells)
 {
-    initNewControlCycle(2,numberOfCells*cellSize);
+    initNewControlCycle(2,numberOfCells*CELL_SIZE);
 }
 
 void left_X_rad(double angleInRad)
@@ -214,12 +253,12 @@ void right_X_rad(double angleInRad)
 
 void drive_forward()
 {
-    initNewControlCycle(1,cellSize);
+    initNewControlCycle(1,CELL_SIZE);
 }
 
 void drive_backward()
 {
-    initNewControlCycle(2,cellSize);
+    initNewControlCycle(2,CELL_SIZE);
 }
 
 
@@ -236,4 +275,46 @@ void right_90degree()
 void turning()
 {
     initNewControlCycle(3,PI/2);
+}
+
+/*
+ Initialization of new control cycle
+ * called by functions that are accessed by the highlevel code
+ */
+void initNewControlCycle(int controlCase, double goalValue)
+{
+    double relativeGoalDistanceLeft = 0;
+    double relativeGoalDistanceRight = 0;
+    switch (controlCase){
+        case 1:             // drive forward -> goalValue in mm
+            relativeGoalDistanceLeft = goalValue;
+            relativeGoalDistanceRight = goalValue;
+            cc.turn = 0;
+            cc.desiredSpeedLeft = desiredDrivingSpeed;
+            cc.desiredSpeedRight = desiredDrivingSpeed;
+            break;
+        case 2:             // drive backward -> goalValue in mm
+            relativeGoalDistanceLeft = - goalValue;
+            relativeGoalDistanceRight = - goalValue;
+            cc.turn = 0;
+            cc.desiredSpeedLeft = - desiredDrivingSpeed;
+            cc.desiredSpeedRight = - desiredDrivingSpeed;
+            break;
+        case 3:             // turn x degrees left -> goalValue in rad
+            relativeGoalDistanceLeft = - WHEEL_CIRCUMFERENCE * goalValue / (2*PI);
+            relativeGoalDistanceRight = WHEEL_CIRCUMFERENCE * goalValue / (2*PI);
+            cc.turn = 1;
+            cc.desiredSpeedLeft = - desiredTurningSpeed;
+            cc.desiredSpeedRight = desiredTurningSpeed;
+            break;
+        case 4:             // turn x degrees right -> goalValue in rad
+            relativeGoalDistanceLeft = WHEEL_CIRCUMFERENCE * goalValue / (2*PI);
+            relativeGoalDistanceRight = - WHEEL_CIRCUMFERENCE * goalValue / (2*PI);
+            cc.turn = 1;
+            cc.desiredSpeedLeft = desiredTurningSpeed;
+            cc.desiredSpeedRight = - desiredTurningSpeed;
+            break;
+    }
+    cc.absoluteGoalDistanceLeft = WheelDistanceLeft + relativeGoalDistanceLeft;
+    cc.absoluteGoalDistanceRight = WheelDistanceRight + relativeGoalDistanceRight;
 }

@@ -135,8 +135,8 @@ void updateSpeed(void) {
     speedLeft = (WheelDistanceLeft - WheelDistanceLeftOld) / delta_t_timer;
     speedRight = (WheelDistanceRight - WheelDistanceRightOld) / delta_t_timer;
     speedAbs = (speedLeft + speedRight) / 2;
-    speedTurningLeft = (WheelRotationsLeft - WheelRotationsLeftOld) / delta_t_timer;
-    speedTurningRight = (WheelRotationsRight - WheelRotationsRightOld) / delta_t_timer;
+    speedAngularLeft = (WheelRotationsLeft - WheelRotationsLeftOld) / delta_t_timer;
+    speedAngularRight = (WheelRotationsRight - WheelRotationsRightOld) / delta_t_timer;
     // save the current wheel distance for the next speed calculations
     WheelDistanceLeftOld = WheelDistanceLeft;
     WheelDistanceRightOld = WheelDistanceRight;

@@ -50,6 +50,10 @@
 #include "encoder.h"
 #include "serialComms.h"
 #include "myPWM.h"
+#include "myTimers.h"
+#include "adc.h"
+#include "dma.h"
+
 
 
 /// Defines----------------------------

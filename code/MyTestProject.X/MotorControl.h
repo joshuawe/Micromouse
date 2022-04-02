@@ -18,7 +18,7 @@
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
  * TERMS. 
  */
-void left_90degree();
+
 /* 
  * File:   
  * Author: 
@@ -33,54 +33,30 @@ void left_90degree();
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
-// TODO Insert appropriate #include <>
+#define CELL_SIZE 180            // length and width of one cell in mm
+#define A_WHEELS 102             // distance between wheels in mm -> CHANGE THIS!!! (from CAD)
+#define A_SENSORS 64             // distance between sensors in mm -> CHANGE THIS!!! (from CAD)
+#define DISTANCE_SENSOR_WALL (CELL_SIZE - A_SENSORS) / 2          // distance sensor to wall in mm -> CHANGE THIS!!! (from CAD)
+#define MAX_POSS_DISTANCE_SENSOR_WALL (1.5 * (CELL_SIZE - A_WHEELS/2 - A_SENSORS/2))     // CHANGE THIS!!! (factor 1.5 is random value > 1 that ensures that there really is no wall)
 
-// TODO Insert C++ class definitions if appropriate
 
-// TODO Insert declarations
-
-// Comment a function and leverage automatic documentation with slash star star
-/**
-    <p><b>Function prototype:</b></p>
-  
-    <p><b>Summary:</b></p>
-
-    <p><b>Description:</b></p>
-
-    <p><b>Precondition:</b></p>
-
-    <p><b>Parameters:</b></p>
-
-    <p><b>Returns:</b></p>
-
-    <p><b>Example:</b></p>
-    <code>
- 
-    </code>
-
-    <p><b>Remarks:</b></p>
+/*
+ * Speed Constant kn from Datasheet:    1130 [Motor rpm/V]
+ * Übersetzung Getriebe:                33
+ * Umrechnung in pro Minute:            60
+ * =======================
+ * Speed Constant umgerechnet:          1130 / 60 / 33 = 0.5707 [Wheel rounds per second / V]
  */
-// TODO Insert declarations or function prototypes (right here) to leverage 
-// live documentation
-
-#ifdef	__cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-    // TODO If C++ is being used, regular C code needs function names to have C 
-    // linkage so the functions can be used by the c code. 
-
-#ifdef	__cplusplus
-}
-#endif /* __cplusplus */
+#define SPEED_CONSTANT 0.5707       // [wheel rps/V]
+#define MAX_VOLTAGE 7.0             // maximum voltage -> leads to a maximum speed of 3.99 round/s
 
 
 typedef struct{
+    double kFF;
     double kP;
     double kI;
     double kD;
     double integralLimit;
-    double tolerance;
     double error;
     double integral;
     double derivative;
@@ -90,6 +66,8 @@ typedef struct{
 } PID_Controller;
 
 typedef struct{
+    double desiredSpeedLeft;
+    double desiredSpeedRight;
     double absoluteGoalDistanceLeft;
     double absoluteGoalDistanceRight;
     int turn;
@@ -97,32 +75,28 @@ typedef struct{
 
 
 
-void initController(double OscillationPeriod);
-
+void initController();
+void setControllerParameter(PID_Controller pid, double kFF, double kP, double kI, double kD, double integralLimit);
+void controlStep(PID_Controller pid, double error);
 void getMeasurements();
 
-int driveStraight(double goalDistance);
-int turnAroundXrad(double angleInRad);
+void controlBaseVelocity();
+void controlStraightVelocityBasedOnDistanceMeasurements();
 
-void adjustLeftVelocity(double output);
-void adjustRightVelocity(double output);
+int executeControl();
+void adjustVelocity(double outputLeft, double outputRight);
+float convertOutputToPWMsignal(double output);
 
-
-double countInMM(long count);
-long mmInCount(double mm);
-double turnsInMM(double turns);
-double mmInTurns(double mm);
-
-void left_wheel_forward_cm(double turns);
-void left_wheel_backward_cm(double turns);
-void right_wheel_forward_mm(double turns);
-void right_wheel_backward_mm(double turns);
-
+void drive_forward_X_cells(double numberOfCells);
+void drive_backward_X_cells(double numberOfCells);
+void left_X_rad(double angleInRad);
+void right_X_rad(double angleInRad);
 void drive_forward();
 void drive_backward();
 void left_90degree();
 void right_90degree();
 void turning();
+void initNewControlCycle(int controlCase, double goalValue);
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
