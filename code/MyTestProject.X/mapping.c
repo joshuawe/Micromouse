@@ -15,7 +15,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define squares 8
+#include "proxSensors.h"
+#define squares 6
 
 typedef struct {
         int front;
@@ -33,17 +34,14 @@ int goalpositionx = 3;
 int goalpositiony = 3;
 int maze_size; //in cm
 int square_size = 1; //in cm
-int position [2];
 double front_measurement; //in cm
 double right_measurement; // in cm
 double left_measurement; // in cm
 int i;
-int orientation; //front = 0, turned right = 1, back = 2 turned left = 3
 char next_step;
 bool visited[squares][squares];
 cell map[squares][squares];
 
-//path: 0 move front, 1 move right, 2 move back, 3 move left
 node_t * shortestpath = NULL;
 node_t * currentpath = NULL;
 int currentdistance;
@@ -63,27 +61,36 @@ void set_square_size(int square)
 /*
  * position is set in the size of the maze (e.g. (0,0) is start (0,1) is one step forward)
  */
-void set_position(int positionx, int positiony)
+/*void set_position(int positionx, int positiony)
 {
     position[0] = positionx/square_size;
     position[1] = positiony/square_size;
+}*/
+
+char get_next_step()
+{
+    return next_step;
 }
 
-void get_measurements()
+void set_goal_position(int new_goalpositionx, int new_goalpositiony)
 {
-    float distanceLeft, distanceFront, distanceRight;
-    getDistances(&distanceRight, &distanceFront, &distanceLeft);
-    set_measurements((double)distanceFront, (double)distanceRight, (double)distanceLeft);
+    goalpositionx = new_goalpositionx;
+    goalpositiony = new_goalpositiony;
 }
+
 /*
  * Measurement in relation of the square sizes (measurment = 1 -> the obstacle is one square away)
  */
-void set_measurements(double new_front_measurement, double new_right_measurement, double new_left_measurement)
-{
+void set_measurements()
+{  
+    float new_left_measurement, new_front_measurement, new_right_measurement;
+    getDistances(&new_right_measurement, &new_front_measurement, &new_left_measurement);
     front_measurement = (int)new_front_measurement/square_size;
     right_measurement = (int)new_right_measurement/square_size;
     left_measurement = (int)new_left_measurement/square_size;
 }
+
+
 
 /*
  * free = 0, obstacle  = 1, unsure = -1
@@ -121,13 +128,9 @@ void initalize_map()
 /*
  * add from the new measurements walls in the map
  */
-void update_map(double new_front_measurement, double new_right_measurement, double new_left_measurement, double new_positionx, double new_positiony)
+void update_map(int positionx, int positiony, int orientation)
 {
-    front_measurement = (int)new_front_measurement/square_size;
-    right_measurement = (int)new_right_measurement/square_size;
-    left_measurement = (int)new_left_measurement/square_size;
-    int positionx = (int) new_positionx/square_size;
-    int positiony = (int) new_positiony/square_size;
+    set_measurements(); // actualise measurements
 
     if (orientation == 0)
     {
@@ -301,7 +304,7 @@ void update_map(double new_front_measurement, double new_right_measurement, doub
 
 /* explore left part of the map
  */
-int exploreleft(int positionx, int positiony)
+int exploreleft(int positionx, int positiony, int orientation)
 {
     if(positionx == 0 || map[positionx][positiony].left == 1) // if the robot is on the very left of the maze or there is a wall on the left
     {
@@ -312,13 +315,28 @@ int exploreleft(int positionx, int positiony)
         return -1;
     }
     
-    next_step = 'l';
+    if(orientation == 0)
+    {
+        next_step = 'l';
+    }
+    else if(orientation == 1)
+    {
+        next_step = 't';
+    }
+    else if(orientation == 2)
+    {
+        next_step = 'r'; 
+    }
+    else
+    {
+        next_step = 'f';
+    }
     return 1;
 }
 
 /* explore front part of the map
  */
-int explorefront(int positionx, int positiony)
+int explorefront(int positionx, int positiony, int orientation)
 {
     if(positionx == squares -1 || map[positionx][positiony].front == 1) // if the robot is on the very top of the maze or there is a wall on the left
     {
@@ -329,13 +347,29 @@ int explorefront(int positionx, int positiony)
         return -1;
     }
     
-    next_step= 'f';
+    if(orientation == 0)
+    {
+        next_step = 'f';
+    }
+    else if(orientation == 1)
+    {
+        next_step = 'l';
+    }
+    else if(orientation == 2)
+    {
+        next_step = 't'; 
+    }
+    else
+    {
+        next_step = 'r';
+    }
+    
     return 1;
 }
 
 /* explore right part of the map
  */
-int exploreright(int positionx, int positiony)
+int exploreright(int positionx, int positiony, int orientation)
 {
     if(positionx == squares -1 || map[positionx][positiony].right == 1) // if the robot is on the very left of the maze or there is a wall on the left
     {
@@ -346,7 +380,23 @@ int exploreright(int positionx, int positiony)
         return -1;
     }
     
-    next_step = 'r';
+    if(orientation == 0)
+    {
+        next_step = 'r';
+    }
+    else if(orientation == 1)
+    {
+        next_step = 'f';
+    }
+    else if(orientation == 2)
+    {
+        next_step = 'l';
+    }
+    else
+    {
+        next_step = 't';
+    }
+    
     return 1;
 }
 
@@ -368,31 +418,6 @@ int allexplored()
     return 1;
 }
 
-void move(int positionx, int positiony)
-{
-    //try to move somewhere new
-}
-
-/* explore the whole maze
- */
-void explore(int positionx, int positiony)
-{
-    if(explorefront(positionx, positiony)== -1)
-    {
-        if(exploreleft( positionx,  positiony) == -1)
-        {
-            if(exploreright( positionx,  positiony) == -1)
-            {
-                if(allexplored() == -1)
-                {
-                    move(positionx,  positiony);
-                }
-            }
-        }
-    }
-}
-
-
 /* list functions from https://www.learn-c.org/de/Linked%20lists
  * remove the last element from a list
 */
@@ -412,20 +437,19 @@ void remove_last(node_t * head) {
 }
 
 /* remove the first element of a list */
-int pop(node_t ** head) {
-    int retval = -1;
+int pop(node_t * head) {
+    
     node_t * next_node = NULL;
 
-    if (*head == NULL) {
+    if (head == NULL) {
         return -1;
     }
 
-    next_node = (*head)->next;
-    retval = (*head)->val;
-    free(*head);
-    *head = next_node;
+    next_node = (head)->next;
+    free(head);
+    head = next_node;
 
-    return retval;
+    return 1;
 }
 
 /* add a value to list
@@ -459,7 +483,7 @@ void replace_list(node_t * current, node_t * old) {
 
 /* recursive method to find the shortest path 
  */
-void calculatepath(int positionx, int positiony)
+void calculatepath(int positionx, int positiony, int orientation)
 {
     if(positionx == goalpositionx && positiony == goalpositiony && currentdistance < mindistance)
     {
@@ -474,27 +498,112 @@ void calculatepath(int positionx, int positiony)
         {
             if(map[positionx][positiony].front == 0)
             {
-                currentdistance++;
-                push(currentpath, 0);
-                calculatepath(positionx, positiony + 1);
+                if(orientation == 0)
+                {
+                    currentdistance++;
+                    push(currentpath, 'f');
+                    calculatepath(positionx, positiony + 1, 0);
+                }
+                else if (orientation == 1)
+                {
+                    currentdistance++;
+                    push(currentpath, 'l'); // turning to the front
+                    calculatepath(positionx, positiony, 0);
+                }
+                else if (orientation == 2)
+                {
+                    currentdistance++;
+                    push(currentpath, 't');
+                    calculatepath(positionx, positiony, 0);
+                }
+                else
+                {
+                    currentdistance++;
+                    push(currentpath, 'r'); // turning to the front
+                    calculatepath(positionx, positiony, 0);
+                }
+                
             }
             else if(map[positionx][positiony].right == 0)
             {
-                currentdistance++;
-                push(currentpath, 1);
-                calculatepath(positionx+1, positiony);
+                if(orientation == 0)
+                {
+                    currentdistance++;
+                    push(currentpath, 'r');
+                    calculatepath(positionx, positiony, 1);
+                }
+                else if (orientation == 1)
+                {
+                    currentdistance++;
+                    push(currentpath, 'f') ;
+                    calculatepath(positionx+1, positiony, 1);
+                }
+                else if (orientation == 2)
+                {
+                    currentdistance++;
+                    push(currentpath, 'l');
+                    calculatepath(positionx, positiony, 1);
+                }
+                else
+                {
+                    currentdistance++;
+                    push(currentpath, 't');
+                    calculatepath(positionx, positiony, 1);
+                }
             }
             else if(map[positionx][positiony].back == 0)
             {
-                currentdistance++;
-                push(currentpath, 2);
-                calculatepath(positionx, positiony-1);
+               if(orientation == 0)
+                {
+                    currentdistance++;
+                    push(currentpath, 't');
+                    calculatepath(positionx, positiony, 2);
+                }
+                else if (orientation == 1)
+                {
+                    currentdistance++;
+                    push(currentpath, 'r');
+                    calculatepath(positionx, positiony, 2);
+                }
+                else if (orientation == 2)
+                {
+                    currentdistance++;
+                    push(currentpath, 'f');
+                    calculatepath(positionx, positiony-1, 2);
+                }
+                else
+                {
+                    currentdistance++;
+                    push(currentpath, 'l');
+                    calculatepath(positionx, positiony, 2);
+                }
             }
             else if(map[positionx][positiony].left == 0)
             {
-                currentdistance++;
-                push(currentpath, 3);
-                calculatepath(positionx-1, positiony);
+               if(orientation == 0)
+                {
+                    currentdistance++;
+                    push(currentpath, 'l');
+                    calculatepath(positionx, positiony, 3);
+                }
+                else if (orientation == 1)
+                {
+                    currentdistance++;
+                    push(currentpath, 't') ;
+                    calculatepath(positionx+1, positiony, 3);
+                }
+                else if (orientation == 2)
+                {
+                    currentdistance++;
+                    push(currentpath, 'r');
+                    calculatepath(positionx, positiony, 3);
+                }
+                else
+                {
+                    currentdistance++;
+                    push(currentpath, 'f');
+                    calculatepath(positionx-1, positiony, 3);
+                }
             }
             else
             {
@@ -506,12 +615,68 @@ void calculatepath(int positionx, int positiony)
 
 /* calculates the shortest path from the start position to the goalposition
  */
-node_t * calculateshortestpath(int positionx, int positiony)
+node_t * calculateshortestpath(int positionx, int positiony, int orientation)
 {
+    //to check: if two times done, is the list newly initalised or the old one still there
     shortestpath = malloc(sizeof(node_t));
     currentpath = malloc(sizeof(node_t));
-    calculatepath(positionx, positiony);
+    calculatepath(positionx, positiony, orientation);
     return shortestpath;
 }
 
+int drive_shortest_path()
+{
+    next_step = (char)shortestpath;
+    //check if the last element is removed
+    if(pop(shortestpath) == -1)
+    {
+        return -1;
+    }
+    return 1;
+}
 
+void move(int positionx, int positiony, int orientation)
+{
+    int k,l;
+    for(k = 0; k < squares; k++)
+    {
+        for(l = 0; l < squares; l++)
+        {
+            if(visited[k][l] == false)
+            {
+                set_goal_position(k,l);
+                calculateshortestpath(positionx, positiony, orientation);
+                drive_shortest_path();       
+            }
+        }
+    }
+}
+
+/* explore the whole maze
+ */
+void explore(int positionx, int positiony, int orientation)
+{
+    if(explorefront(positionx, positiony, orientation)== -1)
+    {
+        if(exploreleft(positionx,  positiony, orientation) == -1)
+        {
+            if(exploreright( positionx,  positiony, orientation) == -1)
+            {
+                if(allexplored() == -1)
+                {
+                    move(positionx,  positiony, orientation);
+                }
+            }
+        }
+    }
+}
+
+node_t * get_shortestpath()
+{
+    return shortestpath;
+}
+
+node_t * get_currentpath()
+{
+    return currentpath;
+}

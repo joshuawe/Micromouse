@@ -13,6 +13,7 @@
       <itemPath>MotorControl.h</itemPath>
       <itemPath>encoder.h</itemPath>
       <itemPath>proxSensors.h</itemPath>
+      <itemPath>mapping.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
