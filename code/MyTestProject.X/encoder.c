@@ -10,15 +10,17 @@
 #include "encoder.h"
 #include <stdlib.h>
 
-extern int delta_t_timer;
+extern int delta_t_timer;               // [s]
 
 int resets1 = 0;  // [-]
 int resets2 = 0;  // [-]
 long encoderCountsLeft  = 0;  // [-]
 long encoderCountsRight = 0;  // [-]
 double speedAbs   = 0;   // [??] the absolute speed: (speedLeft + speedRight)/2
-double speedLeft  = 0;   // [??]
-double speedRight = 0;   // [??]
+double speedLeft  = 0;   // [??]    -> mm/s
+double speedRight = 0;   // [??]    -> mm/s
+double speedTurningLeft = 0;              // [rounds/s]
+double speedTurningRight = 0;             // [rounds/s]
 double WheelDistanceLeft           = 0;   // [mm] The distance the wheel covered over ground
 double WheelDistanceRight          = 0;   // [mm]
 double WheelDistanceLeftAbsolute   = 0;   // [mm]  This includes forward and backward motion
@@ -127,13 +129,19 @@ void updateEncoderCounts(void) {
 void updateSpeed(void) {
     static double WheelDistanceLeftOld;
     static double WheelDistanceRightOld;
+    static double WheelRotationsLeftOld;
+    static double WheelRotationsRightOld;
     // calculate the new speeds
     speedLeft = (WheelDistanceLeft - WheelDistanceLeftOld) / delta_t_timer;
     speedRight = (WheelDistanceRight - WheelDistanceRightOld) / delta_t_timer;
     speedAbs = (speedLeft + speedRight) / 2;
+    speedTurningLeft = (WheelRotationsLeft - WheelRotationsLeftOld) / delta_t_timer;
+    speedTurningRight = (WheelRotationsRight - WheelRotationsRightOld) / delta_t_timer;
     // save the current wheel distance for the next speed calculations
     WheelDistanceLeftOld = WheelDistanceLeft;
     WheelDistanceRightOld = WheelDistanceRight;
+    WheelRotationsLeftOld = WheelRotationLeft;
+    WheelRotationsRightOld = WheelRotationsRight;
 }
 
 
