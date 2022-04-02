@@ -37,7 +37,9 @@
 #define A_WHEELS 102             // distance between wheels in mm -> CHANGE THIS!!! (from CAD)
 #define A_SENSORS 64             // distance between sensors in mm -> CHANGE THIS!!! (from CAD)
 #define DISTANCE_SENSOR_WALL (CELL_SIZE - A_SENSORS) / 2          // distance sensor to wall in mm -> CHANGE THIS!!! (from CAD)
-#define MAX_POSS_DISTANCE_SENSOR_WALL (1.5 * (CELL_SIZE - A_WHEELS/2 - A_SENSORS/2))     // CHANGE THIS!!! (factor 1.5 is random value > 1 that ensures that there really is no wall)
+#define MAX_POSS_DISTANCE_SENSOR_WALL (1.5 * (CELL_SIZE - A_WHEELS/2 - A_SENSORS/2))     // CHANGE THIS!!! (factor 1.5 is random value > 1
+                                                                                         // that ensures that there really is no wall)
+
 
 
 /*
@@ -48,7 +50,7 @@
  * Speed Constant umgerechnet:          1130 / 60 / 33 = 0.5707 [Wheel rounds per second / V]
  */
 #define SPEED_CONSTANT 0.5707       // [wheel rps/V]
-#define MAX_VOLTAGE 7.0             // maximum voltage -> leads to a maximum speed of 3.99 round/s
+#define MAX_VOLTAGE 9.0             // maximum voltage -> leads to a maximum speed of 3.99 round/s
 
 
 typedef struct{

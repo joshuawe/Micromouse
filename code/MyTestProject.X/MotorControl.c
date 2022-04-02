@@ -13,6 +13,7 @@
 
 // Necessary variables
 extern int delta_t_timer;
+double minimumAllowedDistanceFront = 30;  // TO CHANGE!!! [mm] wall is in front, so forward movement is stopped
 double tolerance = 2.0;                   // TO CHANGE!!! [mm] tolerated error between goal and current distance
 double influenceProximity = 0.3;          // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
 double desiredTurningSpeed = 0.25;        // TO CHANGE!!! [rounds/s]
@@ -159,8 +160,10 @@ int executeControl()
     double distanceToGoalLeft = cc.absoluteGoalDistanceLeft - WheelDistanceLeft;
     double distanceToGoalRight = cc.absoluteGoalDistanceRight - WheelDistanceRight;  
     if (distanceToGoalLeft < tolerance && distanceToGoalRight < tolerance){
+        adjustVelocity(0,0);
         return 1;
     }
+    
     
     // control of base velocity
     controlBaseVelocity();
@@ -170,6 +173,11 @@ int executeControl()
     // use velocity and proximity control if the mouse is not turning
     if (cc.turn == 0){
         getMeasurements();
+        // wall is detected when moving forward, so stop movement and wait for other command
+        if(cc.desiredSpeedLeft > 0 && measurementDistanceFront < minimumAllowedDistanceFront){
+            adjustVelocity(0,0);
+            return 2;
+        }
         controlStraightVelocityBasedOnDistanceMeasurements();
         outputLeft = pid_velocity_left.output + influenceProximity * pid_distance_wall_left.output;
         outputRight = pid_velocity_right.output + influenceProximity * pid_distance_wall_right.output;
@@ -317,4 +325,9 @@ void initNewControlCycle(int controlCase, double goalValue)
     }
     cc.absoluteGoalDistanceLeft = WheelDistanceLeft + relativeGoalDistanceLeft;
     cc.absoluteGoalDistanceRight = WheelDistanceRight + relativeGoalDistanceRight;
+    // reset of velocity controller memories that include values of former tasks
+    pid_velocity_left.errorMemory = 0;
+    pid_velocity_right.errorMemory = 0;
+    pid_velocity_left.integralMemory = 0;
+    pid_velocity_right.integralMemory = 0;
 }
