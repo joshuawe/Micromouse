@@ -610,6 +610,11 @@ void calculatepath(int positionx, int positiony, int orientation)
                 // ERROR STATE
             }
         }
+        else 
+        {
+            currentdistance--;
+            remove_last(currentpath);
+        }
     }
 }
 
