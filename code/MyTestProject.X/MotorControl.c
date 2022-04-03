@@ -10,15 +10,17 @@
 #include "proxSensors.h"
 #include "encoder.h"
 #include "myPWM.h"
+#include "math.h"
 
 // Necessary variables
 extern int delta_t_timer;
-double minimumAllowedDistanceFront = 30;  // TO CHANGE!!! [mm] wall is in front, so forward movement is stopped
-double tolerance = 2.0;                   // TO CHANGE!!! [mm] tolerated error between goal and current distance
-double influenceProximity = 0.3;          // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
-double desiredTurningSpeed = 0.25;        // TO CHANGE!!! [rounds/s]
-double desiredDrivingSpeed = 1.5;         // TO CHANGE!!! [rounds/s]
-double maximumOutput = 1.0;               // TO CHANGE!!! [rounds/s]
+double toleranceGoal = 2.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
+double crossingStartOrEndRecognized = 10.0; // TO CHANGE!!! [mm] difference between two subsequent proximity measurements that indicates a crossing
+double toleranceCalibration = 0.5;          // TO CHANGE!!! [mm] tolerated error when calibrating the front distance to the wall
+double influenceProximity = 0.3;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
+double desiredTurningSpeed = 0.25;          // TO CHANGE!!! [rounds/s]
+double desiredDrivingSpeed = 1.5;           // TO CHANGE!!! [rounds/s]
+double maximumOutput = 1.0;                 // TO CHANGE!!! [rounds/s]
 
 // Controller
 static PID_Controller pid_velocity_left;        // Controller for velocity of left wheel
@@ -39,14 +41,47 @@ extern double WheelDistanceRight;       // [mm] The distance the wheel covered o
 static float* distanceRight;
 static float* distanceLeft;
 static float* distanceFront;
-static double measurementDistanceRight = 0;     // [mm] distance from right sensor to wall
-static double measurementDistanceLeft = 0;      // [mm] distance from left sensor to wall
-static double measurementDistanceFront = 0;     // [mm] distance from front sensor to wall
+static double measurementDistanceRight;     // [mm] distance from right sensor to wall
+static double measurementDistanceLeft;      // [mm] distance from left sensor to wall
+static double measurementDistanceFront;     // [mm] distance from front sensor to wall
 
+// Memorized measurements for calibration
+static double lastMeasurementDistanceRight;     // [mm] distance from right sensor to wall
+static double lastMeasurementDistanceLeft;      // [mm] distance from left sensor to wall
+static double lastMeasurementDistanceFront;     // [mm] distance from front sensor to wall
+
+// Distance to goal
+static double distanceToGoalLeft;           // [mm] distance to goal position of left wheel
+static double distanceToGoalRight;          // [mm] distance to goal position of right wheel
+static double distanceToGoal;               // [mm] (distanceToGoalLeft + distanceToGoalRight)/2
+
+Outputs interestingOutputForDebugging(){
+    Outputs out;
+    out.controlCycle = cc;
+    out.velocity_left_error = pid_velocity_left.error;
+    out.velocity_left_output= pid_velocity_left.output;
+    out.velocity_right_error = pid_velocity_right.error;
+    out.distance_wall_right_output = pid_velocity_right.output;
+    out.distance_wall_left_error = pid_distance_wall_left.error;
+    out.distance_wall_left_output = pid_distance_wall_left.output;
+    out.distance_wall_right_error = pid_distance_wall_right.error;
+    out.distance_wall_right_output = pid_distance_wall_right.output;
+    out.distance_to_goal_left = distanceToGoalLeft;
+    out.distance_to_goal_right = distanceToGoalRight;
+    out.distance_to_goal = distanceToGoal;
+    return out;
+}
+
+/*****************************************************************************
+ *                                                                           * 
+ *   PART 0 - Initialization of Controller and general control functions     *
+ *                                                                           *
+ *****************************************************************************/
 
 /*
  Entry point 0 for highlevel code
- * Initialization of controller -> called 1 time before program starts  
+ * Initialization of controller -> called 1 time before program starts
+ * sets velocity of motors to 0
  */
 void initController()
 {
@@ -70,6 +105,9 @@ void initController()
     setControllerParameter(pid_velocity_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);      // TO CHANGE!!!
     setControllerParameter(pid_distance_wall_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);  // TO CHANGE!!!
     setControllerParameter(pid_distance_wall_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit); // TO CHANGE!!!
+    
+    // starts with 0 velocity
+    adjustVelocity(0,0);
 }
 
 /*
@@ -100,137 +138,23 @@ void controlStep(PID_Controller pid, double error){
 }
 
 
-/*
- Control of base velocity of the two wheels
- * called by executeControl for turning and straight movement
- */
-void controlBaseVelocity()
-{    
-    double errorSpeedLeft = cc.desiredSpeedLeft - speedAngularLeft;
-    double errorSpeedRight = cc.desiredSpeedRight - speedAngularRight;    
-    controlStep(pid_velocity_left,errorSpeedLeft);
-    controlStep(pid_velocity_right,errorSpeedRight);
-}
 
-/*
- Control of velocity based on distance measurement
- * called by executeControl for straight movement only
- */
-void controlStraightVelocityBasedOnDistanceMeasurements()
-{
-    double errorLeft;
-    double errorRight;
-    
-    // no walls to both sides -> just continue with base velocity
-    if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL && measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
-        return;
-    }
-    // no wall on left side
-    else if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL){
-        errorLeft = CELL_SIZE - measurementDistanceRight - A_SENSORS - DISTANCE_SENSOR_WALL;
-        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
-    }
-    // no wall on right side
-    else if(measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
-        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
-        errorRight = CELL_SIZE - measurementDistanceLeft - A_SENSORS - DISTANCE_SENSOR_WALL;
-    }
-    else{
-        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
-        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
-    }
-    
-    controlStep(pid_distance_wall_left,errorLeft);
-    controlStep(pid_distance_wall_right,errorRight);
-    
-}
 
-/*
- Entry point 2 for highlevel code
- * executes the actual control of the current control cycle
- * checks if goal position is already reached
- * controls base velocity depending on the task
- * if no turning movement: controls velocity based on distance measurements to drive straight in the middle of the cell
- * returns 1 if goal position is already reached
- * returns 0 if not
- */
-int executeControl()
-{
-    // check if goal is already reached
-    double distanceToGoalLeft = cc.absoluteGoalDistanceLeft - WheelDistanceLeft;
-    double distanceToGoalRight = cc.absoluteGoalDistanceRight - WheelDistanceRight;  
-    if (distanceToGoalLeft < tolerance && distanceToGoalRight < tolerance){
-        adjustVelocity(0,0);
-        return 1;
-    }
-    
-    
-    // control of base velocity
-    controlBaseVelocity();
-    double outputLeft;
-    double outputRight;
-    
-    // use velocity and proximity control if the mouse is not turning
-    if (cc.turn == 0){
-        getMeasurements();
-        // wall is detected when moving forward, so stop movement and wait for other command
-        if(cc.desiredSpeedLeft > 0 && measurementDistanceFront < minimumAllowedDistanceFront){
-            adjustVelocity(0,0);
-            return 2;
-        }
-        controlStraightVelocityBasedOnDistanceMeasurements();
-        outputLeft = pid_velocity_left.output + influenceProximity * pid_distance_wall_left.output;
-        outputRight = pid_velocity_right.output + influenceProximity * pid_distance_wall_right.output;
-        outputLeft = (outputLeft < maximumOutput) ? outputLeft : maximumOutput;
-        outputRight= (outputRight < maximumOutput) ? outputRight : maximumOutput;
-        adjustVelocity(outputLeft, outputRight);   
-    }
-    else{ // use only proximity control if the mouse is turning
-        outputLeft = (pid_velocity_left.output < maximumOutput) ? pid_velocity_left.output : maximumOutput;
-        outputRight = (pid_velocity_right.output < maximumOutput) ? pid_velocity_right.output : maximumOutput;
-        adjustVelocity(outputLeft, outputRight);        
-    }
-    return 0;
-}
 
-/*
- Input measurements of distance sensors
- * write pointer value in local variable
- */
-void getMeasurements(){
-    getDistances(distanceRight, distanceFront, distanceLeft);
-    measurementDistanceRight = *distanceRight;
-    measurementDistanceLeft = *distanceLeft;
-    measurementDistanceFront = *distanceFront;
-}
+/*****************************************************************************
+ *                                                                           * 
+ *     PART 1 - Initialization of new control cycle by highlevel control     *
+ *                                                                           *
+ *****************************************************************************/
 
-/*
- Command to motor (PWM Signal)
- */
-void adjustVelocity(double outputLeft, double outputRight)
-{
-    float pwmLeft = convertOutputToPWMsignal(outputLeft);
-    float pwmRight = convertOutputToPWMsignal(outputRight);
-    setMotorSpeed(pwmLeft, pwmRight);
-}
-
-/*
- Helper function to compute PWM Signal
- */
-float convertOutputToPWMsignal(double output)
-{
-    double outputVoltage = output / SPEED_CONSTANT;
-    float pwmSignal = outputVoltage / MAX_VOLTAGE;
-    return pwmSignal;
-}       
 
 
 
 /*
  Entry point 1 for highlevel code
  * initializes controller for this control cycle depending on called function:
- * drive_forward_X_cells -> input: double numberOfCells
- * drive_backward_X_cells -> input: double numberOfCells
+ * not possible - drive_forward_X_cells -> input: double numberOfCells
+ * not possible - drive_backward_X_cells -> input: double numberOfCells
  * left_X_rad -> input: angleInRad
  * right_X_rad -> input: angleInRad
  * drive_forward
@@ -239,15 +163,15 @@ float convertOutputToPWMsignal(double output)
  * right_90degree
  * turn_around 
  */
-void drive_forward_X_cells(double numberOfCells)
-{
-    initNewControlCycle(1,numberOfCells*CELL_SIZE);
-}
-
-void drive_backward_X_cells(double numberOfCells)
-{
-    initNewControlCycle(2,numberOfCells*CELL_SIZE);
-}
+//void drive_forward_X_cells(double numberOfCells) // can not be used anymore otherwise calibration needs to be adjusted
+//{
+//   initNewControlCycle(1,numberOfCells*CELL_SIZE);
+//}
+//
+//void drive_backward_X_cells(double numberOfCells) // can not be used anymore otherwise calibration needs to be adjusted
+//{
+//    initNewControlCycle(2,numberOfCells*CELL_SIZE);
+//}
 
 void left_X_rad(double angleInRad)
 {
@@ -331,3 +255,220 @@ void initNewControlCycle(int controlCase, double goalValue)
     pid_velocity_left.integralMemory = 0;
     pid_velocity_right.integralMemory = 0;
 }
+
+
+
+
+
+/*****************************************************************************
+ *                                                                           * 
+ *         PART 2 - Execution of control cycle including calibration         *
+ *                                                                           *
+ *****************************************************************************/
+
+
+
+/*
+ Entry point 2 for highlevel code
+ * executes the actual control of the current control cycle
+ * checks if goal position is already reached
+ * controls base velocity depending on the task
+ * if no turning movement: controls velocity based on distance measurements to drive straight in the middle of the cell
+ * returns 1 if goal position is already reached
+ * returns 0 if not
+ */
+int executeControl()
+{
+    // check if goal is already reached
+    int goalReached = checkGoalReachedAlready();
+    
+    
+    // control of base velocity
+    double outputLeft;
+    double outputRight;
+    
+    if (goalReached == 0){
+        // use velocity and proximity control if the mouse is not turning
+        if (cc.turn == 0){
+            getMeasurements();
+            calibrateAndControlStraightVelocityBasedOnDistanceMeasurements();
+            outputLeft = pid_velocity_left.output + influenceProximity * pid_distance_wall_left.output;
+            outputRight = pid_velocity_right.output + influenceProximity * pid_distance_wall_right.output;
+        }
+        else{ // use only velocity control if the mouse is turning
+            controlBaseVelocity();
+            outputLeft = pid_velocity_left.output;
+            outputRight = pid_velocity_right.output;  
+        }
+        outputLeft = checkOutputIfItExceedsMaximum(outputLeft);
+        outputRight= checkOutputIfItExceedsMaximum(outputRight);
+        adjustVelocity(outputLeft, outputRight); 
+    }
+    else{
+        adjustVelocity(0,0);
+    }
+    return goalReached;
+}
+
+/*
+ Helper function to check if the goal position (orientation) is reached already
+ */
+int checkGoalReachedAlready()
+{
+    distanceToGoalLeft = cc.absoluteGoalDistanceLeft - WheelDistanceLeft;
+    distanceToGoalRight = cc.absoluteGoalDistanceRight - WheelDistanceRight;
+    distanceToGoal = (distanceToGoalLeft + distanceToGoalRight) / 2;
+    if (fabs(distanceToGoal) <= toleranceGoal){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+/*
+ Input measurements of distance sensors
+ * write pointer value in local variable
+ */
+void getMeasurements(){
+    getDistances(distanceRight, distanceFront, distanceLeft);
+    lastMeasurementDistanceRight = measurementDistanceRight;
+    lastMeasurementDistanceLeft = measurementDistanceLeft;
+    lastMeasurementDistanceFront = measurementDistanceFront;
+    measurementDistanceRight = *distanceRight;
+    measurementDistanceLeft = *distanceLeft;
+    measurementDistanceFront = *distanceFront;
+}
+
+
+/*
+ Control of velocity based on distance measurement
+ * called by executeControl for straight movement only
+ */
+void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
+{
+    double errorLeft;
+    double errorRight;
+          
+    // no walls to both sides -> just continue with base velocity
+    if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL && measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
+        controlBaseVelocity();
+        return;
+    }
+    // no wall on left side
+    else if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL){
+        errorLeft = CELL_SIZE - measurementDistanceRight - A_SENSORS - DISTANCE_SENSOR_WALL;
+        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
+    }
+    // no wall on right side
+    else if(measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
+        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
+        errorRight = CELL_SIZE - measurementDistanceLeft - A_SENSORS - DISTANCE_SENSOR_WALL;
+    }
+    // walls to both sides
+    else{
+        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
+        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
+    }
+    
+    // if wall in front in certain distance, then calibrate 
+    if (fabs(measurementDistanceFront-DISTANCE_USED_TO_CALIBRATE) < toleranceCalibration){
+        calibrateGoalFront();      
+    } // else if crossing to left and or right starts or ends
+    else if (fabs(lastMeasurementDistanceLeft - measurementDistanceLeft) > crossingStartOrEndRecognized
+            || fabs(lastMeasurementDistanceRight - measurementDistanceRight) > crossingStartOrEndRecognized){
+        calibrateGoalSide();
+    }
+    
+    // first: control base velocity with eventually new calibrated goal distances
+    controlBaseVelocity();
+    // second: control distance to walls
+    controlStep(pid_distance_wall_left,errorLeft);
+    controlStep(pid_distance_wall_right,errorRight);
+    
+}
+
+/*
+ Calibration if corridor to the side when driving forward
+ */
+void calibrateGoalSide(){
+    // do not calibrate if moving backwards or turning
+    if (cc.desiredSpeedLeft > 0 && cc.desiredSpeedRight > 0){
+        cc.absoluteGoalDistanceLeft = CALIBRATION_SIDE;
+        cc.absoluteGoalDistanceRight = CALIBRATION_SIDE;
+    }
+}
+
+/*
+ Calibration if wall in front when driving forward
+ */
+void calibrateGoalFront(){
+    if (cc.desiredSpeedLeft > 0 && cc.desiredSpeedRight > 0){
+        cc.absoluteGoalDistanceLeft = CALIBRATION_FRONT;
+        cc.absoluteGoalDistanceRight = CALIBRATION_FRONT;
+    }
+}
+
+
+/*
+ Control of base velocity of the two wheels
+ * called by executeControl for turning
+ * called by calibrateAndControlStraightVelocityBasedOnDistanceMeasurements for straight movement
+ */
+void controlBaseVelocity()
+{    
+    double errorSpeedLeft = cc.desiredSpeedLeft - speedAngularLeft;
+    double errorSpeedRight = cc.desiredSpeedRight - speedAngularRight;    
+    controlStep(pid_velocity_left,errorSpeedLeft);
+    controlStep(pid_velocity_right,errorSpeedRight);
+}
+
+
+/*
+ Helper function to check if the output is too high
+ */
+double checkOutputIfItExceedsMaximum(double output)
+{
+    double checkedOutput = 0;
+    if (output < 0){                    // drive backwards
+        if (output > -maximumOutput){   // output is okay
+            checkedOutput = output;
+        }
+        else{                           // output is too high (too large negative number)
+            checkedOutput = -maximumOutput;
+        }
+    }
+    else{                               // drive forwards
+        if (output < maximumOutput){    // output is okay  
+            checkedOutput = output;
+        }
+        else{                           // output is too high (too large positive number)
+            checkedOutput = maximumOutput;
+        }
+    }
+    return checkedOutput;
+}
+
+
+
+/*
+ Command to motor (PWM Signal)
+ */
+void adjustVelocity(double outputLeft, double outputRight)
+{
+    float pwmLeft = convertOutputToPWMsignal(outputLeft);
+    float pwmRight = convertOutputToPWMsignal(outputRight);
+    setMotorSpeed(pwmLeft, pwmRight);
+}
+
+/*
+ Helper function to compute PWM Signal
+ */
+float convertOutputToPWMsignal(double output)
+{
+    double outputVoltage = output / SPEED_CONSTANT;
+    float pwmSignal = outputVoltage / MAX_VOLTAGE;
+    return pwmSignal;
+}       
+
+
