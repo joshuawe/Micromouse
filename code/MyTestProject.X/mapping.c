@@ -26,7 +26,7 @@ typedef struct {
     }cell;
     
 typedef struct node {
-    int val;
+    char val;
     struct node * next;
 } node_t; 
 
@@ -39,14 +39,13 @@ double right_measurement; // in cm
 double left_measurement; // in cm
 int i;
 char next_step;
-bool visited[squares][squares]; //exploring
-bool visited_path_planning[squares][squares];
+bool visited[squares][squares]; 
 cell map[squares][squares];
-
+char last_step;
 node_t * shortestpath = NULL;
 node_t * currentpath = NULL;
 int currentdistance;
-int mindistance = 10000;
+int mindistance = 16; // maximal cell number, so that there isn't an endless loop
 
 
 void set_maze_size(int size)
@@ -110,7 +109,6 @@ void initalize_map()
             map[o][j].right = -1;
             map[o][j].front = -1;
             visited[o][j] = false;
-            visited_path_planning[o][j] = false;
             
         }
     }        
@@ -487,7 +485,7 @@ void replace_list(node_t * current, node_t * old) {
 
 void undo_last_step(int positionx, int positiony, int orientation)
 {
-    char last_step = remove_last(currentpath);
+    last_step = remove_last(currentpath);
     currentdistance--;
     if(orientation == 0)
             {
@@ -592,126 +590,139 @@ void calculatepath(int positionx, int positiony, int orientation)
     {
         if(currentdistance < mindistance)
         {
-            if(map[positionx][positiony].front == 0 && visited_path_planning[positionx][positiony+1] == false)
+            if(map[positionx][positiony].front == 0)
             {
-                if(orientation == 0)
+                if(orientation == 0 && last_step != 'f')
                 {
                     currentdistance++;
                     push(currentpath, 'f');
                     calculatepath(positionx, positiony + 1, 0);
                 }
-                else if (orientation == 1)
+                else if (orientation == 1 && last_step != 'l')
                 {
                     currentdistance++;
                     push(currentpath, 'l'); // turning to the front
                     calculatepath(positionx, positiony, 0);
                 }
-                else if (orientation == 2)
+                else if (orientation == 2 && last_step != 'b')
                 {
                     currentdistance++;
                     push(currentpath, 'b'); //moving backward
                     calculatepath(positionx, positiony+1, 2);
                 }
-                else
+                else if (orientation == 3 && last_step != 'r')
                 {
                     currentdistance++;
                     push(currentpath, 'r'); // turning to the front
                     calculatepath(positionx, positiony, 0);
                 }
+                else 
+                {
+                    //ERROR
+                }
                 
             }
-            else if(map[positionx][positiony].right == 0 && visited_path_planning[positionx+1][positiony] == false)
+            else if(map[positionx][positiony].right)
             {
-                if(orientation == 0)
+                if(orientation == 0 && last_step != 'r')
                 {
                     currentdistance++;
                     push(currentpath, 'r');
                     calculatepath(positionx, positiony, 1);
                 }
-                else if (orientation == 1)
+                else if (orientation == 1 && last_step != 'f')
                 {
                     currentdistance++;
                     push(currentpath, 'f') ;
                     calculatepath(positionx+1, positiony, 1);
                 }
-                else if (orientation == 2)
+                else if (orientation == 2 && last_step != 'l')
                 {
                     currentdistance++;
                     push(currentpath, 'l');
                     calculatepath(positionx, positiony, 1);
                 }
-                else
+                else if (orientation == 3 && last_step != 'b')
                 {
                     currentdistance++;
                     push(currentpath, 'b');
                     calculatepath(positionx+1, positiony, 3);
                 }
+                else
+                {
+                    //ERROR
+                }
             }
-            else if(map[positionx][positiony].back == 0 && visited_path_planning[positionx][positiony-1] == false)
+            else if(map[positionx][positiony].back == 0)
             {
-               if(orientation == 0)
+                if(orientation == 0 && last_step != 'b')
                 {
                     currentdistance++;
                     push(currentpath, 'b');
                     calculatepath(positionx, positiony-1, 0);
                 }
-                else if (orientation == 1)
+                else if (orientation == 1 && last_step != 'r')
                 {
                     currentdistance++;
                     push(currentpath, 'r');
                     calculatepath(positionx, positiony, 2);
                 }
-                else if (orientation == 2)
+                else if (orientation == 2 && last_step != 'f')
                 {
                     currentdistance++;
                     push(currentpath, 'f');
                     calculatepath(positionx, positiony-1, 2);
                 }
-                else
+                else if (orientation == 3 && last_step != 'l')
                 {
                     currentdistance++;
                     push(currentpath, 'l');
                     calculatepath(positionx, positiony, 2);
                 }
+                else 
+                {
+                    //ERROR
+                }
             }
-            else if(map[positionx][positiony].left == 0 && visited_path_planning[positionx-1][positiony] == false)
+            else if(map[positionx][positiony].left == 0)
             {
-               if(orientation == 0)
+               if(orientation == 0 && last_step != 'l')
                 {
                     currentdistance++;
                     push(currentpath, 'l');
                     calculatepath(positionx, positiony, 3);
                 }
-                else if (orientation == 1)
+               else if (orientation == 1 && last_step != 'b')
                 {
                     currentdistance++;
                     push(currentpath, 'b') ;
                     calculatepath(positionx-1, positiony, 1);
                 }
-                else if (orientation == 2)
+               else if (orientation == 2 && last_step != 'r')
                 {
                     currentdistance++;
                     push(currentpath, 'r');
                     calculatepath(positionx, positiony, 3);
                 }
-                else
+               else if (orientation == 3 && last_step != 'f')
                 {
                     currentdistance++;
                     push(currentpath, 'f');
                     calculatepath(positionx-1, positiony, 3);
                 }
+               else
+               {
+                   //ERROR
+               }
             }
             else // either walls or already visited cells around the current cell
             {
-                visited_path_planning[positionx][positiony] = true;
                 undo_last_step(positionx, positiony, orientation);
             }
         }
         else // not possible to reach the goal with less steps than already -> remove last element
         {
-            visited_path_planning[positionx][positiony] = true;
-            undo_last_step(positionx, positiony, orientation);
-                     
+            undo_last_step(positionx, positiony, orientation);         
         }
     }
 }
@@ -729,7 +740,7 @@ node_t * calculateshortestpath(int positionx, int positiony, int orientation)
 
 int drive_shortest_path()
 {
-    next_step = (char)shortestpath;
+    next_step = shortestpath->val;
     //check if the last element is removed
     if(pop(shortestpath) == -1)
     {

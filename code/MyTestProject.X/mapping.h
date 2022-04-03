@@ -57,6 +57,7 @@ void remove_last(node_t * head);
 int pop(node_t ** head);
 void push(node_t * head, int val);
 void replace_list(node_t * current, node_t * old);
+void undo_last_step(int positionx, int positiony, int orientation);
 void calculatepath(int positionx, int positiony, int orientation);
 node_t * calculateshortestpath(int positionx, int positiony, int orientation);
 int drive_shortest_path();
