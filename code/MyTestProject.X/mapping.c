@@ -39,7 +39,8 @@ double right_measurement; // in cm
 double left_measurement; // in cm
 int i;
 char next_step;
-bool visited[squares][squares];
+bool visited[squares][squares]; //exploring
+bool visited_path_planning[squares][squares];
 cell map[squares][squares];
 
 node_t * shortestpath = NULL;
@@ -109,6 +110,7 @@ void initalize_map()
             map[o][j].right = -1;
             map[o][j].front = -1;
             visited[o][j] = false;
+            visited_path_planning[o][j] = false;
             
         }
     }        
@@ -421,10 +423,11 @@ int allexplored()
 /* list functions from https://www.learn-c.org/de/Linked%20lists
  * remove the last element from a list
 */
-void remove_last(node_t * head) {
+char remove_last(node_t * head) {
     /* if there is only one element */
+    char last;
     if (head->next == NULL) {
-        head->val;
+        last = head->val;
         free(head);
         head = NULL;
     }
@@ -434,6 +437,7 @@ void remove_last(node_t * head) {
     while (current->next->next != NULL) {
         current = current->next;
     }
+    return last;
 }
 
 /* remove the first element of a list */
@@ -481,6 +485,99 @@ void replace_list(node_t * current, node_t * old) {
     }
 }
 
+void undo_last_step(int positionx, int positiony, int orientation)
+{
+    char last_step = remove_last(currentpath);
+    currentdistance--;
+    if(orientation == 0)
+            {
+                if(last_step == 'f')
+                {
+                    calculatepath(positionx, positiony-1, 0);
+                }
+                else if(last_step == 'b')
+                {
+                    calculatepath(positionx, positiony+1,0);
+                }
+                else if(last_step == 'l')
+                {
+                    calculatepath(positionx, positiony, 1);
+                }
+                else if(last_step == 'r')
+                {
+                    calculatepath(positionx, positiony, 3);
+                }
+                else
+                { /* ERROR*/ }
+            }
+            else if(orientation == 1)
+            {
+                if(last_step == 'f')
+                {
+                    calculatepath(positionx-1, positiony, 1);
+                }
+                else if(last_step == 'b')
+                {
+                    calculatepath(positionx+1, positiony,1);
+                }
+                else if(last_step == 'l')
+                {
+                    calculatepath(positionx, positiony, 2);
+                }
+                else if(last_step == 'r')
+                {
+                    calculatepath(positionx, positiony, 0);
+                }
+                else
+                { /* ERROR*/ }
+
+            }
+            else if(orientation == 2)
+            {
+                if(last_step == 'f')
+                {
+                    calculatepath(positionx, positiony+1, 2);
+                }
+                else if(last_step == 'b')
+                {
+                    calculatepath(positionx, positiony-1,2);
+                }
+                else if(last_step == 'l')
+                {
+                    calculatepath(positionx, positiony, 3);
+                }
+                else if(last_step == 'r')
+                {
+                    calculatepath(positionx, positiony, 1);
+                }
+                else
+                { /* ERROR*/ }
+
+            }
+            else if(orientation == 3)
+            {
+                if(last_step == 'f')
+                {
+                    calculatepath(positionx+1, positiony, 3);
+                }
+                else if(last_step == 'b')
+                {
+                    calculatepath(positionx-1, positiony,3);
+                }
+                else if(last_step == 'l')
+                {
+                    calculatepath(positionx, positiony, 0);
+                }
+                else if(last_step == 'r')
+                {
+                    calculatepath(positionx, positiony, 2);
+                }
+                else
+                { /* ERROR*/ }
+
+            }
+    
+}
 /* recursive method to find the shortest path 
  */
 void calculatepath(int positionx, int positiony, int orientation)
@@ -489,14 +586,13 @@ void calculatepath(int positionx, int positiony, int orientation)
     {
         replace_list(currentpath, shortestpath); //currentpath will get the shortestpath
         mindistance = currentdistance;
-        currentdistance--;
-        remove_last(currentpath);
+        undo_last_step(positionx, positiony, orientation);
     }
     else
     {
         if(currentdistance < mindistance)
         {
-            if(map[positionx][positiony].front == 0)
+            if(map[positionx][positiony].front == 0 && visited_path_planning[positionx][positiony+1] == false)
             {
                 if(orientation == 0)
                 {
@@ -513,8 +609,8 @@ void calculatepath(int positionx, int positiony, int orientation)
                 else if (orientation == 2)
                 {
                     currentdistance++;
-                    push(currentpath, 't');
-                    calculatepath(positionx, positiony, 0);
+                    push(currentpath, 'b'); //moving backward
+                    calculatepath(positionx, positiony+1, 2);
                 }
                 else
                 {
@@ -524,7 +620,7 @@ void calculatepath(int positionx, int positiony, int orientation)
                 }
                 
             }
-            else if(map[positionx][positiony].right == 0)
+            else if(map[positionx][positiony].right == 0 && visited_path_planning[positionx+1][positiony] == false)
             {
                 if(orientation == 0)
                 {
@@ -547,17 +643,17 @@ void calculatepath(int positionx, int positiony, int orientation)
                 else
                 {
                     currentdistance++;
-                    push(currentpath, 't');
-                    calculatepath(positionx, positiony, 1);
+                    push(currentpath, 'b');
+                    calculatepath(positionx+1, positiony, 3);
                 }
             }
-            else if(map[positionx][positiony].back == 0)
+            else if(map[positionx][positiony].back == 0 && visited_path_planning[positionx][positiony-1] == false)
             {
                if(orientation == 0)
                 {
                     currentdistance++;
-                    push(currentpath, 't');
-                    calculatepath(positionx, positiony, 2);
+                    push(currentpath, 'b');
+                    calculatepath(positionx, positiony-1, 0);
                 }
                 else if (orientation == 1)
                 {
@@ -578,7 +674,7 @@ void calculatepath(int positionx, int positiony, int orientation)
                     calculatepath(positionx, positiony, 2);
                 }
             }
-            else if(map[positionx][positiony].left == 0)
+            else if(map[positionx][positiony].left == 0 && visited_path_planning[positionx-1][positiony] == false)
             {
                if(orientation == 0)
                 {
@@ -589,8 +685,8 @@ void calculatepath(int positionx, int positiony, int orientation)
                 else if (orientation == 1)
                 {
                     currentdistance++;
-                    push(currentpath, 't') ;
-                    calculatepath(positionx+1, positiony, 3);
+                    push(currentpath, 'b') ;
+                    calculatepath(positionx-1, positiony, 1);
                 }
                 else if (orientation == 2)
                 {
@@ -605,15 +701,17 @@ void calculatepath(int positionx, int positiony, int orientation)
                     calculatepath(positionx-1, positiony, 3);
                 }
             }
-            else
+            else // either walls or already visited cells around the current cell
             {
-                // ERROR STATE
+                visited_path_planning[positionx][positiony] = true;
+                undo_last_step(positionx, positiony, orientation);
             }
         }
-        else 
+        else // not possible to reach the goal with less steps than already -> remove last element
         {
-            currentdistance--;
-            remove_last(currentpath);
+            visited_path_planning[positionx][positiony] = true;
+            undo_last_step(positionx, positiony, orientation);
+                     
         }
     }
 }
