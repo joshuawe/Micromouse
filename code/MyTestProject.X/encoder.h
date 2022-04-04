@@ -55,6 +55,24 @@ extern double WheelDistanceLeft;        // [mm] The distance the wheel covered o
 extern double WheelDistanceRight;       // [mm] The distance the wheel covered over ground
 
 
+
+extern long encoderCountsLeft;          // [-]
+extern long encoderCountsRight;         // [-]
+extern double speedAbs;                 // [??] the absolute speed: (speedLeft + speedRight)/2
+extern double speedLeft;                // [??]    -> mm/s
+extern double speedRight;               // [??]    -> mm/s
+extern double speedAngularLeft;              // [rounds/s]
+extern double speedAngularRight;             // [rounds/s]
+extern double WheelDistanceLeft;        // [mm] The distance the wheel covered over ground
+extern double WheelDistanceRight;       // [mm]
+extern double WheelDistanceLeftAbsolute;     // [mm]  This includes forward and backward motion
+extern double WheelDistanceRightAbsolute;    // [mm]
+extern double WheelRotationsLeft;            // [-] The num rotations the wheel has turned
+extern double WheelRotationsRight;           // [-]
+extern double WheelRotationsLeftAbsolute;    // [-] Includes forward and backward rotation
+extern double WheelRotationsRightAbsolute;   // [-]
+
+
 void initQEI(void);
 void getEncoderCounts(long* left, long* right);
 void updateEncoderCounts(void);

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "myTimers.h"
 #include "IOconfig.h"
 #include "encoder.h"
@@ -6,7 +7,6 @@
 #include "proxSensors.h"
 #include "serialComms.h"
 #include "MotorControl.h"
-#include <stdio.h>
 
 static int myCount;
 int t;
@@ -113,13 +113,15 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     updateSpeed();
     
     //executeControl();
-    setMotorSpeed(0.5, 0);
+    static double s = 0.3;
+    setMotorSpeed(s, -s);
     
 
+
         
-    long encLeft, encRight;
-    getEncoderCounts(&encLeft, &encRight);
-    
+//    long encLeft, encRight;
+//    getEncoderCounts(&encLeft, &encRight);
+//    
     
     
     
@@ -145,7 +147,11 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 //    putsUART1(ftoa(speedAngularRight));
 //    putsUART1("*/");
     
-    printf("/*%f,%f,%f,%d,%d,%f,%f,%f,%f*/\r\n", distanceLeft, distanceFront, distanceRight, encLeft, encRight, WheelDistanceLeft, WheelDistanceRight, speedAngularLeft, speedAngularRight);
+    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f*/\r\n", distanceLeft, distanceFront, distanceRight, 
+        encoderCountsLeft, encoderCountsRight, 
+        WheelDistanceLeft, WheelDistanceRight, 
+        speedAngularLeft, speedAngularRight,
+        speedLeft, speedRight);
 
     
 

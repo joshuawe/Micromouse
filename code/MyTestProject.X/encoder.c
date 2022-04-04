@@ -153,7 +153,7 @@ void updateSpeed(void) {
 void updateWheelDistanceRotation(void) {
     // Defining the 'old' values from previous function calls
     static long encoderCountsLeftOld, encoderCountsRightOld;
-    static long WheelRotationsLeftOld, WheelRotationsRightOld;
+    static double WheelRotationsLeftOld, WheelRotationsRightOld;
     double temp = 0;
     double dTemp = 0;
     // First, the Wheel Rotations are calculated
