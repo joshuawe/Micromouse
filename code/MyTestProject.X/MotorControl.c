@@ -101,10 +101,10 @@ void initController()
     pid_velocity_right = init;
     pid_distance_wall_left = init;
     pid_distance_wall_right = init;
-    setControllerParameter(pid_velocity_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);       // TO CHANGE!!!
-    setControllerParameter(pid_velocity_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);      // TO CHANGE!!!
-    setControllerParameter(pid_distance_wall_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);  // TO CHANGE!!!
-    setControllerParameter(pid_distance_wall_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit); // TO CHANGE!!!
+    setControllerParameter(&pid_velocity_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);       // TO CHANGE!!!
+    setControllerParameter(&pid_velocity_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);      // TO CHANGE!!!
+    setControllerParameter(&pid_distance_wall_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);  // TO CHANGE!!!
+    setControllerParameter(&pid_distance_wall_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit); // TO CHANGE!!!
     
     // starts with 0 velocity
     adjustVelocity(0,0);
@@ -115,26 +115,26 @@ void initController()
  * either by editing the values in the call of setControllerParameter in initController
  * or by calling the function (also possible from outside ?!) 
  */
-void setControllerParameter(PID_Controller pid, double kFF, double kP, double kI, double kD, double integralLimit){
-    pid.kFF = kFF;
-    pid.kP = kP;
-    pid.kI = kI;
-    pid.kD = kD;
-    pid.integralLimit = integralLimit;
+void setControllerParameter(PID_Controller *pid, double kFF, double kP, double kI, double kD, double integralLimit){
+    pid->kFF = kFF;
+    pid->kP = kP;
+    pid->kI = kI;
+    pid->kD = kD;
+    pid->integralLimit = integralLimit;
 }
 
 /*
  Main control step that receives an error and the corresponding pid controller as input and computes the output
  * called by controlBaseVelocity and controlStraightVelocityBasedOnDistanceMeasurements
  */
-void controlStep(PID_Controller pid, double error){
-    pid.error = error;
-    pid.integral = pid.integralMemory + pid.error * delta_t_timer;
-    pid.integral = (pid.integral < pid.integralLimit) ? pid.integral : pid.integralLimit;
-    pid.derivative = (pid.error - pid.errorMemory) / delta_t_timer;
-    pid.errorMemory = pid.error;
-    pid.integralMemory = pid.integral;
-    pid.output = pid.kFF * pid.error + pid.kP * pid.error + pid.kI * pid.integral + pid.kD * pid.derivative;
+void controlStep(PID_Controller *pid, double error){
+    pid->error = error;
+    pid->integral = pid->integralMemory + pid->error * delta_t_timer;
+    pid->integral = (pid->integral < pid->integralLimit) ? pid->integral : pid->integralLimit;
+    pid->derivative = (pid->error - pid->errorMemory) / delta_t_timer;
+    pid->errorMemory = pid->error;
+    pid->integralMemory = pid->integral;
+    pid->output = pid->kFF * pid->error + pid->kP * pid->error + pid->kI * pid->integral + pid->kD * pid->derivative;
 }
 
 
@@ -383,8 +383,8 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
     // first: control base velocity with eventually new calibrated goal distances
     controlBaseVelocity();
     // second: control distance to walls
-    controlStep(pid_distance_wall_left,errorLeft);
-    controlStep(pid_distance_wall_right,errorRight);
+    controlStep(&pid_distance_wall_left,errorLeft);
+    controlStep(&pid_distance_wall_right,errorRight);
     
 }
 
@@ -419,8 +419,8 @@ void controlBaseVelocity()
 {    
     double errorSpeedLeft = cc.desiredSpeedLeft - speedAngularLeft;
     double errorSpeedRight = cc.desiredSpeedRight - speedAngularRight;    
-    controlStep(pid_velocity_left,errorSpeedLeft);
-    controlStep(pid_velocity_right,errorSpeedRight);
+    controlStep(&pid_velocity_left,errorSpeedLeft);
+    controlStep(&pid_velocity_right,errorSpeedRight);
 }
 
 

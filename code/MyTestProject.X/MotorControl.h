@@ -126,8 +126,8 @@ typedef struct{
  PART 0 
  */
 void initController();
-void setControllerParameter(PID_Controller pid, double kFF, double kP, double kI, double kD, double integralLimit);
-void controlStep(PID_Controller pid, double error);
+void setControllerParameter(PID_Controller *pid, double kFF, double kP, double kI, double kD, double integralLimit);
+void controlStep(PID_Controller *pid, double error);
 
 /*
  PART 1 
