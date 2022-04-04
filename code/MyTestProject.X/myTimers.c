@@ -5,6 +5,7 @@
 #include "myPWM.h"
 #include "proxSensors.h"
 #include "serialComms.h"
+#include "MotorControl.h"
 
 static int myCount;
 int t;
@@ -102,22 +103,26 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     // Reset timer 1 interrupt flag
     IFS0bits.T1IF = 0;
     
-    float distanceLeft, distanceFront, distanceRight;
-    getDistances(&distanceRight, &distanceFront, &distanceLeft);
+    updateDistances();
+    updateEncoderCounts();
+    updateSpeed();
+    updateWheelDistanceRotation();
     
-    sendFloat("dLeft", distanceLeft);
-    sendFloat("dFront", distanceFront);
-    sendFloat("dRight", distanceRight);
+    executeControl();
+    
+    //sendFloat("dLeft", distanceLeft);
+    //sendFloat("dFront", distanceFront);
+    //sendFloat("dRight", distanceRight);
 
-    logInt("dLeft", (int) (distanceLeft*10));
-    logInt("dFront", (int) (distanceFront*10));
-    logInt("dRight", (int) (distanceRight*10));
+    //logInt("dLeft", (int) (distanceLeft*10));
+    //logInt("dFront", (int) (distanceFront*10));
+    //logInt("dRight", (int) (distanceRight*10));
         
     long encLeft, encRight;
     getEncoderCounts(&encLeft, &encRight);
     
-    logInt("eLeft", encLeft);
-    logInt("eRight", encRight);
+//    logInt("eLeft", encLeft);
+//    logInt("eRight", encRight);
     
     putsUART1("\r\n");
     
@@ -132,7 +137,11 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     putsUART1(",");
     putsUART1(ltoa(encLeft));
     putsUART1(",");    
-    putsUART1(ltoa(encRight));
+    putsUART1(ltoa(encRight));   
+    putsUART1(",");
+    putsUART1(ftoa(WheelDistanceLeft));
+    putsUART1(",");    
+    putsUART1(ftoa(WheelDistanceRight));
     putsUART1("*/");
 
     LED1 = ~LED1;
@@ -141,18 +150,7 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
         LED2 = ~LED2;
     }
     
-    float speed1 = 0.0;
-    float speed2 = 0.0;
-    if (adcData[1] < 400 && adcData[1]>50) {
-        speed1 = -0.3;
-        speed2 = 0.3;
-    }
-    else if (adcData[1] < 50) {
-        speed1 = 0.2;
-        speed2 = 0.2;  
-    }
-    
-    setMotorSpeed(0, 0);
+
     
 //
 //    myCount++;

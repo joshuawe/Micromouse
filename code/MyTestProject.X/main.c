@@ -53,6 +53,7 @@
 #include "myTimers.h"
 #include "adc.h"
 #include "dma.h"
+#include "MotorControl.h"
 
 
 
@@ -133,6 +134,9 @@ int main()
     LED2 = LEDON;
     
     setPWM(0.0, DIRECTION_FWD, 0.0, DIRECTION_FWD);
+    
+    initController();
+    drive_forward();
     
     //*** we do nothing forever --> wait until things are happening
     //*** --> but the interrupt function is called after xxx time

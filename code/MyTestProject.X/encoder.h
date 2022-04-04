@@ -48,6 +48,12 @@
 #define WHEEL_RADIUS 30    // [mm]    // 60 mm / 2 :)
 #define WHEEL_CIRCUMFERENCE (2 * PI * WHEEL_RADIUS)  // [MM]
 
+// Encoder measurements
+extern double speedAngularLeft;         // [rounds/s] wheel turns per second
+extern double speedAngularRight;        // [rounds/s] wheel turns per second
+extern double WheelDistanceLeft;        // [mm] The distance the wheel covered over ground
+extern double WheelDistanceRight;       // [mm] The distance the wheel covered over ground
+
 
 void initQEI(void);
 void getEncoderCounts(long* left, long* right);

@@ -14,13 +14,13 @@
 
 // Necessary variables
 extern int delta_t_timer;
-double toleranceGoal = 2.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
+double toleranceGoal = 20.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
 double crossingStartOrEndRecognized = 10.0; // TO CHANGE!!! [mm] difference between two subsequent proximity measurements that indicates a crossing
 double toleranceCalibration = 0.5;          // TO CHANGE!!! [mm] tolerated error when calibrating the front distance to the wall
 double influenceProximity = 0.3;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
 double desiredTurningSpeed = 0.25;          // TO CHANGE!!! [rounds/s]
-double desiredDrivingSpeed = 1.5;           // TO CHANGE!!! [rounds/s]
-double maximumOutput = 1.0;                 // TO CHANGE!!! [rounds/s]
+double desiredDrivingSpeed = 0.1;           // TO CHANGE!!! [rounds/s]
+double maximumOutput = 0.4;                 // TO CHANGE!!! [rounds/s]
 
 // Controller
 static PID_Controller pid_velocity_left;        // Controller for velocity of left wheel
@@ -30,20 +30,6 @@ static PID_Controller pid_distance_wall_right;  // Controller for distance to ri
 
 // Control cycle with goals of movement
 static Control_Cycle cc;
-
-// Encoder measurements
-extern double speedAngularLeft;         // [rounds/s] wheel turns per second
-extern double speedAngularRight;        // [rounds/s] wheel turns per second
-extern double WheelDistanceLeft;        // [mm] The distance the wheel covered over ground
-extern double WheelDistanceRight;       // [mm] The distance the wheel covered over ground
-
-// Proximity measurements
-static float* distanceRight;
-static float* distanceLeft;
-static float* distanceFront;
-static double measurementDistanceRight;     // [mm] distance from right sensor to wall
-static double measurementDistanceLeft;      // [mm] distance from left sensor to wall
-static double measurementDistanceFront;     // [mm] distance from front sensor to wall
 
 // Memorized measurements for calibration
 static double lastMeasurementDistanceRight;     // [mm] distance from right sensor to wall
@@ -290,7 +276,6 @@ int executeControl()
     if (goalReached == 0){
         // use velocity and proximity control if the mouse is not turning
         if (cc.turn == 0){
-            getMeasurements();
             calibrateAndControlStraightVelocityBasedOnDistanceMeasurements();
             outputLeft = pid_velocity_left.output + influenceProximity * pid_distance_wall_left.output;
             outputRight = pid_velocity_right.output + influenceProximity * pid_distance_wall_right.output;
@@ -327,21 +312,6 @@ int checkGoalReachedAlready()
 }
 
 /*
- Input measurements of distance sensors
- * write pointer value in local variable
- */
-void getMeasurements(){
-    getDistances(distanceRight, distanceFront, distanceLeft);
-    lastMeasurementDistanceRight = measurementDistanceRight;
-    lastMeasurementDistanceLeft = measurementDistanceLeft;
-    lastMeasurementDistanceFront = measurementDistanceFront;
-    measurementDistanceRight = *distanceRight;
-    measurementDistanceLeft = *distanceLeft;
-    measurementDistanceFront = *distanceFront;
-}
-
-
-/*
  Control of velocity based on distance measurement
  * called by executeControl for straight movement only
  */
@@ -350,33 +320,36 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
     double errorLeft;
     double errorRight;
           
+    controlBaseVelocity();
+    return;
+    
     // no walls to both sides -> just continue with base velocity
-    if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL && measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
+    if(distanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL && distanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
         controlBaseVelocity();
         return;
     }
     // no wall on left side
-    else if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL){
-        errorLeft = CELL_SIZE - measurementDistanceRight - A_SENSORS - DISTANCE_SENSOR_WALL;
-        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
+    else if(distanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL){
+        errorLeft = CELL_SIZE - distanceRight - A_SENSORS - DISTANCE_SENSOR_WALL;
+        errorRight = DISTANCE_SENSOR_WALL - distanceRight;
     }
     // no wall on right side
-    else if(measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
-        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
-        errorRight = CELL_SIZE - measurementDistanceLeft - A_SENSORS - DISTANCE_SENSOR_WALL;
+    else if(distanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
+        errorLeft = DISTANCE_SENSOR_WALL - distanceLeft;
+        errorRight = CELL_SIZE - distanceLeft - A_SENSORS - DISTANCE_SENSOR_WALL;
     }
     // walls to both sides
     else{
-        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
-        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
+        errorLeft = DISTANCE_SENSOR_WALL - distanceLeft;
+        errorRight = DISTANCE_SENSOR_WALL - distanceRight;
     }
     
     // if wall in front in certain distance, then calibrate 
-    if (fabs(measurementDistanceFront-DISTANCE_USED_TO_CALIBRATE) < toleranceCalibration){
+    if (fabs(distanceFront-DISTANCE_USED_TO_CALIBRATE) < toleranceCalibration){
         calibrateGoalFront();      
     } // else if crossing to left and or right starts or ends
-    else if (fabs(lastMeasurementDistanceLeft - measurementDistanceLeft) > crossingStartOrEndRecognized
-            || fabs(lastMeasurementDistanceRight - measurementDistanceRight) > crossingStartOrEndRecognized){
+    else if (fabs(lastMeasurementDistanceLeft - distanceLeft) > crossingStartOrEndRecognized
+            || fabs(lastMeasurementDistanceRight - distanceRight) > crossingStartOrEndRecognized){
         calibrateGoalSide();
     }
     

@@ -77,7 +77,7 @@ void __attribute__((interrupt, auto_psv)) _QEI1Interrupt(void)
     // Encoder 1 interrupt
     IFS3bits.QEI1IF = 0;
 
-    if(POS1CNT<MAX2CNT/2)
+    if(POS1CNT<MAX1CNT/2)
         resets1++; // over-run condition caused interrupt
     else
         resets1--; // under-run condition caused interrupt
@@ -164,6 +164,7 @@ void updateWheelDistanceRotation(void) {
     // Second, the distance travelled by the wheel is calculated
     dTemp = (WheelRotationsLeft - WheelRotationsLeftOld) * WHEEL_CIRCUMFERENCE;
     WheelRotationsLeftOld += dTemp;
+    WheelDistanceLeft += dTemp;
     WheelDistanceLeftAbsolute += abs(dTemp);
     dTemp = (WheelRotationsRight - WheelRotationsRightOld) * WHEEL_CIRCUMFERENCE;
     WheelDistanceRight += dTemp;
