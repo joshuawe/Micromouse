@@ -6,9 +6,13 @@
 #include "proxSensors.h"
 #include "serialComms.h"
 #include "MotorControl.h"
+#include <stdio.h>
 
 static int myCount;
 int t;
+
+int const delta_t_timer = 500;   // time in [ms] determining the frequency, sorry for the ugly name
+double const delta_t_sec = 0.5;     // [s]
 
 void initTimer1(unsigned int period)
 {
@@ -105,44 +109,45 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     
     updateDistances();
     updateEncoderCounts();
-    updateSpeed();
     updateWheelDistanceRotation();
+    updateSpeed();
     
-    executeControl();
+    //executeControl();
+    setMotorSpeed(0.5, 0);
     
-    //sendFloat("dLeft", distanceLeft);
-    //sendFloat("dFront", distanceFront);
-    //sendFloat("dRight", distanceRight);
 
-    //logInt("dLeft", (int) (distanceLeft*10));
-    //logInt("dFront", (int) (distanceFront*10));
-    //logInt("dRight", (int) (distanceRight*10));
         
     long encLeft, encRight;
     getEncoderCounts(&encLeft, &encRight);
     
-//    logInt("eLeft", encLeft);
-//    logInt("eRight", encRight);
     
-    putsUART1("\r\n");
     
     
     // for SerialStudio
-    putsUART1("/*");
-    putsUART1(ftoa(distanceLeft));
-    putsUART1(",");
-    putsUART1(ftoa(distanceFront));
-    putsUART1(",");
-    putsUART1(ftoa(distanceRight));    
-    putsUART1(",");
-    putsUART1(ltoa(encLeft));
-    putsUART1(",");    
-    putsUART1(ltoa(encRight));   
-    putsUART1(",");
-    putsUART1(ftoa(WheelDistanceLeft));
-    putsUART1(",");    
-    putsUART1(ftoa(WheelDistanceRight));
-    putsUART1("*/");
+    
+//    putsUART1("/*");
+//    putsUART1(ftoa(distanceLeft));
+//    putsUART1(",");
+//    putsUART1(ftoa(distanceFront));
+//    putsUART1(",");
+//    putsUART1(ftoa(distanceRight));    
+//    putsUART1(",");
+//    putsUART1(ltoa(encLeft));
+//    putsUART1(",");    
+//    putsUART1(ltoa(encRight));   
+//    putsUART1(",");
+//    putsUART1(ftoa(WheelDistanceLeft));
+//    putsUART1(",");    
+//    putsUART1(ftoa(WheelDistanceRight));
+//    putsUART1(",");
+//    putsUART1(ftoa(speedAngularLeft));
+//    putsUART1(",");
+//    putsUART1(ftoa(speedAngularRight));
+//    putsUART1("*/");
+    
+    printf("/*%f,%f,%f,%d,%d,%f,%f,%f,%f*/\r\n", distanceLeft, distanceFront, distanceRight, encLeft, encRight, WheelDistanceLeft, WheelDistanceRight, speedAngularLeft, speedAngularRight);
+
+    
 
     LED1 = ~LED1;
 

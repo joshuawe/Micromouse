@@ -32,6 +32,11 @@
     #define	__MYTIMERS_H__
 
     #include <xc.h> // include processor files - each processor file is guarded.  
+
+extern const int delta_t_timer;   // time in [ms] determining the frequency, sorry for the ugly name
+extern const double delta_t_sec;     // [s]
+
+
 void initTimer1(unsigned int period);
 
 void startTimer1(void); 

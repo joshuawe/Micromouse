@@ -62,7 +62,7 @@
 #define SEVEN_MEG_OSC 0 //set to 1 if we use slow (7.3728 MHz) oscillator and not 16 MHz
 
 
-int delta_t_timer = 500;   // time in [ms] determining the frequency, sorry for the ugly name
+
 
 
 /*
@@ -136,7 +136,8 @@ int main()
     setPWM(0.0, DIRECTION_FWD, 0.0, DIRECTION_FWD);
     
     initController();
-    drive_forward();
+//    drive_forward();
+    initNewControlCycle(1,1000);
     
     //*** we do nothing forever --> wait until things are happening
     //*** --> but the interrupt function is called after xxx time
