@@ -37,9 +37,9 @@ static double lastMeasurementDistanceLeft;      // [mm] distance from left senso
 static double lastMeasurementDistanceFront;     // [mm] distance from front sensor to wall
 
 // Distance to goal
-static double distanceToGoalLeft;           // [mm] distance to goal position of left wheel
-static double distanceToGoalRight;          // [mm] distance to goal position of right wheel
-static double distanceToGoal;               // [mm] (distanceToGoalLeft + distanceToGoalRight)/2
+double distanceToGoalLeft;           // [mm] distance to goal position of left wheel
+double distanceToGoalRight;          // [mm] distance to goal position of right wheel
+double distanceToGoal;               // [mm] (distanceToGoalLeft + distanceToGoalRight)/2
 
 Outputs interestingOutputForDebugging(){
     Outputs out;
@@ -395,14 +395,30 @@ void calibrateGoalFront(){
 
 
 /*
+ * Function computes the desired velocity of the Mouse in regards to the distance to the goal. This can be linear or quadratic... 
+ */
+double velocityForGoalDistance(double distance, double desiredSpeedMax) {
+    double d = 40; // The distance to goal, where we start adjusting
+    
+    if (fabs(distance) <= d) {
+        return (desiredSpeedMax / d) * distance;
+    } else {
+        return (distance>0)*desiredSpeedMax + (-1*(distance<0)*desiredSpeedMax);
+    }
+    
+
+    
+}
+
+/*
  Control of base velocity of the two wheels
  * called by executeControl for turning
  * called by calibrateAndControlStraightVelocityBasedOnDistanceMeasurements for straight movement
  */
 void controlBaseVelocity()
 {    
-    double errorSpeedLeft = cc.desiredSpeedLeft - speedAngularLeft;
-    double errorSpeedRight = cc.desiredSpeedRight - speedAngularRight;    
+    double errorSpeedLeft = velocityForGoalDistance(distanceToGoalLeft, cc.desiredSpeedLeft) - speedAngularLeft;
+    double errorSpeedRight = velocityForGoalDistance(distanceToGoalRight, cc.desiredSpeedRight) - speedAngularRight;    
     controlStep(&pid_velocity_left,errorSpeedLeft);
     controlStep(&pid_velocity_right,errorSpeedRight);
 }

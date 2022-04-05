@@ -84,6 +84,12 @@
 #define SPEED_CONSTANT 0.5707       // [wheel rps/V]
 #define MAX_VOLTAGE 9.0             // maximum voltage -> leads to a maximum speed of 3.99 round/s
 
+
+extern double distanceToGoal;
+extern double distanceToGoalLeft;
+extern double distanceToGoalRight;
+
+
 typedef struct{
     double kFF;
     double kP;

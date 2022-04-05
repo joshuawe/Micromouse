@@ -147,11 +147,11 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 //    putsUART1(ftoa(speedAngularRight));
 //    putsUART1("*/");
     
-    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f*/\r\n", distanceLeft, distanceFront, distanceRight, 
+    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f*/\r\n", distanceLeft, distanceFront, distanceRight, 
         encoderCountsLeft, encoderCountsRight, 
         WheelDistanceLeft, WheelDistanceRight, 
         speedAngularLeft, speedAngularRight,
-        speedLeft, speedRight);
+        speedLeft, speedRight, distanceToGoalLeft, distanceToGoalRight);
 
     
 

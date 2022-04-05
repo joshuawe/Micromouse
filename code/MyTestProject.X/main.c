@@ -136,7 +136,7 @@ int main()
     setPWM(0.0, DIRECTION_FWD, 0.0, DIRECTION_FWD);
     
     initController();
-//    drive_forward();
+    drive_forward();
     //initNewControlCycle(1,100);
     
     //*** we do nothing forever --> wait until things are happening
