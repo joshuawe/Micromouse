@@ -6,6 +6,7 @@
 // signature for the protocoll for communication with PC
 const char SIGNATURE[] = "MMMJ";
 
+#include "ICC.h"
 
 /*
 *	set-up the serial port
@@ -68,17 +69,16 @@ void setupUART1(void)
 #define STATE_READ_PARAM 6
 #define CMD_MAX_LEN 16
 
-unsigned short cmd_state = STATE_AWAIT_SIG1;
-char cmd_cmd[CMD_MAX_LEN];
-char cmd_param[CMD_MAX_LEN];
-unsigned int cmd_index = 0;
-unsigned int param_index = 0;
-
-
 void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 {	
 	unsigned char rxData; // a local buffer to copy the data into
 
+    static unsigned short state = STATE_AWAIT_SIG1;
+    static char cmd[CMD_MAX_LEN];
+    static char param[CMD_MAX_LEN];
+    static unsigned int cmd_index = 0;
+    static unsigned int param_index = 0;
+    
 	/**Set the UART2 receiving interrupt flag to zero*/
 	IFS0bits.U1RXIF=0;
 
@@ -87,50 +87,51 @@ void __attribute__((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 	//we should now read out the data
 	rxData=U1RXREG;
     
-    switch(cmd_state) {
+    switch(state) {
         case STATE_AWAIT_SIG1:
-            if (rxData == 'M') cmd_state =  STATE_AWAIT_SIG2;
-            else cmd_state =  STATE_AWAIT_SIG1;
+            if (rxData == 'M') state =  STATE_AWAIT_SIG2;
+            else state =  STATE_AWAIT_SIG1;
             break;
         case STATE_AWAIT_SIG2:
-            if (rxData == 'M') cmd_state =  STATE_AWAIT_SIG3;
-            else cmd_state =  STATE_AWAIT_SIG1;
+            if (rxData == 'M') state =  STATE_AWAIT_SIG3;
+            else state =  STATE_AWAIT_SIG1;
             break;
         case STATE_AWAIT_SIG3:
-            if (rxData == 'M') cmd_state =  STATE_AWAIT_SIG4;
-            else cmd_state =  STATE_AWAIT_SIG1;
+            if (rxData == 'M') state =  STATE_AWAIT_SIG4;
+            else state =  STATE_AWAIT_SIG1;
             break;
         case STATE_AWAIT_SIG4:
-            if (rxData == 'J') cmd_state =  STATE_AWAIT_COL;
-            else cmd_state =  STATE_AWAIT_SIG1;
+            if (rxData == 'J') state =  STATE_AWAIT_COL;
+            else state =  STATE_AWAIT_SIG1;
             break;
         case STATE_AWAIT_COL:
             if (rxData == ':') {
-                cmd_state =  STATE_READ_CMD;
+                state =  STATE_READ_CMD;
                 cmd_index = 0;
             }
-            else cmd_state =  STATE_AWAIT_SIG1;
+            else state =  STATE_AWAIT_SIG1;
             break;
         case STATE_READ_CMD:
             if (rxData == ':') {
-                cmd_state = STATE_READ_PARAM;
+                state = STATE_READ_PARAM;
                 param_index = 0;
-                cmd_cmd[cmd_index] = '\0';
+                cmd[cmd_index] = '\0';
             } else if(cmd_index < CMD_MAX_LEN) {
-                cmd_cmd[cmd_index] = rxData;
+                cmd[cmd_index] = rxData;
                 cmd_index += 1;
-            } else cmd_state =  STATE_AWAIT_SIG1;
+            } else state =  STATE_AWAIT_SIG1;
             break;
         case STATE_READ_PARAM:
             if (rxData == '\r') {
             } else if (rxData == '\n') {
                 // We are done!
-                cmd_state = STATE_AWAIT_SIG1;
-                cmd_param[param_index] = '\0';
+                state = STATE_AWAIT_SIG1;
+                param[param_index] = '\0';
+                execute_bt_command(cmd, param);
             } else if(param_index < CMD_MAX_LEN) {
-                cmd_param[param_index] = rxData;
+                param[param_index] = rxData;
                 param_index += 1;
-            } else cmd_state =  STATE_AWAIT_SIG1;
+            } else state =  STATE_AWAIT_SIG1;
             break;
     }
     
