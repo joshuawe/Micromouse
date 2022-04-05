@@ -11,8 +11,8 @@
 static int myCount;
 int t;
 
-int const delta_t_timer = 500;   // time in [ms] determining the frequency, sorry for the ugly name
-double const delta_t_sec = 0.5;     // [s]
+int const delta_t_timer = 100;   // time in [ms] determining the frequency, sorry for the ugly name
+double const delta_t_sec = 0.1;     // [s]
 
 void initTimer1(unsigned int period)
 {
@@ -112,9 +112,9 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     updateWheelDistanceRotation();
     updateSpeed();
     
-    //executeControl();
-    static double s = 0.3;
-    setMotorSpeed(s, -s);
+    executeControl();
+    
+    //setMotorSpeed(0,0);
     
 
 

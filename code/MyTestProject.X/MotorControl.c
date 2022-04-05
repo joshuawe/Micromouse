@@ -11,16 +11,16 @@
 #include "encoder.h"
 #include "myPWM.h"
 #include "math.h"
+#include "myTimers.h"
 
 // Necessary variables
-extern int delta_t_timer;
 double toleranceGoal = 20.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
 double crossingStartOrEndRecognized = 10.0; // TO CHANGE!!! [mm] difference between two subsequent proximity measurements that indicates a crossing
 double toleranceCalibration = 0.5;          // TO CHANGE!!! [mm] tolerated error when calibrating the front distance to the wall
-double influenceProximity = 0.3;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
+double influenceProximity = 0;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
 double desiredTurningSpeed = 0.25;          // TO CHANGE!!! [rounds/s]
-double desiredDrivingSpeed = 0.1;           // TO CHANGE!!! [rounds/s]
-double maximumOutput = 0.4;                 // TO CHANGE!!! [rounds/s]
+double desiredDrivingSpeed = 2;           // TO CHANGE!!! [rounds/s]
+double maximumOutput = 4;                 // TO CHANGE!!! [rounds/s]
 
 // Controller
 static PID_Controller pid_velocity_left;        // Controller for velocity of left wheel
@@ -76,7 +76,13 @@ void initController()
     init.kP = 1;                            // TO CHANGE!!! hint: Ziegler-Nichols method --> kP = 0.45 kU
     init.kI = 1.2*init.kP/delta_t_timer;    // TO CHANGE!!! hint: Ziegler-Nichols method --> kP = 1.2 kP/Pu
     init.kD = 0;                            // TO CHANGE!!! hint: http://robotsforroboticists.com/pid-control/
-    init.integralLimit = 1000;              // TO CHANGE!!! limits the integral because the integral slows it down
+    
+    // Josh Test - Ziegler Nichols method
+    init.kP = 0.1;
+    init.kI = 0.4;
+    init.kD = 0;
+    
+    init.integralLimit = 0.6;              // TO CHANGE!!! limits the integral because the integral slows it down
     init.error = 0;
     init.derivative = 0;
     init.integral = 0;
@@ -91,6 +97,9 @@ void initController()
     setControllerParameter(&pid_velocity_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);      // TO CHANGE!!!
     setControllerParameter(&pid_distance_wall_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);  // TO CHANGE!!!
     setControllerParameter(&pid_distance_wall_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit); // TO CHANGE!!!
+    
+    //setControllerParameter(&pid_velocity_left, 0, 0, 0, 0, init.integralLimit);      // TO CHANGE!!!
+
     
     // starts with 0 velocity
     adjustVelocity(0,0);
@@ -115,9 +124,9 @@ void setControllerParameter(PID_Controller *pid, double kFF, double kP, double k
  */
 void controlStep(PID_Controller *pid, double error){
     pid->error = error;
-    pid->integral = pid->integralMemory + pid->error * delta_t_timer;
+    pid->integral = pid->integralMemory + pid->error * delta_t_sec;
     pid->integral = (pid->integral < pid->integralLimit) ? pid->integral : pid->integralLimit;
-    pid->derivative = (pid->error - pid->errorMemory) / delta_t_timer;
+    pid->derivative = (pid->error - pid->errorMemory) / delta_t_sec;
     pid->errorMemory = pid->error;
     pid->integralMemory = pid->integral;
     pid->output = pid->kFF * pid->error + pid->kP * pid->error + pid->kI * pid->integral + pid->kD * pid->derivative;

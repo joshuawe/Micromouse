@@ -137,7 +137,7 @@ int main()
     
     initController();
 //    drive_forward();
-    initNewControlCycle(1,1000);
+    initNewControlCycle(1,100);
     
     //*** we do nothing forever --> wait until things are happening
     //*** --> but the interrupt function is called after xxx time
