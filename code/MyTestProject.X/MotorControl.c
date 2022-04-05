@@ -305,7 +305,9 @@ int executeControl()
 }
 
 /*
- Helper function to check if the goal position (orientation) is reached already
+ * Helper function to check if the goal position (orientation) is reached already
+ * If Goal is reached then return is 1
+ * If Goal is not reached then return is 0
  */
 int checkGoalReachedAlready()
 {
@@ -313,10 +315,10 @@ int checkGoalReachedAlready()
     distanceToGoalRight = cc.absoluteGoalDistanceRight - WheelDistanceRight;
     distanceToGoal = (distanceToGoalLeft + distanceToGoalRight) / 2;
     if (fabs(distanceToGoal) <= toleranceGoal){
-        return 1;
+        return 1;    // 1 => Goal Reached
     }
     else{
-        return 0;
+        return 0;    // 0 => Goal Not Reached
     }
 }
 
