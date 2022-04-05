@@ -275,7 +275,7 @@ void initNewControlCycle(int controlCase, double goalValue)
 int executeControl()
 {
     // check if goal is already reached
-    int goalReached = checkGoalReachedAlready();
+    int goalReached = checkGoalReachedAlready(); 
     
     
     // control of base velocity
@@ -415,7 +415,7 @@ double checkOutputIfItExceedsMaximum(double output)
 {
     double checkedOutput = 0;
     if (output < 0){                    // drive backwards
-        if (output > -maximumOutput){   // output is okay
+        if (-output > maximumOutput){   // output is okay
             checkedOutput = output;
         }
         else{                           // output is too high (too large negative number)
