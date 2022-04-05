@@ -179,6 +179,40 @@
             ],
             "title": "Speeds & Velocities",
             "widget": ""
+        },
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "graph": true,
+                    "led": false,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "dGoal Left",
+                    "units": "mm",
+                    "value": "%12",
+                    "widget": ""
+                },
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "graph": true,
+                    "led": false,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "dGoal Right",
+                    "units": "mm",
+                    "value": "%13",
+                    "widget": ""
+                }
+            ],
+            "title": "Distance TO GOal",
+            "widget": ""
         }
     ],
     "separator": ",",
