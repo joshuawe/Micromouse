@@ -412,7 +412,8 @@ void calibrateGoalFront(){
 
 
 /*
- * Function computes the desired velocity of the Mouse in regards to the distance to the goal. This can be linear or quadratic... 
+ * Function computes the desired velocity of the Mouse in regards to the distance to the goal. 
+ * Right now it is quadratic. It could also be linearly decreasing.
  */
 double velocityForGoalDistance(double distance, double desiredSpeedMax) {
     double d = 20; // The distance to goal, where we start adjusting
