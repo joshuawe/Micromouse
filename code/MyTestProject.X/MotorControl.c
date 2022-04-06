@@ -13,15 +13,16 @@
 #include "math.h"
 #include "myTimers.h"
 #include "IOconfig.h"
+#include "ICC.h"
 
 // Necessary variables
 double const distanceTolerance = 80;  // [mm] If a wall is less than distanceTolerance to the side, we take it into account, when controlling the side distance
-double toleranceGoal = 2.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
+double toleranceGoal = 3.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
 double crossingStartOrEndRecognized = 10.0; // TO CHANGE!!! [mm] difference between two subsequent proximity measurements that indicates a crossing
 double toleranceCalibration = 0.5;          // TO CHANGE!!! [mm] tolerated error when calibrating the front distance to the wall
-double const influenceProximity = 0.3/80;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
-double desiredTurningSpeed = 1;          // TO CHANGE!!! [rounds/s]
-double desiredDrivingSpeed = 1;           // TO CHANGE!!! [rounds/s]
+double const influenceProximity = 0.4/80;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
+double desiredTurningSpeed = 0.75;          // TO CHANGE!!! [rounds/s]
+double desiredDrivingSpeed = 0.5;           // TO CHANGE!!! [rounds/s]
 double maximumOutput = 4;                 // TO CHANGE!!! [rounds/s]
 
 // Controller
@@ -83,10 +84,10 @@ void initController()
     // Josh Test (frequency = 100 ms)
     init.kP = 0.1;
     init.kI = 0.4;
-    init.kD = 0;
+    init.kD = 0.5;
     
     // Josh Test (frequency = 20 ms)
-    init.kP = 0.15;
+    init.kP = 0.35;
     init.kI = 2;
     init.kD = 0;
     
@@ -367,8 +368,21 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
 {
     double errorLeft;
     double errorRight;
+    static int lastNumDriveInstructions = 0;
+    static int wallLeft = 0, wallRight = 0;
           
     controlBaseVelocity();
+    
+    // Calibration, but Only calibrate if we are not turning
+    if (cc.turn == 0) {
+        // Calibrate if there is a wall in front
+        if ((distanceFront <= DISTANCE_USED_TO_CALIBRATE) && (numDriveInstructions != lastNumDriveInstructions)) { 
+            cc.absoluteGoalDistanceLeft  = WheelDistanceLeft  + distanceFront - DISTANCE_FRONT_WALL_STOP;
+            cc.absoluteGoalDistanceRight = WheelDistanceRight + distanceFront - DISTANCE_FRONT_WALL_STOP; 
+            lastNumDriveInstructions = numDriveInstructions;
+        
+    }
+    
     return;
     
     // TODO: Test and re-enable calibration 
@@ -422,7 +436,8 @@ double velocityForGoalDistance(double distance, double desiredSpeedMax) {
     
     if (fabs(distance) <= d) {
         d = (desiredSpeedMax / d) * distance;
-        return (d >= 0) ? d*d : -d*d;
+        return d;                           // linear
+        //return (d >= 0) ? d*d : -d*d;       // quadratic (preserving sign)
     } else {
         return (distance >= 0) ? desiredSpeedMax : -desiredSpeedMax;
     }

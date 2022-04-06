@@ -9,12 +9,14 @@
 #include "xc.h"
 #include "MotorControl.h"
 #include "mapping.h"
+#include <stdio.h>
 
 int positionx = 0;
 int positiony = 0;
 int orientation = 0; // 0: front, 1: turned to the right, 2: turned to the back, 3: turned to the left
 int middlex = 1;
 int middley = 1;
+int numDriveInstructions = 0; // Number of drive instructions, such as forward, left, ...
 
 int get_positionx()
 {
@@ -133,6 +135,7 @@ void update_position(char next_step)
 
 void drive(char next_step)
 {
+    numDriveInstructions++;
     if(next_step == 'l')
     {
         left_90degree();

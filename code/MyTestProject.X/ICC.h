@@ -33,7 +33,10 @@
 #ifndef ICC_H
 #define	ICC_H
 
-#include <xc.h> // include processor files - each processor file is guarded.  
+#include <xc.h> // include processor files - each processor file is guarded.
+
+extern int numDriveInstructions;
+
 int get_positionx();
 int get_positiony();
 int get_orientation();

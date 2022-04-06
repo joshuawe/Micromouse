@@ -138,6 +138,7 @@ int main()
     
     initalize_map();
 
+    /*
     map[0][0].front = 0;
     map[0][0].right = 1;
     map[0][0].back = 1;
@@ -184,6 +185,7 @@ int main()
     map[2][2].left = 0;
     
     drive_to_the_middle();
+    */
     
     initController();
   //  drive_forward();

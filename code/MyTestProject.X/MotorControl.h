@@ -55,7 +55,7 @@
 
 
 
-#define CELL_SIZE 166               // length and width of one cell in mm
+#define CELL_SIZE 175               // length and width of one cell in mm
 #define A_WHEELS 122.5              // distance between wheels in mm -> CHANGE THIS!!! (from CAD)
 #define A_SENSORS 93                // distance between left and right sensors in mm -> CHANGE THIS!!! (from CAD)
 #define DISTANCE_SENSOR_WALL ((CELL_SIZE - A_SENSORS) / 2)          // desired distance from wall to sensor
@@ -68,9 +68,10 @@
                                                                     // current position of the mouse if the missing wall is detected
 #define A_FRONT_SENSOR_AXIS 79    // CHANGE THIS!!! (from CAD) distance between motor axis and sensor to the front
                                     // -> used for calibration, so it is important that this distance is correct!
-#define DISTANCE_USED_TO_CALIBRATE 50       // distance front sensor to wall when position is new calibrated
 #define CALIBRATION_FRONT (A_FRONT_SENSOR_AXIS + DISTANCE_USED_TO_CALIBRATE - CELL_SIZE/2)       // remaining distance to goal position
 
+#define DISTANCE_USED_TO_CALIBRATE 100       // distance front sensor to wall when position is new calibrated
+#define DISTANCE_FRONT_WALL_STOP 20          // Distance at which the mouse stops infront of a wall
 
 
 
