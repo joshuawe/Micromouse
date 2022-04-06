@@ -17,7 +17,7 @@
 #include <math.h>
 #include "proxSensors.h"
 #include "mapping.h"
-#define squares 6
+#define squares 3
 
 typedef struct {
         int front;
@@ -31,13 +31,10 @@ typedef struct {
     struct node * next;
 } node_t; */
 
-int goalpositionx = 3;
-int goalpositiony = 3;
+int goalpositionx = 1;
+int goalpositiony = 1;
 int maze_size; //in cm
-int square_size = 1; //in cm
-double front_measurement; //in cm
-double right_measurement; // in cm
-double left_measurement; // in cm
+int square_size = 180; //in mm
 int i;
 char next_step;
 bool visited[squares][squares]; 
@@ -80,20 +77,6 @@ void set_goal_position(int new_goalpositionx, int new_goalpositiony)
 }
 
 /*
- * Measurement in relation of the square sizes (measurment = 1 -> the obstacle is one square away)
- */
-void set_measurements()
-{  
-    float new_left_measurement, new_front_measurement, new_right_measurement;
-    getDistances(&new_right_measurement, &new_front_measurement, &new_left_measurement);
-    front_measurement = (int)new_front_measurement/square_size;
-    right_measurement = (int)new_right_measurement/square_size;
-    left_measurement = (int)new_left_measurement/square_size;
-}
-
-
-
-/*
  * free = 0, obstacle  = 1, unsure = -1
  * binary: bottom, left, up, right
  * connections numbers start from left bottom with 0,1,2,3 then going one square up: 
@@ -103,7 +86,7 @@ void initalize_map()
     int o, j;
     for(o = 0; o < squares; o++)
     {
-        for(j=0; j < squares; o++)
+        for(j=0; j < squares; j++)
         {
             map[o][j].back = -1;
             map[o][j].left = -1;
@@ -131,175 +114,32 @@ void initalize_map()
  */
 void update_map(int positionx, int positiony, int orientation)
 {
-    set_measurements(); // actualise measurements
-
     if (orientation == 0)
     {
-        if (front_measurement >= 2) // only considering the next two squares
-        {
-            map[positionx][positiony].front = 0;
-            map[positionx+1][positiony+1].front = 0;
-        }
-        else if (front_measurement == 1)
-        {
-            map[positionx+1][positiony+1].front = 1;
-        }
-        else if (front_measurement == 0)
-        {
-            map[positionx][positiony].front = 1;
-        }
-       if (left_measurement >= 2)
-        {
-            map[positionx][positiony].left = 0;
-            map[positionx+1][positiony+1].left = 0;
-        }
-       else if (left_measurement == 1)
-        {
-            map[positionx+1][positiony+1].left = 1;
-        }
-       else if (left_measurement == 0)
-        {
-            map[positionx][positiony].left = 1;
-        }
-        if (right_measurement >= 2)
-        {
-            map[positionx][positiony].right = 0;
-            map[positionx+1][positiony+1].right = 0;
-        }
-       else if (right_measurement == 1)
-        {
-            map[positionx+1][positiony+1].right = 1;
-        }
-       else if (right_measurement == 0)
-        {
-            map[positionx][positiony].right = 1;
-        }
+        map[positionx][positiony].front = distanceFront < 100;
+        map[positionx][positiony].left = distanceLeft < 100;
+        map[positionx][positiony].right = distanceRight < 100;
     }
     else  if (orientation == 1) //turned right
     {
-        if (front_measurement >= 2) // only considering the next two squares
-        {
-            map[positionx][positiony].right = 0;
-            map[positionx+1][positiony+1].right = 0;
-        }
-        else if (front_measurement == 1)
-        {
-            map[positionx+1][positiony+1].right = 1;
-        }
-        else if (front_measurement == 0)
-        {
-            map[positionx][positiony].right = 1;
-        }
-       if (left_measurement >= 2)
-        {
-            map[positionx][positiony].front = 0;
-            map[positionx+1][positiony+1].front = 0;
-        }
-       else if (left_measurement == 1)
-        {
-            map[positionx+1][positiony+1].front = 1;
-        }
-       else if (left_measurement == 0)
-        {
-            map[positionx][positiony].front = 1;
-        }
-        if (right_measurement >= 2)
-        {
-            map[positionx][positiony].back = 0;
-            map[positionx+1][positiony+1].back = 0;
-        }
-       else if (right_measurement == 1)
-        {
-            map[positionx+1][positiony+1].back = 1;
-        }
-       else if (right_measurement == 0)
-        {
-            map[positionx][positiony].back = 1;
-        }  
+            map[positionx][positiony].right = distanceFront < 100;
+            map[positionx][positiony].front = distanceLeft < 100;   
+            map[positionx][positiony].back = distanceRight < 100;
+           
     }
     else if (orientation == 2) // turned back
     {
-        if (front_measurement >= 2) // only considering the next two squares
-        {
-            map[positionx][positiony].back = 0;
-            map[positionx+1][positiony+1].back = 0;
-        }
-        else if (front_measurement == 1)
-        {
-            map[positionx+1][positiony+1].back = 1;
-        }
-        else if (front_measurement == 0)
-        {
-            map[positionx][positiony].back = 1;
-        }
-       if (left_measurement >= 2)
-        {
-            map[positionx][positiony].right = 0;
-            map[positionx+1][positiony+1].right = 0;
-        }
-       else if (left_measurement == 1)
-        {
-            map[positionx+1][positiony+1].right = 1;
-        }
-       else if (left_measurement == 0)
-        {
-            map[positionx][positiony].right = 1;
-        }
-        if (right_measurement >= 2)
-        {
-            map[positionx][positiony].left = 0;
-            map[positionx+1][positiony+1].left = 0;
-        }
-       else if (right_measurement == 1)
-        {
-            map[positionx+1][positiony+1].left = 1;
-        }
-       else if (right_measurement == 0)
-        {
-            map[positionx][positiony].left = 1;
-        }
+            map[positionx][positiony].back = distanceFront <100;
+            map[positionx][positiony].right = distanceLeft < 100;
+            map[positionx][positiony].left = distanceRight < 100;
     }
     else if (orientation == 3 ) //turned left
     {
-        if (front_measurement >= 2) // only considering the next two squares
-        {
-            map[positionx][positiony].left = 0;
-            map[positionx+1][positiony+1].left = 0;
-        }
-        else if (front_measurement == 1)
-        {
-            map[positionx+1][positiony+1].left = 1;
-        }
-        else if (front_measurement == 0)
-        {
-            map[positionx][positiony].left = 1;
-        }
-       if (left_measurement >= 2)
-        {
-            map[positionx][positiony].back = 0;
-            map[positionx+1][positiony+1].back = 0;
-        }
-       else if (left_measurement == 1)
-        {
-            map[positionx+1][positiony+1].back = 1;
-        }
-       else if (left_measurement == 0)
-        {
-            map[positionx][positiony].back = 1;
-        }
-        if (right_measurement >= 2)
-        {
-            map[positionx][positiony].front = 0;
-            map[positionx+1][positiony+1].front = 0;
-        }
-       else if (right_measurement == 1)
-        {
-            map[positionx+1][positiony+1].front = 1;
-        }
-       else if (right_measurement == 0)
-        {
-            map[positionx][positiony].front = 1;
-        }
+            map[positionx][positiony].left = distanceFront < 100;
+            map[positionx][positiony].back = distanceLeft < 100;
+            map[positionx][positiony].front = distanceRight < 100;
+            
+        
     }
 }
 

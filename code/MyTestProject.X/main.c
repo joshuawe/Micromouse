@@ -54,7 +54,7 @@
 #include "adc.h"
 #include "dma.h"
 #include "MotorControl.h"
-
+#include "ICC.h"
 
 
 /// Defines----------------------------
@@ -130,10 +130,12 @@ int main()
     //    LED6 = LEDOFF;
     //SRbits.IPL=0; //back to normal
     
-    LED1 = LEDON;
-    LED2 = LEDON;
+    LED1 = LEDOFF;
+    LED2 = LEDOFF;
     
     setPWM(0.0, DIRECTION_FWD, 0.0, DIRECTION_FWD);
+    
+    initalize_map();
     
     initController();
   //  drive_forward();

@@ -44,7 +44,6 @@ char get_next_step();
 void set_goal_position(int new_goalpositionx, int new_goalpositiony);
 node_t * get_shortestpath();
 node_t * get_currentpath();
-void set_measurements();
 void initalize_map();
 void update_map(int positionx, int positiony, int orientation);
 int exploreleft(int positionx, int positiony, int orientation);
