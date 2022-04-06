@@ -89,7 +89,7 @@ void initController()
     // Josh Test (frequency = 20 ms)
     init.kP = 0.35;
     init.kI = 2;
-    init.kD = 0;
+    init.kD = 0.5;
     
     init.integralLimit = 50;              // TO CHANGE!!! limits the integral because the integral slows it down
     init.error = 0;
@@ -327,6 +327,7 @@ int executeControl()
             double error = getErrorFromProximitySensors();
             outputLeft = pid_velocity_left.output - influenceProximity * error;
             outputRight = pid_velocity_right.output + influenceProximity * error;
+            
         }
         else{ // use only velocity control if the mouse is turning
             controlBaseVelocity();
@@ -380,9 +381,8 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
             cc.absoluteGoalDistanceLeft  = WheelDistanceLeft  + distanceFront - DISTANCE_FRONT_WALL_STOP;
             cc.absoluteGoalDistanceRight = WheelDistanceRight + distanceFront - DISTANCE_FRONT_WALL_STOP; 
             lastNumDriveInstructions = numDriveInstructions;
-        
+        }
     }
-    
     return;
     
     // TODO: Test and re-enable calibration 
