@@ -264,7 +264,35 @@ void initNewControlCycle(int controlCase, double goalValue)
  *                                                                           *
  *****************************************************************************/
 
+double getErrorFromProximitySensors() {
+    double error = 0;
+    LED1 = 0;
+    LED2 = 0;
 
+    // Check, if the walls are ~ equally far away, AND not too far away on either side
+    if ((distanceLeft < distanceTolerance) && (distanceRight < distanceTolerance)){
+        error = distanceLeft - distanceRight;
+        LED1 = 1;
+        LED2 = 1;
+
+
+    // Left wall plausibly close, right wall far away
+    } else if ((distanceLeft < distanceTolerance) && (distanceRight > distanceTolerance))  {
+        error = distanceLeft - DISTANCE_SENSOR_WALL;
+        LED1 = 1;
+        LED2 = 0;
+
+    // Right wall close, left wall far away
+    } else if ((distanceRight < distanceTolerance ) && (distanceLeft > distanceTolerance)) {
+        error = DISTANCE_SENSOR_WALL - distanceRight;
+        LED1 = 0;
+        LED2 = 1;
+    }
+    
+    // If none of the above is true, error remains zero. (I.e. both walls are far away -> no error)
+    
+    return error;
+}
 
 /*
  Entry point 2 for highlevel code
@@ -289,30 +317,7 @@ int executeControl()
         // use velocity and proximity control if the mouse is not turning
         if (cc.turn == 0){
             calibrateAndControlStraightVelocityBasedOnDistanceMeasurements();
-            double error = 0;
-            LED1 = 0;
-            LED2 = 0;
-            
-            // Check, if the walls are ~ equally far away, AND not too far away on either side
-            if ((distanceLeft < distanceTolerance) && (distanceRight < distanceTolerance)){
-                error = distanceLeft - distanceRight;
-                LED1 = 1;
-                LED2 = 1;
-                
-                
-            // Left wall plausibly close, right wall far away
-            } else if ((distanceLeft < distanceTolerance) && (distanceRight > distanceTolerance))  {
-                error = distanceLeft - DISTANCE_SENSOR_WALL;
-                LED1 = 1;
-                LED2 = 0;
-                
-            // Right wall close, left wall far away
-            } else if ((distanceRight < distanceTolerance ) && (distanceLeft > distanceTolerance)) {
-                error = DISTANCE_SENSOR_WALL - distanceRight;
-                LED1 = 0;
-                LED2 = 1;
-            } 
-            // If none of the above is true, error remains zero. (I.e. both walls are far away -> no error)
+            double error = getErrorFromProximitySensors();
             outputLeft = pid_velocity_left.output - influenceProximity * error;
             outputRight = pid_velocity_right.output + influenceProximity * error;
         }
