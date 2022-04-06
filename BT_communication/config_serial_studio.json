@@ -213,6 +213,26 @@
             ],
             "title": "Distance TO GOal",
             "widget": ""
+        },
+        {
+            "datasets": [
+                {
+                    "alarm": 0,
+                    "fft": false,
+                    "fftSamples": 1024,
+                    "graph": false,
+                    "led": false,
+                    "log": false,
+                    "max": 0,
+                    "min": 0,
+                    "title": "Next step",
+                    "units": "",
+                    "value": "%14",
+                    "widget": ""
+                }
+            ],
+            "title": "Goal",
+            "widget": ""
         }
     ],
     "separator": ",",
