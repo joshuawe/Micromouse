@@ -158,7 +158,8 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     //LED1 = ~LED1;
     if (BUTTON) {
         //LED2 = ~LED2;
-        initNewControlCycle(1,100);
+        //initNewControlCycle(2,100);
+        right_90degree();
     }
     
 

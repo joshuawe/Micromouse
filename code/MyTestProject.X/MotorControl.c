@@ -20,7 +20,7 @@ double toleranceGoal = 20.0;                 // TO CHANGE!!! [mm] tolerated erro
 double crossingStartOrEndRecognized = 10.0; // TO CHANGE!!! [mm] difference between two subsequent proximity measurements that indicates a crossing
 double toleranceCalibration = 0.5;          // TO CHANGE!!! [mm] tolerated error when calibrating the front distance to the wall
 double const influenceProximity = 0.25/80;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
-double desiredTurningSpeed = 0.25;          // TO CHANGE!!! [rounds/s]
+double desiredTurningSpeed = 1;          // TO CHANGE!!! [rounds/s]
 double desiredDrivingSpeed = 1;           // TO CHANGE!!! [rounds/s]
 double maximumOutput = 4;                 // TO CHANGE!!! [rounds/s]
 
@@ -194,17 +194,17 @@ void drive_backward()
 
 void left_90degree()
 {
-    initNewControlCycle(3,PI/4);
+    initNewControlCycle(3,PI); // We must use PI for 90 deg, no idea why.
 }
 
 void right_90degree()
 {
-    initNewControlCycle(4,PI/4);
+    initNewControlCycle(4,PI);
 }
 
 void turning()
 {
-    initNewControlCycle(3,PI/2);
+    initNewControlCycle(3,2*PI);
 }
 
 /*
@@ -345,8 +345,7 @@ int checkGoalReachedAlready()
 {
     distanceToGoalLeft = cc.absoluteGoalDistanceLeft - WheelDistanceLeft;
     distanceToGoalRight = cc.absoluteGoalDistanceRight - WheelDistanceRight;
-    distanceToGoal = (distanceToGoalLeft + distanceToGoalRight) / 2;
-    if (fabs(distanceToGoal) <= toleranceGoal){
+    if (fabs(distanceToGoalLeft) <= toleranceGoal && fabs(distanceToGoalRight) <= toleranceGoal){
         return 1;    // 1 => Goal Reached
     }
     else{
@@ -450,7 +449,7 @@ double velocityForGoalDistance(double distance, double desiredSpeedMax) {
     if (fabs(distance) <= d) {
         return (desiredSpeedMax / d) * distance;
     } else {
-        return (distance>0)*desiredSpeedMax + (-1*(distance<0)*desiredSpeedMax);
+        return desiredSpeedMax;
     }
     
 
@@ -478,7 +477,7 @@ double checkOutputIfItExceedsMaximum(double output)
 {
     double checkedOutput = 0;
     if (output < 0){                    // drive backwards
-        if (-output > maximumOutput){   // output is okay
+        if (-output < maximumOutput){   // output is okay
             checkedOutput = output;
         }
         else{                           // output is too high (too large negative number)
