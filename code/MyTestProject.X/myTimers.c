@@ -115,38 +115,8 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     executeControl();
     
     //setMotorSpeed(0,0);
-    
-
-
-        
-//    long encLeft, encRight;
-//    getEncoderCounts(&encLeft, &encRight);
-//    
-    
-    
-    
+ 
     // for SerialStudio
-    
-//    putsUART1("/*");
-//    putsUART1(ftoa(distanceLeft));
-//    putsUART1(",");
-//    putsUART1(ftoa(distanceFront));
-//    putsUART1(",");
-//    putsUART1(ftoa(distanceRight));    
-//    putsUART1(",");
-//    putsUART1(ltoa(encLeft));
-//    putsUART1(",");    
-//    putsUART1(ltoa(encRight));   
-//    putsUART1(",");
-//    putsUART1(ftoa(WheelDistanceLeft));
-//    putsUART1(",");    
-//    putsUART1(ftoa(WheelDistanceRight));
-//    putsUART1(",");
-//    putsUART1(ftoa(speedAngularLeft));
-//    putsUART1(",");
-//    putsUART1(ftoa(speedAngularRight));
-//    putsUART1("*/");
-    
     printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f*/\r\n", distanceLeft, distanceFront, distanceRight, 
         encoderCountsLeft, encoderCountsRight, 
         WheelDistanceLeft, WheelDistanceRight, 
@@ -161,38 +131,4 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
         //initNewControlCycle(2,100);
         right_90degree();
     }
-    
-
-    
-//
-//    myCount++;
-//    /*
-//
-//    if (LED6 == LEDON){
-//        U1TXREG = 'A';
-//    }
-//    else{
-//        U1TXREG = 'Z';
-//    }
-//    */
-//
-//    //send all character from A to Z on the serial port
-//
-//   static char dataOut='A';
-//   U1TXREG=dataOut; //0x55;
-//   dataOut++;
-//   if(dataOut>'Z'){
-//       dataOut='A';
-//   }
-//
-//
-//   //dataOut = 'A';
-//   //U1TXREG=dataOut; //0x55;
-//   //dataOut++;
-//   //if(dataOut>'Z'){
-//   //    dataOut='A';
-//   //}
-//
-//   //char * data = "Hello";
-//   //putsUART1(data);
 }

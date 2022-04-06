@@ -365,27 +365,7 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
     controlBaseVelocity();
     return;
     
-    // no walls to both sides -> just continue with base velocity
-    if(distanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL && distanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
-        controlBaseVelocity();
-        return;
-    }
-    // no wall on left side, only wall on the right
-    else if(distanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL){
-        errorLeft = CELL_SIZE - distanceRight - A_SENSORS - DISTANCE_SENSOR_WALL;
-        errorRight = DISTANCE_SENSOR_WALL - distanceRight;
-    }
-    // no wall on right side
-    else if(distanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
-        errorLeft = DISTANCE_SENSOR_WALL - distanceLeft;
-        errorRight = CELL_SIZE - distanceLeft - A_SENSORS - DISTANCE_SENSOR_WALL;
-    }
-    // walls to both sides
-    else{
-        errorLeft = DISTANCE_SENSOR_WALL - distanceLeft;
-        errorRight = DISTANCE_SENSOR_WALL - distanceRight;
-    }
-    
+    // TODO: Test and re-enable calibration 
     // if wall in front in certain distance, then calibrate 
     if (fabs(distanceFront-DISTANCE_USED_TO_CALIBRATE) < toleranceCalibration){
         calibrateGoalFront();      
