@@ -7,6 +7,7 @@
 #include "proxSensors.h"
 #include "serialComms.h"
 #include "MotorControl.h"
+#include "ICC.h"
 
 static int myCount;
 int t;
@@ -102,10 +103,16 @@ void startTimer1(void)
     T1CONbits.TON = 1;
 }
 
+#define STATE_IDLE 0
+#define STATE_EXPLORING 1
+#define STATE_DRIVING_TO_MIDDLE 2
+
+
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
-    // 1 if the exploring mode has been started, otherwise 0.
-    static int started;
+    static int tick;
+    static int lastButton;
+    static int state = STATE_IDLE;
     
     // Reset timer 1 interrupt flag
     IFS0bits.T1IF = 0;
@@ -115,32 +122,55 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     updateWheelDistanceRotation();
     updateSpeed();
     
-    if (started) {
-        if (executeControl()) {
-        //    LED1 = 0;
-        //    exploring();
-        }
-    }
-    
     //setMotorSpeed(0,0);
  
     // for SerialStudio
-    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d*/\r\n", distanceLeft, distanceFront, distanceRight, 
-        encoderCountsLeft, encoderCountsRight, 
-        WheelDistanceLeft, WheelDistanceRight, 
-        speedAngularLeft, speedAngularRight,
-        speedLeft, speedRight, distanceToGoalLeft, distanceToGoalRight,
+//    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d*/\r\n", distanceLeft, distanceFront, distanceRight, 
+//        encoderCountsLeft, encoderCountsRight, 
+//        WheelDistanceLeft, WheelDistanceRight, 
+//        speedAngularLeft, speedAngularRight,
+//        speedLeft, speedRight, distanceToGoalLeft, distanceToGoalRight,
+//        get_positionx(), get_positiony(), get_orientation(),
+//        get_next_step_int());
+    
+    if (tick == 20) {
+        printf("/*%d,%d,%d,%d*/\r\n", 
         get_positionx(), get_positiony(), get_orientation(),
         get_next_step_int());
-
-    
-    //LED1 = ~LED1;
-    if (BUTTON) {
-        //LED2 = ~LED2;
-        //initNewControlCycle(2,100);
-        //right_90degree();
-        started = 1;
-        exploring();
-        //LED1 = 1;
+        tick = 0;
     }
+    
+    tick++;
+
+    switch(state) {
+        case STATE_IDLE:
+            if (!lastButton && BUTTON) {
+                state = STATE_EXPLORING;
+                exploring();
+            }
+            break;
+        case STATE_EXPLORING:
+            if (executeControl()) {
+                if (exploring() == -1) {
+                    state = STATE_DRIVING_TO_MIDDLE;
+                    drive_to_the_middle();
+                }
+            }
+            break;
+        case STATE_DRIVING_TO_MIDDLE:
+            executeControl();
+            // TODO: Drive next step
+            break;
+    }
+    
+//    //LED1 = ~LED1;
+//    if (!lastButton && BUTTON) {
+//        //LED2 = ~LED2;
+//        //initNewControlCycle(2,100);
+//        //right_90degree();
+//        started = 1;
+//        exploring();
+//        //LED1 = 1;
+//    }
+    lastButton = BUTTON;
 }

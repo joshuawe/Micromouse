@@ -17,15 +17,8 @@
 #include <math.h>
 #include "proxSensors.h"
 #include "mapping.h"
-#define squares 3
 
-typedef struct {
-        int front;
-        int back;
-        int left;
-        int right;             
-    }cell;
-    
+
 /*typedef struct node {
     char val;
     struct node * next;
@@ -42,7 +35,7 @@ cell map[squares][squares];
 char last_step;
 node_t * shortestpath = NULL;
 node_t * currentpath = NULL;
-int currentdistance;
+int currentdistance = 0;
 int mindistance = 16; // maximal cell number, so that there isn't an endless loop
 
 
@@ -236,6 +229,42 @@ int explorefront(int positionx, int positiony, int orientation)
     
     return 1;
 }
+int exploreback(int positionx, int positiony, int orientation)
+{
+    if( map[positionx][positiony].back == 1) // if the robot is on the very top of the maze or there is a wall on the left
+        
+    {
+
+        return -1;
+    }    
+    else if(visited[positionx][positiony-1] == true) //left square was already visited
+    {
+        printf("Fehler 2\r\n");
+        return -1;
+    }
+    
+    if(orientation == 0)
+    {
+        next_step = 't';
+            
+    }
+    else if(orientation == 1)
+    {
+        next_step = 'r';
+    }
+    else if(orientation == 2)
+    {
+        next_step = 'f'; 
+        visited[positionx][positiony-1] = true;
+    }
+    else
+    {
+        next_step = 'l';
+    }
+   
+    
+    return 1;
+}
 
 /* explore right part of the map
  */
@@ -327,7 +356,7 @@ int pop(node_t * head) {
 
 /* add a value to list
  */
-void push(node_t * head, int val) {
+void push(node_t * head, char val) {
     node_t * current = head;
     while (current->next != NULL) {
         current = current->next;
@@ -337,6 +366,7 @@ void push(node_t * head, int val) {
     current->next = malloc(sizeof(node_t));
     current->next->val = val;
     current->next->next = NULL;
+    printf("char %c\r\n", val);
 }
 
 /*replace the values of one list to the other
@@ -456,9 +486,12 @@ void calculatepath(int positionx, int positiony, int orientation)
         replace_list(currentpath, shortestpath); //currentpath will get the shortestpath
         mindistance = currentdistance;
         undo_last_step(positionx, positiony, orientation);
+        printf("at goal position\r\n");
     }
     else
     {
+        
+        printf("currentpath %c\r\n", currentpath->val);
         if(currentdistance < mindistance)
         {
             if(map[positionx][positiony].front == 0)
@@ -493,7 +526,7 @@ void calculatepath(int positionx, int positiony, int orientation)
                 }
                 
             }
-            else if(map[positionx][positiony].right)
+            else if(map[positionx][positiony].right == 0)
             {
                 if(orientation == 0 && last_step != 'r')
                 {
@@ -603,8 +636,8 @@ void calculatepath(int positionx, int positiony, int orientation)
 node_t * calculateshortestpath(int positionx, int positiony, int orientation)
 {
     //to check: if two times done, is the list newly initalised or the old one still there
-    shortestpath = malloc(sizeof(node_t));
-    currentpath = malloc(sizeof(node_t));
+    shortestpath = calloc(sizeof(node_t), 1);
+    currentpath = calloc(sizeof(node_t), 1);
     calculatepath(positionx, positiony, orientation);
     return shortestpath;
 }
@@ -612,9 +645,11 @@ node_t * calculateshortestpath(int positionx, int positiony, int orientation)
 int drive_shortest_path()
 {
     next_step = shortestpath->val;
+    printf("next step: %c\r\n", next_step);
     //check if the last element is removed
     if(pop(shortestpath) == -1)
     {
+        printf("no element in shortest path\r\n");
         return -1;
     }
     return 1;
@@ -647,9 +682,13 @@ void explore(int positionx, int positiony, int orientation)
         {
             if(exploreright( positionx,  positiony, orientation) == -1)
             {
-                if(allexplored() == -1)
+                if(exploreback( positionx,  positiony, orientation) == -1)
                 {
-                    move(positionx,  positiony, orientation);
+                    if(allexplored() == -1)
+                    {
+                        printf("Fehler 3\r\n");
+                        move(positionx,  positiony, orientation);
+                    }
                 }
             }
         }

@@ -77,6 +77,7 @@ void initQEI(void);
 void getEncoderCounts(long* left, long* right);
 void updateEncoderCounts(void);
 void updateSpeed(void);
+void updateWheelDistanceRotation(void);
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 

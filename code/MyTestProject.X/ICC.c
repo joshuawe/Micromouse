@@ -13,8 +13,8 @@
 int positionx = 0;
 int positiony = 0;
 int orientation = 0; // 0: front, 1: turned to the right, 2: turned to the back, 3: turned to the left
-int middlex = 3;
-int middley = 3;
+int middlex = 1;
+int middley = 1;
 
 int get_positionx()
 {
@@ -176,7 +176,7 @@ int drive_to_the_middle()
 {
     char next_step;
     set_goal_position(middlex, middley);
-    calculateshortestpath(positionx, positiony, orientation);
+    calculateshortestpath(0, 0, 0);
     // to check if only one more element is in shortest_path
     if(drive_shortest_path()!= -1)
     {
@@ -198,12 +198,15 @@ int drive_to_the_start()
     // to check if only one more element is in shortest_path
     if(drive_shortest_path()!= -1)
     {
+        printf("drive shortest path\r\n");
         next_step = get_next_step();
         drive(next_step);
+        printf(next_step);
         return 1;
     }
     else
     {
+        printf("done\r\n");
         return -1;
     }
 }

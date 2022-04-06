@@ -33,14 +33,26 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
+#define squares 3
+
 typedef struct node {
-    int val;
+    char val;
     struct node * next;
 } node_t; 
+
+typedef struct {
+        int front;
+        int back;
+        int left;
+        int right;             
+    }cell;
+    
+extern cell map[squares][squares];
 
 void set_maze_size(int size);
 void set_square_size(int square);
 char get_next_step();
+int get_next_step_int();
 void set_goal_position(int new_goalpositionx, int new_goalpositiony);
 node_t * get_shortestpath();
 node_t * get_currentpath();
@@ -54,7 +66,7 @@ void move(int positionx, int positiony, int orientation);
 void explore(int positionx, int positiony, int orientation);
 char remove_last(node_t * head);
 int pop(node_t * head);
-void push(node_t * head, int val);
+void push(node_t * head, char val);
 void replace_list(node_t * current, node_t * old);
 void undo_last_step(int positionx, int positiony, int orientation);
 void calculatepath(int positionx, int positiony, int orientation);
