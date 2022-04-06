@@ -16,10 +16,10 @@
 
 // Necessary variables
 double const distanceTolerance = 80;  // [mm] If a wall is less than distanceTolerance to the side, we take it into account, when controlling the side distance
-double toleranceGoal = 20.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
+double toleranceGoal = 2.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
 double crossingStartOrEndRecognized = 10.0; // TO CHANGE!!! [mm] difference between two subsequent proximity measurements that indicates a crossing
 double toleranceCalibration = 0.5;          // TO CHANGE!!! [mm] tolerated error when calibrating the front distance to the wall
-double const influenceProximity = 0.25/80;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
+double const influenceProximity = 0.3/80;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
 double desiredTurningSpeed = 1;          // TO CHANGE!!! [rounds/s]
 double desiredDrivingSpeed = 1;           // TO CHANGE!!! [rounds/s]
 double maximumOutput = 4;                 // TO CHANGE!!! [rounds/s]
@@ -80,12 +80,17 @@ void initController()
     init.kI = 1.2*init.kP/delta_t_timer;    // TO CHANGE!!! hint: Ziegler-Nichols method --> kP = 1.2 kP/Pu
     init.kD = 0;                            // TO CHANGE!!! hint: http://robotsforroboticists.com/pid-control/
     
-    // Josh Test - Ziegler Nichols method
+    // Josh Test (frequency = 100 ms)
     init.kP = 0.1;
     init.kI = 0.4;
     init.kD = 0;
     
-    init.integralLimit = 0.6;              // TO CHANGE!!! limits the integral because the integral slows it down
+    // Josh Test (frequency = 20 ms)
+    init.kP = 0.25;
+    init.kI = 2;
+    init.kD = 0;
+    
+    init.integralLimit = 500;              // TO CHANGE!!! limits the integral because the integral slows it down
     init.error = 0;
     init.derivative = 0;
     init.integral = 0;
@@ -410,12 +415,14 @@ void calibrateGoalFront(){
  * Function computes the desired velocity of the Mouse in regards to the distance to the goal. This can be linear or quadratic... 
  */
 double velocityForGoalDistance(double distance, double desiredSpeedMax) {
-    double d = 40; // The distance to goal, where we start adjusting
+    double d = 20; // The distance to goal, where we start adjusting
+    
+    desiredSpeedMax = fabs(desiredSpeedMax);
     
     if (fabs(distance) <= d) {
         return (desiredSpeedMax / d) * distance;
     } else {
-        return desiredSpeedMax;
+        return (distance >= 0) ? desiredSpeedMax : -desiredSpeedMax;
     }
     
 

@@ -11,8 +11,8 @@
 static int myCount;
 int t;
 
-int const delta_t_timer = 100;   // time in [ms] determining the frequency, sorry for the ugly name
-double const delta_t_sec = 0.1;     // [s]
+int const delta_t_timer = 50;   // time in [ms] determining the frequency, sorry for the ugly name
+double const delta_t_sec = 0.05;     // [s]
 
 void initTimer1(unsigned int period)
 {
