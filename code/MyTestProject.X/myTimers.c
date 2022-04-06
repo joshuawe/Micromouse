@@ -155,10 +155,15 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 
     
 
-    LED1 = ~LED1;
-
+    //LED1 = ~LED1;
+    static int pushs = 0;
     if (BUTTON) {
-        LED2 = ~LED2;
+        //LED2 = ~LED2;
+        pushs++;
+        if (pushs>2) {
+            initNewControlCycle(1,7000);
+            pushs = 0;
+        }
     }
     
 

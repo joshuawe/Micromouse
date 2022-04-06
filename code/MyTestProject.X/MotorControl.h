@@ -55,10 +55,10 @@
 
 
 
-#define CELL_SIZE 180               // length and width of one cell in mm
+#define CELL_SIZE 166               // length and width of one cell in mm
 #define A_WHEELS 122.5              // distance between wheels in mm -> CHANGE THIS!!! (from CAD)
-#define A_SENSORS 95                // distance between left and right sensors in mm -> CHANGE THIS!!! (from CAD)
-#define DISTANCE_SENSOR_WALL ((CELL_SIZE - A_SENSORS) / 2)          // distance sensor to wall in mm -> CHANGE THIS!!! (from CAD)
+#define A_SENSORS 93                // distance between left and right sensors in mm -> CHANGE THIS!!! (from CAD)
+#define DISTANCE_SENSOR_WALL ((CELL_SIZE - A_SENSORS) / 2)          // desired distance from wall to sensor
 #define MAX_POSS_DISTANCE_SENSOR_WALL (1.5 * (CELL_SIZE - A_WHEELS/2 - A_SENSORS/2))     // CHANGE THIS!!! (factor 1.5 is random value > 1
                                                                                          // that ensures that there really is no wall)
 #define A_SIDE_SENSORS_AXIS 55    // CHANGE THIS!!! (from CAD) distance between motor axis and sensors to the side

@@ -12,14 +12,16 @@
 #include "myPWM.h"
 #include "math.h"
 #include "myTimers.h"
+#include "IOconfig.h"
 
 // Necessary variables
+double const distanceTolerance = 80;  // [mm] If a wall is less than distanceTolerance to the side, we take it into account, when controlling the side distance
 double toleranceGoal = 20.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
 double crossingStartOrEndRecognized = 10.0; // TO CHANGE!!! [mm] difference between two subsequent proximity measurements that indicates a crossing
 double toleranceCalibration = 0.5;          // TO CHANGE!!! [mm] tolerated error when calibrating the front distance to the wall
-double influenceProximity = 0;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
+double const influenceProximity = 0.25/80;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
 double desiredTurningSpeed = 0.25;          // TO CHANGE!!! [rounds/s]
-double desiredDrivingSpeed = 2;           // TO CHANGE!!! [rounds/s]
+double desiredDrivingSpeed = 1;           // TO CHANGE!!! [rounds/s]
 double maximumOutput = 4;                 // TO CHANGE!!! [rounds/s]
 
 // Controller
@@ -27,6 +29,7 @@ static PID_Controller pid_velocity_left;        // Controller for velocity of le
 static PID_Controller pid_velocity_right;       // Controller for velocity of right wheel
 static PID_Controller pid_distance_wall_left;   // Controller for distance to left wall
 static PID_Controller pid_distance_wall_right;  // Controller for distance to right wall
+
 
 // Control cycle with goals of movement
 static Control_Cycle cc;
@@ -286,8 +289,32 @@ int executeControl()
         // use velocity and proximity control if the mouse is not turning
         if (cc.turn == 0){
             calibrateAndControlStraightVelocityBasedOnDistanceMeasurements();
-            outputLeft = pid_velocity_left.output + influenceProximity * pid_distance_wall_left.output;
-            outputRight = pid_velocity_right.output + influenceProximity * pid_distance_wall_right.output;
+            double error = 0;
+            LED1 = 0;
+            LED2 = 0;
+            
+            // Check, if the walls are ~ equally far away, AND not too far away on either side
+            if ((distanceLeft < distanceTolerance) && (distanceRight < distanceTolerance)){
+                error = distanceLeft - distanceRight;
+                LED1 = 1;
+                LED2 = 1;
+                
+                
+            // Left wall plausibly close, right wall far away
+            } else if ((distanceLeft < distanceTolerance) && (distanceRight > distanceTolerance))  {
+                error = distanceLeft - DISTANCE_SENSOR_WALL;
+                LED1 = 1;
+                LED2 = 0;
+                
+            // Right wall close, left wall far away
+            } else if ((distanceRight < distanceTolerance ) && (distanceLeft > distanceTolerance)) {
+                error = DISTANCE_SENSOR_WALL - distanceRight;
+                LED1 = 0;
+                LED2 = 1;
+            } 
+            // If none of the above is true, error remains zero. (I.e. both walls are far away -> no error)
+            outputLeft = pid_velocity_left.output - influenceProximity * error;
+            outputRight = pid_velocity_right.output + influenceProximity * error;
         }
         else{ // use only velocity control if the mouse is turning
             controlBaseVelocity();
@@ -339,7 +366,7 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
         controlBaseVelocity();
         return;
     }
-    // no wall on left side
+    // no wall on left side, only wall on the right
     else if(distanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL){
         errorLeft = CELL_SIZE - distanceRight - A_SENSORS - DISTANCE_SENSOR_WALL;
         errorRight = DISTANCE_SENSOR_WALL - distanceRight;
@@ -358,7 +385,7 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
     // if wall in front in certain distance, then calibrate 
     if (fabs(distanceFront-DISTANCE_USED_TO_CALIBRATE) < toleranceCalibration){
         calibrateGoalFront();      
-    } // else if crossing to left and or right starts or ends
+    } // else if crossing (=Abzweigung) to left and or right starts or ends
     else if (fabs(lastMeasurementDistanceLeft - distanceLeft) > crossingStartOrEndRecognized
             || fabs(lastMeasurementDistanceRight - distanceRight) > crossingStartOrEndRecognized){
         calibrateGoalSide();
@@ -371,6 +398,21 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
     controlStep(&pid_distance_wall_right,errorRight);
     
 }
+
+
+//void reactToWalls() {
+//    double error;
+//    
+//    // We assume walls left and right, right now
+//    error = 
+//    
+//    
+//}
+//
+
+
+
+
 
 /*
  Calibration if corridor to the side when driving forward
