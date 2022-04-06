@@ -12,12 +12,57 @@ const int SENSOR_VALUES[3][13] = {
                              {23, 24, 25, 75, 250, 360, 475, 670, 830, 1070, 1280, 1500, 2430}    //left
 };
 
+double distanceLeft = 0;
+double distanceFront = 0;
+double distanceRight = 0;
 
 void getDistances(float* distanceRight, float* distanceFront, float* distanceLeft){
     
     int i, length, pos, posLeft, posRight, value;
     length = NUM_VALUES;
     float* finalDistances[] = {distanceRight, distanceFront, distanceLeft};
+    
+    // Loop through all sensors from left to front to right
+    for (i=0; i<3; i++) {
+        value = adcData[i];   // read out the data from the sensors
+                
+        // use binarySearch to find closest element
+        pos = binarySearch(SENSOR_VALUES[i], 0, length-1, value);    
+    
+        // check if pos is positioned at the left or right boundary of array
+        if (pos <= 0) {
+            posLeft = 0;
+            posRight = 1;
+        }
+        else if (pos >= length-1) {
+            posLeft = length-2;
+            posRight = length-1;
+        }
+        else {
+            posLeft = pos;
+            posRight = pos + 1;
+        }
+
+        // interpolation -> yInterpolated = y0 + ((y1-y0)/(x1-x0)) * (xp - x0);
+        float yInterpolated;
+        int xLeft = SENSOR_VALUES[i][posLeft];
+        int xRight = SENSOR_VALUES[i][posRight];
+        int yLeft = SENSOR_DISTANCES[posLeft];
+        int yRight = SENSOR_DISTANCES[posRight];
+        yInterpolated = yLeft + ((float)(yRight-yLeft)/ (float)(xRight- xLeft)) * (value - xLeft);
+    
+        *(finalDistances[i]) = yInterpolated;
+    }  
+    
+}
+
+
+
+void updateDistances(void){
+    
+    int i, length, pos, posLeft, posRight, value;
+    length = NUM_VALUES;
+    double* finalDistances[] = {&distanceRight, &distanceFront, &distanceLeft};
     
     // Loop through all sensors from left to front to right
     for (i=0; i<3; i++) {

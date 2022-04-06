@@ -9,8 +9,10 @@
 #include "xc.h"
 #include "encoder.h"
 #include <stdlib.h>
+#include <math.h>
+#include "myTimers.h"
 
-extern int delta_t_timer;               // [s]
+
 
 int resets1 = 0;  // [-]
 int resets2 = 0;  // [-]
@@ -77,7 +79,7 @@ void __attribute__((interrupt, auto_psv)) _QEI1Interrupt(void)
     // Encoder 1 interrupt
     IFS3bits.QEI1IF = 0;
 
-    if(POS1CNT<MAX2CNT/2)
+    if(POS1CNT<MAX1CNT/2)
         resets1++; // over-run condition caused interrupt
     else
         resets1--; // under-run condition caused interrupt
@@ -132,11 +134,11 @@ void updateSpeed(void) {
     static double WheelRotationsLeftOld;
     static double WheelRotationsRightOld;
     // calculate the new speeds
-    speedLeft = (WheelDistanceLeft - WheelDistanceLeftOld) / delta_t_timer;
-    speedRight = (WheelDistanceRight - WheelDistanceRightOld) / delta_t_timer;
+    speedLeft = (WheelDistanceLeft - WheelDistanceLeftOld) / delta_t_sec;
+    speedRight = (WheelDistanceRight - WheelDistanceRightOld) / delta_t_sec;
     speedAbs = (speedLeft + speedRight) / 2;
-    speedAngularLeft = (WheelRotationsLeft - WheelRotationsLeftOld) / delta_t_timer;
-    speedAngularRight = (WheelRotationsRight - WheelRotationsRightOld) / delta_t_timer;
+    speedAngularLeft = (WheelRotationsLeft - WheelRotationsLeftOld) / delta_t_sec;
+    speedAngularRight = (WheelRotationsRight - WheelRotationsRightOld) / delta_t_sec;
     // save the current wheel distance for the next speed calculations
     WheelDistanceLeftOld = WheelDistanceLeft;
     WheelDistanceRightOld = WheelDistanceRight;
@@ -151,23 +153,23 @@ void updateSpeed(void) {
 void updateWheelDistanceRotation(void) {
     // Defining the 'old' values from previous function calls
     static long encoderCountsLeftOld, encoderCountsRightOld;
-    static long WheelRotationsLeftOld, WheelRotationsRightOld;
-    long temp = 0;
+    static double WheelRotationsLeftOld, WheelRotationsRightOld;
+    double temp = 0;
     double dTemp = 0;
     // First, the Wheel Rotations are calculated
-    temp = (encoderCountsLeft - encoderCountsLeftOld) / PULSES_PER_ROTATION;
+    temp = ((double)(encoderCountsLeft - encoderCountsLeftOld)) / ((double)PULSES_PER_ROTATION);     // this is the amount of rotation
     WheelRotationsLeft += temp;
-    WheelRotationsLeftAbsolute += abs(temp);
-    temp = (encoderCountsRight - encoderCountsRightOld) / PULSES_PER_ROTATION;
+    WheelRotationsLeftAbsolute += fabs(temp);
+    temp = ((double)(encoderCountsRight - encoderCountsRightOld)) / ((double)PULSES_PER_ROTATION);
     WheelRotationsRight += temp;
-    WheelRotationsRightAbsolute += abs(temp);
+    WheelRotationsRightAbsolute += fabs(temp);
     // Second, the distance travelled by the wheel is calculated
     dTemp = (WheelRotationsLeft - WheelRotationsLeftOld) * WHEEL_CIRCUMFERENCE;
-    WheelRotationsLeftOld += dTemp;
-    WheelDistanceLeftAbsolute += abs(dTemp);
+    WheelDistanceLeft += dTemp;
+    WheelDistanceLeftAbsolute += fabs(dTemp);
     dTemp = (WheelRotationsRight - WheelRotationsRightOld) * WHEEL_CIRCUMFERENCE;
     WheelDistanceRight += dTemp;
-    WheelDistanceRightAbsolute += abs(dTemp);
+    WheelDistanceRightAbsolute += fabs(dTemp);
     // Last, the current values are stored for the next function call
     encoderCountsLeftOld = encoderCountsLeft;
     encoderCountsRightOld = encoderCountsRight;

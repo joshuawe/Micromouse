@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "myTimers.h"
 #include "IOconfig.h"
 #include "encoder.h"
@@ -5,9 +6,13 @@
 #include "myPWM.h"
 #include "proxSensors.h"
 #include "serialComms.h"
+#include "MotorControl.h"
 
 static int myCount;
 int t;
+
+int const delta_t_timer = 100;   // time in [ms] determining the frequency, sorry for the ugly name
+double const delta_t_sec = 0.1;     // [s]
 
 void initTimer1(unsigned int period)
 {
@@ -102,57 +107,66 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     // Reset timer 1 interrupt flag
     IFS0bits.T1IF = 0;
     
-    float distanceLeft, distanceFront, distanceRight;
-    getDistances(&distanceRight, &distanceFront, &distanceLeft);
+    updateDistances();
+    updateEncoderCounts();
+    updateWheelDistanceRotation();
+    updateSpeed();
     
-    sendFloat("dLeft", distanceLeft);
-    sendFloat("dFront", distanceFront);
-    sendFloat("dRight", distanceRight);
+    executeControl();
+    
+    //setMotorSpeed(0,0);
+    
 
-    logInt("dLeft", (int) (distanceLeft*10));
-    logInt("dFront", (int) (distanceFront*10));
-    logInt("dRight", (int) (distanceRight*10));
+
         
-    long encLeft, encRight;
-    getEncoderCounts(&encLeft, &encRight);
+//    long encLeft, encRight;
+//    getEncoderCounts(&encLeft, &encRight);
+//    
     
-    logInt("eLeft", encLeft);
-    logInt("eRight", encRight);
-    
-    putsUART1("\r\n");
     
     
     // for SerialStudio
-    putsUART1("/*");
-    putsUART1(ftoa(distanceLeft));
-    putsUART1(",");
-    putsUART1(ftoa(distanceFront));
-    putsUART1(",");
-    putsUART1(ftoa(distanceRight));    
-    putsUART1(",");
-    putsUART1(ltoa(encLeft));
-    putsUART1(",");    
-    putsUART1(ltoa(encRight));
-    putsUART1("*/");
+    
+//    putsUART1("/*");
+//    putsUART1(ftoa(distanceLeft));
+//    putsUART1(",");
+//    putsUART1(ftoa(distanceFront));
+//    putsUART1(",");
+//    putsUART1(ftoa(distanceRight));    
+//    putsUART1(",");
+//    putsUART1(ltoa(encLeft));
+//    putsUART1(",");    
+//    putsUART1(ltoa(encRight));   
+//    putsUART1(",");
+//    putsUART1(ftoa(WheelDistanceLeft));
+//    putsUART1(",");    
+//    putsUART1(ftoa(WheelDistanceRight));
+//    putsUART1(",");
+//    putsUART1(ftoa(speedAngularLeft));
+//    putsUART1(",");
+//    putsUART1(ftoa(speedAngularRight));
+//    putsUART1("*/");
+    
+    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f*/\r\n", distanceLeft, distanceFront, distanceRight, 
+        encoderCountsLeft, encoderCountsRight, 
+        WheelDistanceLeft, WheelDistanceRight, 
+        speedAngularLeft, speedAngularRight,
+        speedLeft, speedRight, distanceToGoalLeft, distanceToGoalRight);
 
-    LED1 = ~LED1;
+    
 
+    //LED1 = ~LED1;
+    static int pushs = 0;
     if (BUTTON) {
-        LED2 = ~LED2;
+        //LED2 = ~LED2;
+        pushs++;
+        if (pushs>2) {
+            initNewControlCycle(1,7000);
+            pushs = 0;
+        }
     }
     
-    float speed1 = 0.0;
-    float speed2 = 0.0;
-    if (adcData[1] < 400 && adcData[1]>50) {
-        speed1 = -0.3;
-        speed2 = 0.3;
-    }
-    else if (adcData[1] < 50) {
-        speed1 = 0.2;
-        speed2 = 0.2;  
-    }
-    
-    setMotorSpeed(0, 0);
+
     
 //
 //    myCount++;

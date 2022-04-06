@@ -27,6 +27,7 @@
  */
 
 
+
 // This is a guard condition so that contents of this file are not included
 // more than once.  
 #ifndef ICC_H
@@ -42,6 +43,8 @@ int exploring();
 int drive_to_the_middle();
 int drive_to_the_start();
 void whole_program();
+void execute_bt_command(char *cmd, char *param);
+
 
 #ifdef	__cplusplus
 extern "C" {
@@ -55,4 +58,3 @@ extern "C" {
 #endif /* __cplusplus */
 
 #endif	/* XC_HEADER_TEMPLATE_H */
-

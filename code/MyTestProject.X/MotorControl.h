@@ -33,6 +33,8 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
+/*
+ *  These are the values from Miri, from the CAD model. We are currently using the old CAD values until the 3D printed parts arrive.
 
 #define CELL_SIZE 180               // length and width of one cell in mm
 #define A_WHEELS 102                // distance between wheels in mm -> CHANGE THIS!!! (from CAD)
@@ -49,6 +51,25 @@
                                     // -> used for calibration, so it is important that this distance is correct!
 #define DISTANCE_USED_TO_CALIBRATE 50       // distance front sensor to wall when position is new calibrated
 #define CALIBRATION_FRONT (A_FRONT_SENSOR_AXIS + DISTANCE_USED_TO_CALIBRATE - CELL_SIZE/2)       // remaining distance to goal position
+*/
+
+
+
+#define CELL_SIZE 166               // length and width of one cell in mm
+#define A_WHEELS 122.5              // distance between wheels in mm -> CHANGE THIS!!! (from CAD)
+#define A_SENSORS 93                // distance between left and right sensors in mm -> CHANGE THIS!!! (from CAD)
+#define DISTANCE_SENSOR_WALL ((CELL_SIZE - A_SENSORS) / 2)          // desired distance from wall to sensor
+#define MAX_POSS_DISTANCE_SENSOR_WALL (1.5 * (CELL_SIZE - A_WHEELS/2 - A_SENSORS/2))     // CHANGE THIS!!! (factor 1.5 is random value > 1
+                                                                                         // that ensures that there really is no wall)
+#define A_SIDE_SENSORS_AXIS 55    // CHANGE THIS!!! (from CAD) distance between motor axis and sensors to the side
+                                    // -> used for calibration, so it is important that this distance is correct!
+#define CALIBRATION_SIDE (CELL_SIZE/2 + A_SIDE_SENSORS_AXIS)        // remaining distance to goal position
+                                                                    // alternatively CHANGE THIS if it is more accurate to measure the
+                                                                    // current position of the mouse if the missing wall is detected
+#define A_FRONT_SENSOR_AXIS 79    // CHANGE THIS!!! (from CAD) distance between motor axis and sensor to the front
+                                    // -> used for calibration, so it is important that this distance is correct!
+#define DISTANCE_USED_TO_CALIBRATE 50       // distance front sensor to wall when position is new calibrated
+#define CALIBRATION_FRONT (A_FRONT_SENSOR_AXIS + DISTANCE_USED_TO_CALIBRATE - CELL_SIZE/2)       // remaining distance to goal position
 
 
 
@@ -62,6 +83,11 @@
  */
 #define SPEED_CONSTANT 0.5707       // [wheel rps/V]
 #define MAX_VOLTAGE 9.0             // maximum voltage -> leads to a maximum speed of 3.99 round/s
+
+
+extern double distanceToGoal;
+extern double distanceToGoalLeft;
+extern double distanceToGoalRight;
 
 
 typedef struct{
@@ -105,8 +131,8 @@ typedef struct{
  PART 0 
  */
 void initController();
-void setControllerParameter(PID_Controller pid, double kFF, double kP, double kI, double kD, double integralLimit);
-void controlStep(PID_Controller pid, double error);
+void setControllerParameter(PID_Controller *pid, double kFF, double kP, double kI, double kD, double integralLimit);
+void controlStep(PID_Controller *pid, double error);
 
 /*
  PART 1 
@@ -128,7 +154,6 @@ void initNewControlCycle(int controlCase, double goalValue);
  */
 int executeControl();
 int checkGoalReachedAlready();
-void getMeasurements();
 void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements();
 void calibrateGoalSide();
 void calibrateGoalFront();

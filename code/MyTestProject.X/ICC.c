@@ -217,6 +217,16 @@ void whole_program()
     
 }
 
-
-
-
+void execute_bt_command(char *cmd, char *param) {
+    // drive command
+    switch (cmd[0]) {
+        case 'd':
+            // drive command
+            drive(param[0]);
+            break;
+        case 's':
+            // stop command
+            initNewControlCycle(0, 0);
+            break;
+    }
+}

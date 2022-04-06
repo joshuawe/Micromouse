@@ -11,16 +11,18 @@
 #include "encoder.h"
 #include "myPWM.h"
 #include "math.h"
+#include "myTimers.h"
+#include "IOconfig.h"
 
 // Necessary variables
-extern int delta_t_timer;
-double toleranceGoal = 2.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
+double const distanceTolerance = 80;  // [mm] If a wall is less than distanceTolerance to the side, we take it into account, when controlling the side distance
+double toleranceGoal = 20.0;                 // TO CHANGE!!! [mm] tolerated error between goal and current distance
 double crossingStartOrEndRecognized = 10.0; // TO CHANGE!!! [mm] difference between two subsequent proximity measurements that indicates a crossing
 double toleranceCalibration = 0.5;          // TO CHANGE!!! [mm] tolerated error when calibrating the front distance to the wall
-double influenceProximity = 0.3;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
+double const influenceProximity = 0.25/80;            // TO CHANGE!!! [rounds/(mm*s)] estimated influence of proximity measurements on control
 double desiredTurningSpeed = 0.25;          // TO CHANGE!!! [rounds/s]
-double desiredDrivingSpeed = 1.5;           // TO CHANGE!!! [rounds/s]
-double maximumOutput = 1.0;                 // TO CHANGE!!! [rounds/s]
+double desiredDrivingSpeed = 1;           // TO CHANGE!!! [rounds/s]
+double maximumOutput = 4;                 // TO CHANGE!!! [rounds/s]
 
 // Controller
 static PID_Controller pid_velocity_left;        // Controller for velocity of left wheel
@@ -28,22 +30,9 @@ static PID_Controller pid_velocity_right;       // Controller for velocity of ri
 static PID_Controller pid_distance_wall_left;   // Controller for distance to left wall
 static PID_Controller pid_distance_wall_right;  // Controller for distance to right wall
 
+
 // Control cycle with goals of movement
 static Control_Cycle cc;
-
-// Encoder measurements
-extern double speedAngularLeft;         // [rounds/s] wheel turns per second
-extern double speedAngularRight;        // [rounds/s] wheel turns per second
-extern double WheelDistanceLeft;        // [mm] The distance the wheel covered over ground
-extern double WheelDistanceRight;       // [mm] The distance the wheel covered over ground
-
-// Proximity measurements
-static float* distanceRight;
-static float* distanceLeft;
-static float* distanceFront;
-static double measurementDistanceRight;     // [mm] distance from right sensor to wall
-static double measurementDistanceLeft;      // [mm] distance from left sensor to wall
-static double measurementDistanceFront;     // [mm] distance from front sensor to wall
 
 // Memorized measurements for calibration
 static double lastMeasurementDistanceRight;     // [mm] distance from right sensor to wall
@@ -51,9 +40,9 @@ static double lastMeasurementDistanceLeft;      // [mm] distance from left senso
 static double lastMeasurementDistanceFront;     // [mm] distance from front sensor to wall
 
 // Distance to goal
-static double distanceToGoalLeft;           // [mm] distance to goal position of left wheel
-static double distanceToGoalRight;          // [mm] distance to goal position of right wheel
-static double distanceToGoal;               // [mm] (distanceToGoalLeft + distanceToGoalRight)/2
+double distanceToGoalLeft;           // [mm] distance to goal position of left wheel
+double distanceToGoalRight;          // [mm] distance to goal position of right wheel
+double distanceToGoal;               // [mm] (distanceToGoalLeft + distanceToGoalRight)/2
 
 Outputs interestingOutputForDebugging(){
     Outputs out;
@@ -90,7 +79,13 @@ void initController()
     init.kP = 1;                            // TO CHANGE!!! hint: Ziegler-Nichols method --> kP = 0.45 kU
     init.kI = 1.2*init.kP/delta_t_timer;    // TO CHANGE!!! hint: Ziegler-Nichols method --> kP = 1.2 kP/Pu
     init.kD = 0;                            // TO CHANGE!!! hint: http://robotsforroboticists.com/pid-control/
-    init.integralLimit = 1000;              // TO CHANGE!!! limits the integral because the integral slows it down
+    
+    // Josh Test - Ziegler Nichols method
+    init.kP = 0.1;
+    init.kI = 0.4;
+    init.kD = 0;
+    
+    init.integralLimit = 0.6;              // TO CHANGE!!! limits the integral because the integral slows it down
     init.error = 0;
     init.derivative = 0;
     init.integral = 0;
@@ -101,10 +96,13 @@ void initController()
     pid_velocity_right = init;
     pid_distance_wall_left = init;
     pid_distance_wall_right = init;
-    setControllerParameter(pid_velocity_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);       // TO CHANGE!!!
-    setControllerParameter(pid_velocity_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);      // TO CHANGE!!!
-    setControllerParameter(pid_distance_wall_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);  // TO CHANGE!!!
-    setControllerParameter(pid_distance_wall_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit); // TO CHANGE!!!
+    setControllerParameter(&pid_velocity_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);       // TO CHANGE!!!
+    setControllerParameter(&pid_velocity_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);      // TO CHANGE!!!
+    setControllerParameter(&pid_distance_wall_left, init.kFF, init.kP, init.kI, init.kD, init.integralLimit);  // TO CHANGE!!!
+    setControllerParameter(&pid_distance_wall_right, init.kFF, init.kP, init.kI, init.kD, init.integralLimit); // TO CHANGE!!!
+    
+    //setControllerParameter(&pid_velocity_left, 0, 0, 0, 0, init.integralLimit);      // TO CHANGE!!!
+
     
     // starts with 0 velocity
     adjustVelocity(0,0);
@@ -115,26 +113,26 @@ void initController()
  * either by editing the values in the call of setControllerParameter in initController
  * or by calling the function (also possible from outside ?!) 
  */
-void setControllerParameter(PID_Controller pid, double kFF, double kP, double kI, double kD, double integralLimit){
-    pid.kFF = kFF;
-    pid.kP = kP;
-    pid.kI = kI;
-    pid.kD = kD;
-    pid.integralLimit = integralLimit;
+void setControllerParameter(PID_Controller *pid, double kFF, double kP, double kI, double kD, double integralLimit){
+    pid->kFF = kFF;
+    pid->kP = kP;
+    pid->kI = kI;
+    pid->kD = kD;
+    pid->integralLimit = integralLimit;
 }
 
 /*
  Main control step that receives an error and the corresponding pid controller as input and computes the output
  * called by controlBaseVelocity and controlStraightVelocityBasedOnDistanceMeasurements
  */
-void controlStep(PID_Controller pid, double error){
-    pid.error = error;
-    pid.integral = pid.integralMemory + pid.error * delta_t_timer;
-    pid.integral = (pid.integral < pid.integralLimit) ? pid.integral : pid.integralLimit;
-    pid.derivative = (pid.error - pid.errorMemory) / delta_t_timer;
-    pid.errorMemory = pid.error;
-    pid.integralMemory = pid.integral;
-    pid.output = pid.kFF * pid.error + pid.kP * pid.error + pid.kI * pid.integral + pid.kD * pid.derivative;
+void controlStep(PID_Controller *pid, double error){
+    pid->error = error;
+    pid->integral = pid->integralMemory + pid->error * delta_t_sec;
+    pid->integral = (pid->integral < pid->integralLimit) ? pid->integral : pid->integralLimit;
+    pid->derivative = (pid->error - pid->errorMemory) / delta_t_sec;
+    pid->errorMemory = pid->error;
+    pid->integralMemory = pid->integral;
+    pid->output = pid->kFF * pid->error + pid->kP * pid->error + pid->kI * pid->integral + pid->kD * pid->derivative;
 }
 
 
@@ -280,7 +278,7 @@ void initNewControlCycle(int controlCase, double goalValue)
 int executeControl()
 {
     // check if goal is already reached
-    int goalReached = checkGoalReachedAlready();
+    int goalReached = checkGoalReachedAlready(); 
     
     
     // control of base velocity
@@ -290,10 +288,33 @@ int executeControl()
     if (goalReached == 0){
         // use velocity and proximity control if the mouse is not turning
         if (cc.turn == 0){
-            getMeasurements();
             calibrateAndControlStraightVelocityBasedOnDistanceMeasurements();
-            outputLeft = pid_velocity_left.output + influenceProximity * pid_distance_wall_left.output;
-            outputRight = pid_velocity_right.output + influenceProximity * pid_distance_wall_right.output;
+            double error = 0;
+            LED1 = 0;
+            LED2 = 0;
+            
+            // Check, if the walls are ~ equally far away, AND not too far away on either side
+            if ((distanceLeft < distanceTolerance) && (distanceRight < distanceTolerance)){
+                error = distanceLeft - distanceRight;
+                LED1 = 1;
+                LED2 = 1;
+                
+                
+            // Left wall plausibly close, right wall far away
+            } else if ((distanceLeft < distanceTolerance) && (distanceRight > distanceTolerance))  {
+                error = distanceLeft - DISTANCE_SENSOR_WALL;
+                LED1 = 1;
+                LED2 = 0;
+                
+            // Right wall close, left wall far away
+            } else if ((distanceRight < distanceTolerance ) && (distanceLeft > distanceTolerance)) {
+                error = DISTANCE_SENSOR_WALL - distanceRight;
+                LED1 = 0;
+                LED2 = 1;
+            } 
+            // If none of the above is true, error remains zero. (I.e. both walls are far away -> no error)
+            outputLeft = pid_velocity_left.output - influenceProximity * error;
+            outputRight = pid_velocity_right.output + influenceProximity * error;
         }
         else{ // use only velocity control if the mouse is turning
             controlBaseVelocity();
@@ -311,7 +332,9 @@ int executeControl()
 }
 
 /*
- Helper function to check if the goal position (orientation) is reached already
+ * Helper function to check if the goal position (orientation) is reached already
+ * If Goal is reached then return is 1
+ * If Goal is not reached then return is 0
  */
 int checkGoalReachedAlready()
 {
@@ -319,27 +342,12 @@ int checkGoalReachedAlready()
     distanceToGoalRight = cc.absoluteGoalDistanceRight - WheelDistanceRight;
     distanceToGoal = (distanceToGoalLeft + distanceToGoalRight) / 2;
     if (fabs(distanceToGoal) <= toleranceGoal){
-        return 1;
+        return 1;    // 1 => Goal Reached
     }
     else{
-        return 0;
+        return 0;    // 0 => Goal Not Reached
     }
 }
-
-/*
- Input measurements of distance sensors
- * write pointer value in local variable
- */
-void getMeasurements(){
-    getDistances(distanceRight, distanceFront, distanceLeft);
-    lastMeasurementDistanceRight = measurementDistanceRight;
-    lastMeasurementDistanceLeft = measurementDistanceLeft;
-    lastMeasurementDistanceFront = measurementDistanceFront;
-    measurementDistanceRight = *distanceRight;
-    measurementDistanceLeft = *distanceLeft;
-    measurementDistanceFront = *distanceFront;
-}
-
 
 /*
  Control of velocity based on distance measurement
@@ -350,43 +358,61 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
     double errorLeft;
     double errorRight;
           
+    controlBaseVelocity();
+    return;
+    
     // no walls to both sides -> just continue with base velocity
-    if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL && measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
+    if(distanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL && distanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
         controlBaseVelocity();
         return;
     }
-    // no wall on left side
-    else if(measurementDistanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL){
-        errorLeft = CELL_SIZE - measurementDistanceRight - A_SENSORS - DISTANCE_SENSOR_WALL;
-        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
+    // no wall on left side, only wall on the right
+    else if(distanceLeft > MAX_POSS_DISTANCE_SENSOR_WALL){
+        errorLeft = CELL_SIZE - distanceRight - A_SENSORS - DISTANCE_SENSOR_WALL;
+        errorRight = DISTANCE_SENSOR_WALL - distanceRight;
     }
     // no wall on right side
-    else if(measurementDistanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
-        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
-        errorRight = CELL_SIZE - measurementDistanceLeft - A_SENSORS - DISTANCE_SENSOR_WALL;
+    else if(distanceRight > MAX_POSS_DISTANCE_SENSOR_WALL){
+        errorLeft = DISTANCE_SENSOR_WALL - distanceLeft;
+        errorRight = CELL_SIZE - distanceLeft - A_SENSORS - DISTANCE_SENSOR_WALL;
     }
     // walls to both sides
     else{
-        errorLeft = DISTANCE_SENSOR_WALL - measurementDistanceLeft;
-        errorRight = DISTANCE_SENSOR_WALL - measurementDistanceRight;
+        errorLeft = DISTANCE_SENSOR_WALL - distanceLeft;
+        errorRight = DISTANCE_SENSOR_WALL - distanceRight;
     }
     
     // if wall in front in certain distance, then calibrate 
-    if (fabs(measurementDistanceFront-DISTANCE_USED_TO_CALIBRATE) < toleranceCalibration){
+    if (fabs(distanceFront-DISTANCE_USED_TO_CALIBRATE) < toleranceCalibration){
         calibrateGoalFront();      
-    } // else if crossing to left and or right starts or ends
-    else if (fabs(lastMeasurementDistanceLeft - measurementDistanceLeft) > crossingStartOrEndRecognized
-            || fabs(lastMeasurementDistanceRight - measurementDistanceRight) > crossingStartOrEndRecognized){
+    } // else if crossing (=Abzweigung) to left and or right starts or ends
+    else if (fabs(lastMeasurementDistanceLeft - distanceLeft) > crossingStartOrEndRecognized
+            || fabs(lastMeasurementDistanceRight - distanceRight) > crossingStartOrEndRecognized){
         calibrateGoalSide();
     }
     
     // first: control base velocity with eventually new calibrated goal distances
     controlBaseVelocity();
     // second: control distance to walls
-    controlStep(pid_distance_wall_left,errorLeft);
-    controlStep(pid_distance_wall_right,errorRight);
+    controlStep(&pid_distance_wall_left,errorLeft);
+    controlStep(&pid_distance_wall_right,errorRight);
     
 }
+
+
+//void reactToWalls() {
+//    double error;
+//    
+//    // We assume walls left and right, right now
+//    error = 
+//    
+//    
+//}
+//
+
+
+
+
 
 /*
  Calibration if corridor to the side when driving forward
@@ -411,16 +437,32 @@ void calibrateGoalFront(){
 
 
 /*
+ * Function computes the desired velocity of the Mouse in regards to the distance to the goal. This can be linear or quadratic... 
+ */
+double velocityForGoalDistance(double distance, double desiredSpeedMax) {
+    double d = 40; // The distance to goal, where we start adjusting
+    
+    if (fabs(distance) <= d) {
+        return (desiredSpeedMax / d) * distance;
+    } else {
+        return (distance>0)*desiredSpeedMax + (-1*(distance<0)*desiredSpeedMax);
+    }
+    
+
+    
+}
+
+/*
  Control of base velocity of the two wheels
  * called by executeControl for turning
  * called by calibrateAndControlStraightVelocityBasedOnDistanceMeasurements for straight movement
  */
 void controlBaseVelocity()
 {    
-    double errorSpeedLeft = cc.desiredSpeedLeft - speedAngularLeft;
-    double errorSpeedRight = cc.desiredSpeedRight - speedAngularRight;    
-    controlStep(pid_velocity_left,errorSpeedLeft);
-    controlStep(pid_velocity_right,errorSpeedRight);
+    double errorSpeedLeft = velocityForGoalDistance(distanceToGoalLeft, cc.desiredSpeedLeft) - speedAngularLeft;
+    double errorSpeedRight = velocityForGoalDistance(distanceToGoalRight, cc.desiredSpeedRight) - speedAngularRight;    
+    controlStep(&pid_velocity_left,errorSpeedLeft);
+    controlStep(&pid_velocity_right,errorSpeedRight);
 }
 
 
@@ -431,7 +473,7 @@ double checkOutputIfItExceedsMaximum(double output)
 {
     double checkedOutput = 0;
     if (output < 0){                    // drive backwards
-        if (output > -maximumOutput){   // output is okay
+        if (-output > maximumOutput){   // output is okay
             checkedOutput = output;
         }
         else{                           // output is too high (too large negative number)

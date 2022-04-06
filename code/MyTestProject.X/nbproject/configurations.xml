@@ -53,10 +53,10 @@
         <targetDevice>dsPIC33FJ64MC804</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>Simulator</platformTool>
+        <platformTool>pk4hybrid</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>1.70</languageToolchainVersion>
-        <platform>3</platform>
+        <platform>2</platform>
       </toolsSet>
       <packs>
         <pack name="dsPIC33F-GP-MC_DFP" vendor="Microchip" version="1.3.64"/>
@@ -220,6 +220,9 @@
         <property key="codecoverage.enabled" value="Disable"/>
         <property key="codecoverage.enableoutputtofile" value="false"/>
         <property key="codecoverage.outputfile" value=""/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="lastid" value=""/>
         <property key="oscillator.auxfrequency" value="120"/>
         <property key="oscillator.auxfrequencyunit" value="Mega"/>
         <property key="oscillator.frequency" value="26.7264"/>
@@ -1279,6 +1282,8 @@
         <property key="communication.interface" value=""/>
         <property key="communication.interface.jtag" value="2wire"/>
         <property key="communication.speed" value="${communication.speed.default}"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="true"/>
         <property key="freeze.timers" value="false"/>
