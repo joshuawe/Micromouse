@@ -104,6 +104,9 @@ void startTimer1(void)
 
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
 {
+    // 1 if the exploring mode has been started, otherwise 0.
+    static int started;
+    
     // Reset timer 1 interrupt flag
     IFS0bits.T1IF = 0;
     
@@ -112,23 +115,32 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     updateWheelDistanceRotation();
     updateSpeed();
     
-    executeControl();
+    if (started) {
+        if (executeControl()) {
+        //    LED1 = 0;
+        //    exploring();
+        }
+    }
     
     //setMotorSpeed(0,0);
  
     // for SerialStudio
-    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f*/\r\n", distanceLeft, distanceFront, distanceRight, 
+    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%c*/\r\n", distanceLeft, distanceFront, distanceRight, 
         encoderCountsLeft, encoderCountsRight, 
         WheelDistanceLeft, WheelDistanceRight, 
         speedAngularLeft, speedAngularRight,
-        speedLeft, speedRight, distanceToGoalLeft, distanceToGoalRight);
+        speedLeft, speedRight, distanceToGoalLeft, distanceToGoalRight,
+        get_positionx(), get_positiony(), get_orientation(),
+        get_next_step());
 
     
-
     //LED1 = ~LED1;
     if (BUTTON) {
         //LED2 = ~LED2;
         //initNewControlCycle(2,100);
-        right_90degree();
+        //right_90degree();
+        started = 1;
+        exploring();
+        //LED1 = 1;
     }
 }

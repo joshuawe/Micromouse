@@ -266,27 +266,27 @@ void initNewControlCycle(int controlCase, double goalValue)
 
 double getErrorFromProximitySensors() {
     double error = 0;
-    LED1 = 0;
-    LED2 = 0;
+//    LED1 = 0;
+//    LED2 = 0;
 
     // Check, if the walls are ~ equally far away, AND not too far away on either side
     if ((distanceLeft < distanceTolerance) && (distanceRight < distanceTolerance)){
         error = distanceLeft - distanceRight;
-        LED1 = 1;
-        LED2 = 1;
+//        LED1 = 1;
+//        LED2 = 1;
 
 
     // Left wall plausibly close, right wall far away
     } else if ((distanceLeft < distanceTolerance) && (distanceRight > distanceTolerance))  {
         error = distanceLeft - DISTANCE_SENSOR_WALL;
-        LED1 = 1;
-        LED2 = 0;
+//        LED1 = 1;
+//        LED2 = 0;
 
     // Right wall close, left wall far away
     } else if ((distanceRight < distanceTolerance ) && (distanceLeft > distanceTolerance)) {
         error = DISTANCE_SENSOR_WALL - distanceRight;
-        LED1 = 0;
-        LED2 = 1;
+//        LED1 = 0;
+//        LED2 = 1;
     }
     
     // If none of the above is true, error remains zero. (I.e. both walls are far away -> no error)
@@ -306,7 +306,8 @@ double getErrorFromProximitySensors() {
 int executeControl()
 {
     // check if goal is already reached
-    int goalReached = checkGoalReachedAlready(); 
+    int goalReached = checkGoalReachedAlready();
+    LED1 = !goalReached;
     
     
     // control of base velocity
@@ -382,21 +383,6 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
     controlStep(&pid_distance_wall_right,errorRight);
     
 }
-
-
-//void reactToWalls() {
-//    double error;
-//    
-//    // We assume walls left and right, right now
-//    error = 
-//    
-//    
-//}
-//
-
-
-
-
 
 /*
  Calibration if corridor to the side when driving forward

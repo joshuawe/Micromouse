@@ -160,10 +160,10 @@ int exploring()
 {
     if(allexplored()== -1)
     {
+        update_map(positionx, positiony, orientation);
         explore(positionx, positiony, orientation);
         char next_step = get_next_step();
         drive(next_step);
-        update_map(positionx, positiony, orientation);
         return 1;
     }
     else
