@@ -86,11 +86,11 @@ void initController()
     init.kD = 0;
     
     // Josh Test (frequency = 20 ms)
-    init.kP = 0.25;
+    init.kP = 0.15;
     init.kI = 2;
     init.kD = 0;
     
-    init.integralLimit = 500;              // TO CHANGE!!! limits the integral because the integral slows it down
+    init.integralLimit = 50;              // TO CHANGE!!! limits the integral because the integral slows it down
     init.error = 0;
     init.derivative = 0;
     init.integral = 0;
@@ -420,7 +420,8 @@ double velocityForGoalDistance(double distance, double desiredSpeedMax) {
     desiredSpeedMax = fabs(desiredSpeedMax);
     
     if (fabs(distance) <= d) {
-        return (desiredSpeedMax / d) * distance;
+        d = (desiredSpeedMax / d) * distance;
+        return (d >= 0) ? d*d : -d*d;
     } else {
         return (distance >= 0) ? desiredSpeedMax : -desiredSpeedMax;
     }
