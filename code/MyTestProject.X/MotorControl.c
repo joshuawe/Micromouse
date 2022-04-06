@@ -84,12 +84,12 @@ void initController()
     // Josh Test (frequency = 100 ms)
     init.kP = 0.1;
     init.kI = 0.4;
-    init.kD = 0.5;
+    init.kD = 0;
     
     // Josh Test (frequency = 20 ms)
     init.kP = 0.35;
     init.kI = 2;
-    init.kD = 0.5;
+    init.kD = 0.01;
     
     init.integralLimit = 50;              // TO CHANGE!!! limits the integral because the integral slows it down
     init.error = 0;
