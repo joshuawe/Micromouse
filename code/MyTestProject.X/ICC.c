@@ -156,48 +156,56 @@ void drive(char next_step)
     update_position(next_step);
 }
 
-void exploring()
+int exploring()
 {
-    while(allexplored()== -1)
+    if(allexplored()== -1)
     {
         explore(positionx, positiony, orientation);
         char next_step = get_next_step();
         drive(next_step);
         update_map(positionx, positiony, orientation);
-        exploring();
+        return 1;
+    }
+    else
+    {
+        return -1;
     }
 }
 
-void drive_to_the_middle()
+int drive_to_the_middle()
 {
     char next_step;
     set_goal_position(middlex, middley);
     calculateshortestpath(positionx, positiony, orientation);
     // to check if only one more element is in shortest_path
-    while(drive_shortest_path()!= -1)
+    if(drive_shortest_path()!= -1)
     {
         next_step = get_next_step();
         drive(next_step);
-        drive_to_the_middle();
+        return 1;
     }
-    next_step = get_next_step();
-    drive(next_step);
+    else
+    {
+        return -1;
+    }
 }
 
-void drive_to_the_start()
+int drive_to_the_start()
 {
     char next_step;
     set_goal_position(0,0);
     calculateshortestpath(positionx, positiony, orientation);
     // to check if only one more element is in shortest_path
-    while(drive_shortest_path()!= -1)
+    if(drive_shortest_path()!= -1)
     {
         next_step = get_next_step();
         drive(next_step);
-        drive_to_the_middle();
+        return 1;
     }
-    next_step = get_next_step();
-    drive(next_step);
+    else
+    {
+        return -1;
+    }
 }
 
 void whole_program()

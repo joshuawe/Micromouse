@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "proxSensors.h"
+#include "mapping.h"
 #define squares 6
 
 typedef struct {
@@ -25,10 +26,10 @@ typedef struct {
         int right;             
     }cell;
     
-typedef struct node {
+/*typedef struct node {
     char val;
     struct node * next;
-} node_t; 
+} node_t; */
 
 int goalpositionx = 3;
 int goalpositiony = 3;

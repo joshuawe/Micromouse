@@ -26,43 +26,33 @@
  * Revision history: 
  */
 
+
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef MAPPING_H
-#define	MAPPING_H
+#ifndef ICC_H
+#define	ICC_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
+int get_positionx();
+int get_positiony();
+int get_orientation();
+void update_position(char next_step);
+void drive(char next_step);
+int exploring();
+int drive_to_the_middle();
+int drive_to_the_start();
+void whole_program();
 
-typedef struct node {
-    int val;
-    struct node * next;
-} node_t; 
+#ifdef	__cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
-void set_maze_size(int size);
-void set_square_size(int square);
-char get_next_step();
-void set_goal_position(int new_goalpositionx, int new_goalpositiony);
-node_t * get_shortestpath();
-node_t * get_currentpath();
-void set_measurements();
-void initalize_map();
-void update_map(int positionx, int positiony, int orientation);
-int exploreleft(int positionx, int positiony, int orientation);
-int explorefront(int positionx, int positiony, int orientation);
-int exploreright(int positionx, int positiony, int orientation);
-int allexplored();
-void move(int positionx, int positiony, int orientation);
-void explore(int positionx, int positiony, int orientation);
-char remove_last(node_t * head);
-int pop(node_t * head);
-void push(node_t * head, int val);
-void replace_list(node_t * current, node_t * old);
-void undo_last_step(int positionx, int positiony, int orientation);
-void calculatepath(int positionx, int positiony, int orientation);
-node_t * calculateshortestpath(int positionx, int positiony, int orientation);
-int drive_shortest_path();
+    // TODO If C++ is being used, regular C code needs function names to have C 
+    // linkage so the functions can be used by the c code. 
 
-
+#ifdef	__cplusplus
+}
+#endif /* __cplusplus */
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
