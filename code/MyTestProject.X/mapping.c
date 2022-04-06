@@ -70,6 +70,31 @@ char get_next_step()
     return next_step;
 }
 
+int get_next_step_int()
+{
+    if(next_step == 'f')
+    {
+        return 0;
+    }
+    else if(next_step == 'r')
+    {
+        return 1;
+    }
+    else if(next_step == 'b')
+    {
+        return 2;
+    }
+    else if(next_step == 'l')
+    {
+        return 3;
+    }
+    else if(next_step == 't')
+    {
+        return 4;
+    }
+    return -1;
+    
+}
 void set_goal_position(int new_goalpositionx, int new_goalpositiony)
 {
     goalpositionx = new_goalpositionx;
@@ -159,6 +184,7 @@ int exploreleft(int positionx, int positiony, int orientation)
     if(orientation == 0)
     {
         next_step = 'l';
+        
     }
     else if(orientation == 1)
     {
@@ -171,6 +197,7 @@ int exploreleft(int positionx, int positiony, int orientation)
     else
     {
         next_step = 'f';
+        visited[positionx-1][positiony] = true;
     }
     return 1;
 }
@@ -191,6 +218,8 @@ int explorefront(int positionx, int positiony, int orientation)
     if(orientation == 0)
     {
         next_step = 'f';
+        visited[positionx][positiony+1] = true;
+        
     }
     else if(orientation == 1)
     {
@@ -228,6 +257,7 @@ int exploreright(int positionx, int positiony, int orientation)
     else if(orientation == 1)
     {
         next_step = 'f';
+        visited[positionx+1][positiony] = true;
     }
     else if(orientation == 2)
     {

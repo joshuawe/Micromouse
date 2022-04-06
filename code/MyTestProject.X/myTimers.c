@@ -125,13 +125,13 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     //setMotorSpeed(0,0);
  
     // for SerialStudio
-    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%c*/\r\n", distanceLeft, distanceFront, distanceRight, 
+    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d*/\r\n", distanceLeft, distanceFront, distanceRight, 
         encoderCountsLeft, encoderCountsRight, 
         WheelDistanceLeft, WheelDistanceRight, 
         speedAngularLeft, speedAngularRight,
         speedLeft, speedRight, distanceToGoalLeft, distanceToGoalRight,
         get_positionx(), get_positiony(), get_orientation(),
-        get_next_step());
+        get_next_step_int());
 
     
     //LED1 = ~LED1;
