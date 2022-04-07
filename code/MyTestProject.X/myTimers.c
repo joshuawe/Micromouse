@@ -105,7 +105,8 @@ void startTimer1(void)
 
 #define STATE_IDLE 0
 #define STATE_EXPLORING 1
-#define STATE_DRIVING_TO_MIDDLE 2
+#define STATE_DRIVING_TO_START 2
+#define STATE_DRIVING_TO_MIDDLE 3
 
 
 void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
@@ -152,14 +153,25 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
         case STATE_EXPLORING:
             if (executeControl()) {
                 if (exploring() == -1) {
+                    state = STATE_DRIVING_TO_START;
+                    drive_to_the_start();
+                }
+            }
+            break;
+        case STATE_DRIVING_TO_START:
+            if (executeControl()) {
+                if (drive_to_the_start() == -1) {
                     state = STATE_DRIVING_TO_MIDDLE;
                     drive_to_the_middle();
                 }
             }
             break;
         case STATE_DRIVING_TO_MIDDLE:
-            executeControl();
-            // TODO: Drive next step
+            if (executeControl()) {
+                if (drive_to_the_middle() == -1) {
+                    // We arrived in the middle of the maze!!
+                }
+            }
             break;
     }
     
