@@ -179,18 +179,20 @@ int drive_to_the_middle()
 {
     char next_step;
     set_goal_position(middlex, middley);
-    calculateshortestpath(0, 0, 0);
+    calculateshortestpath(positionx, positiony, orientation);
     // to check if only one more element is in shortest_path
-    if(drive_shortest_path()!= -1)
+    while(drive_shortest_path()!= -1)
     {
         next_step = get_next_step();
-        drive(next_step);
-        return 1;
+        printf("drove: %c\n", next_step);
+        //drive(next_step);
+       // return 1;
     }
-    else
+    return 1;
+    /*else
     {
         return -1;
-    }
+    }*/
 }
 
 int drive_to_the_start()
