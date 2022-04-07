@@ -124,7 +124,7 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
     updateSpeed();
     
     //setMotorSpeed(0,0);
- 
+#
     // for SerialStudio
 //    printf("/*%f,%f,%f,%ld,%ld,%f,%f,%f,%f,%f,%f,%f,%d,%d,%d,%d*/\r\n", distanceLeft, distanceFront, distanceRight, 
 //        encoderCountsLeft, encoderCountsRight, 

@@ -162,7 +162,6 @@ void update_map(int positionx, int positiony, int orientation)
             map[positionx][positiony].left = distanceFront < 100;
             map[positionx][positiony].back = distanceLeft < 100;
             map[positionx][positiony].front = distanceRight < 100;
-            
         
     }
 }
@@ -205,7 +204,7 @@ int exploreleft(int positionx, int positiony, int orientation)
  */
 int explorefront(int positionx, int positiony, int orientation)
 {
-    if(positionx >= squares -1 || map[positionx][positiony].front == 1) // if the robot is on the very top of the maze or there is a wall on the left
+    if(positiony >= squares - 1 || map[positionx][positiony].front == 1) // if the robot is on the very top of the maze or there is a wall on the left
     {
         return -1;
     }    
@@ -240,7 +239,6 @@ int exploreback(int positionx, int positiony, int orientation)
     if( map[positionx][positiony].back == 1) // if the robot is on the very top of the maze or there is a wall on the left
         
     {
-
         return -1;
     }    
     else if(visited[positionx][positiony-1] == true) //left square was already visited
@@ -779,10 +777,11 @@ int drive_shortest_path()
     next_step = shortestpath->val;
     //check if the last element is removed
     if(pop(shortestpath) == -1)
-    {
+    { 
         printf("no element in shortest path\r\n");
-        return -1;
+        return - 1;
     }
+    
     return 1;
 }
 

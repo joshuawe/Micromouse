@@ -137,7 +137,6 @@ int main()
     setPWM(0.0, DIRECTION_FWD, 0.0, DIRECTION_FWD);
     
     initalize_map();
-    
     /*
     map[0][0].front = 0;
     map[0][0].right = 0;
@@ -184,7 +183,7 @@ int main()
     map[2][2].back = 0;
     map[2][2].left = 0;
     */
-    drive_to_the_middle();
+   // drive_to_the_middle();
    
     
     initController();
