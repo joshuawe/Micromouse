@@ -148,6 +148,7 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
             if (!lastButton && BUTTON) {
                 state = STATE_EXPLORING;
                 exploring();
+                //drive_forward();
             }
             break;
         case STATE_EXPLORING:
@@ -155,7 +156,9 @@ void __attribute__((__interrupt__, auto_psv)) _T1Interrupt(void)
                 if (exploring() == -1) {
                     state = STATE_DRIVING_TO_START;
                     drive_to_the_start();
+                  // drive_backward();
                 }
+                 
             }
             break;
         case STATE_DRIVING_TO_START:

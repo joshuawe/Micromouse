@@ -19,6 +19,7 @@ int middlex = 1;
 int middley = 1;
 int numDriveInstructions = 0; // Number of drive instructions, such as forward, left, ...
 bool compute_path_middle = true;
+bool compute_path_start = true;
 
 int get_positionx()
 {
@@ -173,6 +174,7 @@ int exploring()
         return 1;
     }
     else{
+        update_map(positionx, positiony, orientation);
         //drive_to_the_middle();
     }
     return -1;
@@ -182,31 +184,11 @@ int drive_to_the_middle()
 {
     char next_step;
     if(compute_path_middle)
-    {  /*
-        map[0][0].front = 0;
-        map[0][0].right = 0;
-        map[0][0].back = 1;
-        map[0][0].left = 1;
-
-        map[0][1].front = 1;
-        map[0][1].right = 0;
-        map[0][1].back = 0;
-        map[0][1].left = 1;
-        
-        map[1][0].front = 0;
-        map[1][0].right = 1;
-        map[1][0].back = 1;
-        map[1][0].left = 0;
-
-        map[1][1].front = 1;
-        map[1][1].right = 1;
-        map[1][1].back = 0;
-        map[1][1].left = 0;
-        */
-        //drive('t');
+    {  
+        compute_path_middle = false;
         set_goal_position(middlex, middley);
         calculateshortestpath(positionx, positiony, orientation);
-        compute_path_middle = false;  
+          
     }
     //set_goal_position(middlex, middley);
     //calculateshortestpath(positionx, positiony, orientation);
@@ -231,15 +213,21 @@ int drive_to_the_start()
 {
     
     char next_step;
-    set_goal_position(0,0);
-    calculateshortestpath(positionx, positiony, orientation);
+    if(compute_path_start)
+    {
+        compute_path_start = false;
+        set_goal_position(0,0);
+        calculateshortestpath(positionx, positiony, orientation);  
+//        drive('t');
+    }
     // to check if only one more element is in shortest_path
-    
+   printf("start\n\r");
    if(drive_shortest_path()!= -1)
     {
-        next_step = get_next_step();
-        drive(next_step);
-        return 1;
+       printf("drive start \n\r");
+       next_step = get_next_step();
+       drive(next_step);
+       return 1;
     }
     else
     {
