@@ -375,6 +375,8 @@ void calibrateAndControlStraightVelocityBasedOnDistanceMeasurements()
     controlBaseVelocity();
     
     // Calibration, but Only calibrate if we are not turning
+    // TOOO: This calibration should only occur if we want to drive forward,
+    // but backward!
     if (cc.turn == 0) {
         // Calibrate if there is a wall in front
         if ((distanceFront <= DISTANCE_USED_TO_CALIBRATE) && (numDriveInstructions != lastNumDriveInstructions)) { 
