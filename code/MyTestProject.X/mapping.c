@@ -123,13 +123,14 @@ void initalize_map()
     visited[0][0] = true;
     
    // squares = (int)maze_size/square_size;
+    /*
     for (i = 0; i < squares; i++)
     {
-        map[0][i].back = 1;
-        map[i][0].left = 1;
+        map[0][i].left = 1;
+        map[i][0].back = 1;
         map[squares][i].right = 1;
         map[i][squares].front = 1;
-    }
+    */
     
 }
 
@@ -162,7 +163,6 @@ void update_map(int positionx, int positiony, int orientation)
             map[positionx][positiony].left = distanceFront < 100;
             map[positionx][positiony].back = distanceLeft < 100;
             map[positionx][positiony].front = distanceRight < 100;
-        
     }
 }
 
@@ -243,7 +243,6 @@ int exploreback(int positionx, int positiony, int orientation)
     }    
     else if(visited[positionx][positiony-1] == true) //left square was already visited
     {
-        printf("Fehler 2\r\n");
         return -1;
     }
     
@@ -592,6 +591,7 @@ int calculatepath(int positionx, int positiony, int orientation)
         }
     if(positionx == goalpositionx && positiony == goalpositiony && currentdistance < mindistance)
     {
+        printf("goalposition found\n\r");
         replace_list(shortestpath, currentpath); //currentpath will get the shortestpath
         mindistance = currentdistance;
         if(undo_last_step(positionx, positiony, orientation)== -1)
@@ -602,9 +602,10 @@ int calculatepath(int positionx, int positiony, int orientation)
     }
     else
     {     
+        printf("calculating\n\r");
         if(currentdistance < mindistance)
         {
-            if(map[positionx][positiony].front == 0 && !visited_path_planning[positionx][positiony+1])
+            if(map[positionx][positiony].front != 1 && !visited_path_planning[positionx][positiony+1])
             {
                 if(orientation == 0 && last_step != 'f')
                 {
@@ -619,12 +620,12 @@ int calculatepath(int positionx, int positiony, int orientation)
                     push(currentpath, 'l'); // turning to the front
                     calculatepath(positionx, positiony, 0);
                 }
-                else if (orientation == 2 && last_step != 'b')
+                else if (orientation == 2 && last_step != 'l')
                 {
                     currentdistance++;
-                    push(currentpath, 'b'); //moving backward
-                    visited_path_planning[positionx][positiony+1] = true;
-                    calculatepath(positionx, positiony+1, 2);
+                    push(currentpath, 'l'); //moving backward
+                    //visited_path_planning[positionx][positiony+1] = true;
+                    calculatepath(positionx, positiony, 1);
                 }
                 else if (orientation == 3 && last_step != 'r')
                 {
@@ -634,11 +635,12 @@ int calculatepath(int positionx, int positiony, int orientation)
                 }
                 else 
                 {
+                    printf("else1 \n\r");
                     //undo_last_step(positionx,positiony, orientation);
                 }
                 
             }
-            if(map[positionx][positiony].right == 0 && !visited_path_planning[positionx+1][positiony])
+            if(map[positionx][positiony].right != 1 && !visited_path_planning[positionx+1][positiony])
             {
                 if(orientation == 0 && last_step != 'r')
                 {
@@ -659,26 +661,27 @@ int calculatepath(int positionx, int positiony, int orientation)
                     push(currentpath, 'l');
                     calculatepath(positionx, positiony, 1);
                 }
-                else if (orientation == 3 && last_step != 'b')
+                else if (orientation == 3 && last_step != 'l')
                 {
                     currentdistance++;
-                    push(currentpath, 'b');
-                    visited_path_planning[positionx+1][positiony] = true;
-                    calculatepath(positionx+1, positiony, 3);
+                    push(currentpath, 'l');
+//                    visited_path_planning[positionx+1][positiony] = true;
+                    calculatepath(positionx, positiony, 2);
                 }
                 else
                 {
+                    printf("else2 \n\r");
                     //undo_last_step(positionx,positiony, orientation);
                 }
             }
-            if(map[positionx][positiony].back == 0 && !visited_path_planning[positionx][positiony-1])
+            if(map[positionx][positiony].back != 1 && !visited_path_planning[positionx][positiony-1])
             {
-                if(orientation == 0 && last_step != 'b')
+                if(orientation == 0 && last_step != 'l')
                 {
                     currentdistance++;
-                    push(currentpath, 'b');
-                    visited_path_planning[positionx][positiony-1] = true;
-                    calculatepath(positionx, positiony-1, 0);
+                    push(currentpath, 'l');
+                    //visited_path_planning[positionx][positiony-1] = true;
+                    calculatepath(positionx, positiony, 3);
                 }
                 else if (orientation == 1 && last_step != 'r')
                 {
@@ -701,24 +704,32 @@ int calculatepath(int positionx, int positiony, int orientation)
                 }
                 else 
                 {
+//                    printf("else3 \n\r");
                    // undo_last_step(positionx,positiony, orientation);
                 }
             }
-            if(map[positionx][positiony].left == 0 && !visited_path_planning[positionx-1][positiony] )
+            /*
+            printf("positionx %d \n\r", positionx);
+            printf("positiony %d \n\r", positiony);
+            printf("orientation %d \n\r", orientation);
+            printf("visited_path_planning[positionx-1][positiony] %d \n\r", visited_path_planning[positionx-1][positiony]);
+            printf("map[positionx][positiony].left %d \n\r", map[positionx][positiony].left);*/
+            
+            if(map[positionx][positiony].left != 1  && !visited_path_planning[positionx-1][positiony] )
             {
-                printf("last_step: %c\n", last_step);
+//                printf("last_step: %c\n", last_step);
                if(orientation == 0 && last_step != 'l')
                 {
                     currentdistance++;
                     push(currentpath, 'l');
                     calculatepath(positionx, positiony, 3);
                 }
-               else if (orientation == 1 && last_step != 'b')
+               else if (orientation == 1 && last_step != 'l')
                 {
                     currentdistance++;
-                    push(currentpath, 'b') ;
-                    visited_path_planning[positionx-1][positiony] = true;
-                    calculatepath(positionx-1, positiony, 1);
+                    push(currentpath, 'l') ;
+                    //visited_path_planning[positionx-1][positiony] = true;
+                    calculatepath(positionx, positiony, 0);
                 }
                else if (orientation == 2 && last_step != 'r')
                 {
@@ -735,6 +746,7 @@ int calculatepath(int positionx, int positiony, int orientation)
                 }
                else
                {
+                   printf("else4 \n\r");
                    //undo_last_step(positionx,positiony, orientation);
                }
             }
@@ -742,6 +754,8 @@ int calculatepath(int positionx, int positiony, int orientation)
                        
             if(undo_last_step(positionx, positiony, orientation)== -1)
             {
+                
+                printf("only walls or already visited cells \n\r");
                 return -1;
             }
         }
@@ -749,6 +763,7 @@ int calculatepath(int positionx, int positiony, int orientation)
         {
             if(undo_last_step(positionx, positiony, orientation)== -1)
             {
+              printf("currentdistance > mindistance \n\r");
               return -1;
             }         
         }
@@ -760,7 +775,23 @@ int calculatepath(int positionx, int positiony, int orientation)
  */
 node_t * calculateshortestpath(int positionx, int positiony, int orientation)
 {
-    //to check: if two times done, is the list newly initalised or the old one still there
+    int o, j;
+    for(o = 0; o < squares; o++)
+    {
+        for(j=0; j < squares; j++)
+        {
+            visited_path_planning[o][j] = false;
+            printf("map[%d][%d].front = %d;\r\n", o, j, map[o][j].front);
+            printf("map[%d][%d].right = %d;\r\n", o, j, map[o][j].right);
+            printf("map[%d][%d].back = %d;\r\n", o, j, map[o][j].back);
+            printf("map[%d][%d].left = %d;\r\n", o, j, map[o][j].left);
+
+            
+        }
+    }
+    mindistance = 16;
+    currentdistance = 0;
+    last_step = 'u';
     shortestpath = calloc(sizeof(node_t), 1);
     currentpath = calloc(sizeof(node_t), 1);
     pop(currentpath);
@@ -772,17 +803,35 @@ node_t * calculateshortestpath(int positionx, int positiony, int orientation)
 
 int drive_shortest_path()
 {
+    
     //currentpath = currentpath->next;
     shortestpath = shortestpath->next;
     next_step = shortestpath->val;
+    printf("shortestpath %c\n\r", next_step);
     //check if the last element is removed
     if(pop(shortestpath) == -1)
     { 
         printf("no element in shortest path\r\n");
-        return - 1;
+        return -1;
     }
     
     return 1;
+}
+
+void find_unvisited(int * x, int * y)
+{
+    int k,l;
+    for(k = 0; k < squares; k++)
+    {
+        for(l = 0; l < squares; l++)
+        {
+            if(visited[k][l] == false)
+            {
+                * x = k;
+                * y = l;
+            }
+        }
+    }
 }
 
 void move(int positionx, int positiony, int orientation)
@@ -795,8 +844,10 @@ void move(int positionx, int positiony, int orientation)
             if(visited[k][l] == false)
             {
                 set_goal_position(k,l);
+                printf("goalposition %d %d\n\r", k, l);
                 calculateshortestpath(positionx, positiony, orientation);
-                drive_shortest_path();       
+                drive_shortest_path();    
+                return;
             }
         }
     }
@@ -806,6 +857,7 @@ void move(int positionx, int positiony, int orientation)
  */
 void explore(int positionx, int positiony, int orientation)
 {
+    printf("explore \n\r");
     if(explorefront(positionx, positiony, orientation)== -1)
     {
         if(exploreleft(positionx,  positiony, orientation) == -1)
@@ -818,7 +870,6 @@ void explore(int positionx, int positiony, int orientation)
                     {
                         if(deadend(positionx, positiony, orientation) == -1)
                         {
-                            printf("Fehler 3\r\n");
                             move(positionx,  positiony, orientation);
                         }
                         

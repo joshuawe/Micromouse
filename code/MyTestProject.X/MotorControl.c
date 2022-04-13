@@ -219,6 +219,7 @@ void turning()
  */
 void initNewControlCycle(int controlCase, double goalValue)
 {
+    printf("controlCase %d\n\r", controlCase);
     double relativeGoalDistanceLeft = 0;
     double relativeGoalDistanceRight = 0;
     switch (controlCase){
