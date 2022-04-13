@@ -222,7 +222,6 @@ int drive_to_the_middle()
     }
     else
     {
-       
         return -1;
     }
      
