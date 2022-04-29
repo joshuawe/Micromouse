@@ -45,6 +45,16 @@ double distanceToGoalLeft;           // [mm] distance to goal position of left w
 double distanceToGoalRight;          // [mm] distance to goal position of right wheel
 double distanceToGoal;               // [mm] (distanceToGoalLeft + distanceToGoalRight)/2
 
+
+// motor output measurements (rps vs. V)
+const int NUM_VALUES_MOTOR = 13;   // number of elements for each array or sub-array 
+const int MOTOR_VOLTAGES[] = {9.0, 8.1, 7.2, 6.3, 5.4, 4.5, 3.6, 2.7, 1.8, 0.9, 0.6, 0.3, 0}; // [V]
+const int MOTOR_RPS[3][13] = {
+                             {0, 1.6, 3.3, 4.1, 4.8, 5.0, 5.1, 5.2, 5.3, 5.4, 5.4, 5.6, 5.7},   // [rps] left 
+                             {0, 1.7, 3.3, 4.0, 4.6, 4.8, 5.0, 5.0, 5.1, 5.2, 5.2, 5.5, 5.4},   // [rps] right
+};
+
+
 Outputs interestingOutputForDebugging(){
     Outputs out;
     out.controlCycle = cc;
@@ -506,7 +516,40 @@ void adjustVelocity(double outputLeft, double outputRight)
 float convertOutputToPWMsignal(double output)
 {
     double outputVoltage = output / SPEED_CONSTANT;
+    
+    
+    // Use binary search and linear interpolation?
+    if (0==0) {
+        int pos, length, posLeft, posRight;
+        length = NUM_VALUES_MOTOR;
+        // use binarySearch to find closest element
+        pos = binarySearch(MOTOR_RPS[0], 0, length-1, output);
+        
+        // check if pos is positioned at the left or right boundary of array
+        if (pos <= 0) {
+            posLeft = 0;
+            posRight = 1;
+        }
+        else if (pos >= length-1) {
+            posLeft = length-2;
+            posRight = length-1;
+        }
+        else {
+            posLeft = pos;
+            posRight = pos + 1;
+        }
+        
+        // interpolation -> yInterpolated = y0 + ((y1-y0)/(x1-x0)) * (xp - x0);
+        int xLeft = MOTOR_RPS[0][posLeft];
+        int xRight = MOTOR_RPS[0][posRight];
+        int yLeft = MOTOR_VOLTAGES[posLeft];
+        int yRight = MOTOR_VOLTAGES[posRight];
+        outputVoltage = yLeft + ((float)(yRight-yLeft)/ (float)(xRight- xLeft)) * (output - xLeft); 
+    }
+    
+    
     float pwmSignal = outputVoltage / MAX_VOLTAGE;
+    
     return pwmSignal;
 }       
 
